@@ -28,7 +28,7 @@ public class ColegiosEntity {
 	private String nombre;
 	
 	
-	private String RBD;
+	private String Rbd;
 	
 	
 	private String email;

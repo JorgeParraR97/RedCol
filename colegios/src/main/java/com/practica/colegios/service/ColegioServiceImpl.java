@@ -26,7 +26,7 @@ public class ColegioServiceImpl implements IColegioService {
     	cEntity.setEmail(cDTO.getEmail());
     	cEntity.setTelefono(cDTO.getTelefono());
     	cEntity.setDireccion(cDTO.getDireccion());
-    	cEntity.setRBD(cDTO.getRBD());
+    	cEntity.setRbd(cDTO.getRbd());
     	cEntity.setSostenedorId(cDTO.getSostenedorId());
     	return cEntity;
     }
@@ -39,7 +39,7 @@ public class ColegioServiceImpl implements IColegioService {
     	cDTO.setNombre(cE.getNombre());
     	cDTO.setEmail(cE.getEmail());
     	cDTO.setTelefono(cE.getTelefono());
-    	cDTO.setRBD(cE.getRBD());
+    	cDTO.setRbd(cE.getRbd());
     	cDTO.setDireccion(cE.getDireccion());
     	cDTO.setSostenedorId(cE.getSostenedorId());
     	return cDTO;
@@ -97,9 +97,9 @@ public class ColegioServiceImpl implements IColegioService {
     }
 
 	@Override
-	public void delete(int id) {
+	public void deleteById(int id) {
 		data.deleteById(id);
-		
+
 	}
 
 	@Override

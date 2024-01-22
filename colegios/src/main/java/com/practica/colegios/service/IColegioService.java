@@ -15,7 +15,7 @@ public interface IColegioService {
     public List<ColegioDTO> findAll();
     public Optional<ColegioDTO> findById(int id);
     public ColegioDTO save(ColegioDTO colegio);
-    public void delete(int id);
+    public void deleteById(int id);
     
     List<ColegioDTO> findBySostenedorId(int sostenedorId);
 	
