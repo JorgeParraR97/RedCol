@@ -16,6 +16,7 @@ public interface IColegioService {
 	
 	List<ColegioDTO> ColegioFindAll();
 	void ColegioSave(ColegioDTO colegio);
+	void ColegioDelete(int id);
 	ResponseEntity<Optional<ColegioDTO>> findById(int id);
 	ResponseEntity<String> actualizarColegio(@PathVariable int id, @RequestBody ColegioDTO colegioActualizado);
 	ResponseEntity<List<ColegioDTO>> findBySostenedorId(@PathVariable int sostenedorId);

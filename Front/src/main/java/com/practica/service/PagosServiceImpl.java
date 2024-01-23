@@ -16,89 +16,90 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.practica.dto.ColegioDTO;
-
+import com.practica.dto.PagosDTO;
 
 
 @Service
-public class ColegioServiceImpl implements IColegioService {
+public class PagosServiceImpl implements IPagosService {
 	
 	@Autowired
     private RestTemplate restTemplate;
-
+	
 	@Override
-	public List<ColegioDTO> findAllREST() {
+	public List<PagosDTO> findAllREST() {
 		try {
 			ObjectMapper unMapper = new ObjectMapper();
 
-			List<ColegioDTO> colegios = Arrays
-					.asList(unMapper.readValue(new URL("http://localhost:8080/api/bff/colegio/findAll"), ColegioDTO[].class));
-			return colegios;
+			List<PagosDTO> proyectos = Arrays
+					.asList(unMapper.readValue(new URL("http://localhost:8080/api/bff/pagos/findAll"), PagosDTO[].class));
+			return proyectos;
 
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-
+	
 	@Override
-	public ResponseEntity<String> saveREST(ColegioDTO c) {
+	public ResponseEntity<String> saveREST(PagosDTO p) {
 	    try {
 	        HttpHeaders headers = new HttpHeaders();
 	        headers.setContentType(MediaType.APPLICATION_JSON);
 
-	        HttpEntity<ColegioDTO> requestEntity = new HttpEntity<>(c, headers);
+	        HttpEntity<PagosDTO> requestEntity = new HttpEntity<>(p, headers);
 
 	        RestTemplate restTemplate = new RestTemplate();
 	        ResponseEntity<String> responseEntity = restTemplate.postForEntity(
-	                "http://localhost:8080/api/bff/colegio/create", requestEntity, String.class);
+	                "http://localhost:8080/api/bff/pagos/create", requestEntity, String.class);
 
 	        if (responseEntity.getStatusCode().is2xxSuccessful()) {
 	            String responseBody = responseEntity.getBody();
 	            return ResponseEntity.ok(responseBody);
 	        } else {
 	            System.out.println("Ha ocurrido un error");
-	            return ResponseEntity.status(responseEntity.getStatusCode()).body("Error en la creación del colegio");
+	            return ResponseEntity.status(responseEntity.getStatusCode()).body("Error en la creación del pago");
 	        }
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor");
 	    }
 	}
-
+	
+	
 	@Override
-	public void actualizarColegio(ColegioDTO colegioDTO) {
+	public void actualizarPagos(PagosDTO pagosDTO) {
         HttpHeaders headers = new HttpHeaders();
-       
-        HttpEntity<ColegioDTO> requestEntity = new HttpEntity<>(colegioDTO, headers);
+
+        HttpEntity<PagosDTO> requestEntity = new HttpEntity<>(pagosDTO, headers);
 
         ResponseEntity<String> response = restTemplate.exchange(
-        		"http://localhost:8080/api/bff/colegio/actualizar/{id}",
+        		"http://localhost:8080/api/bff/pagos/actualizar/{id}",
                 HttpMethod.PUT,
                 requestEntity,
                 String.class,
-                colegioDTO.getId() 
+                pagosDTO.getId() 
         );
 
         if (!response.getStatusCode().is2xxSuccessful()) {
-            throw new RuntimeException("Error al actualizar colegio en el BFF");
+            throw new RuntimeException("Error al actualizar pagos en el BFF");
         }
     }
-
+	
+	
 	@Override
-	public ColegioDTO deleteREST(int id) {
+	public PagosDTO deleteREST(int id) {
 		try {
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
 
 			RestTemplate restTemplate = new RestTemplate();
-			ResponseEntity<ColegioDTO> responseEntity = restTemplate
-					.getForEntity("http://localhost:8080/api/bff/colegio/buscar" + "/" + id, ColegioDTO.class);
+			ResponseEntity<PagosDTO> responseEntity = restTemplate
+					.getForEntity("http://localhost:8080/api/bff/pagos/buscar" + "/" + id, PagosDTO.class);
 
 			if (responseEntity.getStatusCode().is2xxSuccessful()) {
-				ColegioDTO dto = responseEntity.getBody();
+				PagosDTO dto = responseEntity.getBody();
 
-				restTemplate.delete("http://localhost:8080/api/bff/colegio/delete" + "/" + id);
+				restTemplate.delete("http://localhost:8080/api/bff/pagos/delete" + "/" + id);
 
 				return dto;
 			} else {

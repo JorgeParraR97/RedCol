@@ -11,15 +11,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.practica.dto.ColegioDTO;
+import com.practica.dto.PagosDTO;
 import com.practica.dto.SostenedorDTO;
 import com.practica.service.IColegioService;
+import com.practica.service.IPagosService;
 import com.practica.service.ISostenedorService;
 
 @Controller
@@ -31,6 +34,9 @@ public class AdminPageController {
 	
 	@Autowired
 	IColegioService colServicio;
+	
+	@Autowired
+	IPagosService pagServicio;
 	
 	@GetMapping("sostenedor")
 	public String sostenedor(Model model) {
@@ -151,6 +157,50 @@ public class AdminPageController {
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	        return ResponseEntity.status(500).body("Error al intentar eliminar");
+	    }
+	}
+	
+	@GetMapping("pagos")
+	public String pagos(Model model) {
+		List<PagosDTO> pagos = pagServicio.findAllREST(); 
+		List<ColegioDTO> colegio = colServicio.findAllREST();
+		List<SostenedorDTO> sostenedor = sosServicio.findAllREST();
+		model.addAttribute("pagos", pagos);
+		model.addAttribute("colegio", colegio);
+		model.addAttribute("sostenedor", sostenedor);
+		return "/AdminPage/mantenedor_pagos";
+	}
+	
+	
+    @GetMapping("/findSos")
+    public List<SostenedorDTO> findAllSos() {
+        return sosServicio.findAllREST();
+    }
+    
+    @GetMapping("/findCol")
+    public List<ColegioDTO> findAllCol() {
+        return colServicio.findAllREST();
+    }
+    
+    @PostMapping("/gpREST")
+	public String saveREST(@Valid @ModelAttribute PagosDTO pagosDTO, Model model) {
+	    try {
+	        ResponseEntity<String> response = pagServicio.saveREST(pagosDTO);
+
+	        if (response != null && response.getStatusCode().is2xxSuccessful()) {
+	            // Si la creación en el BffAdminController es exitosa, redirige a la página de login
+	            return "redirect:/admin/pagos";
+	        } else {
+	            // Creación fallida, agregar mensaje de error al modelo
+	            model.addAttribute("error", "Error al crear pagos");
+	            // Redirige a la página de registro
+	            return "redirect:/admin/pagos"; // Cambiar según la ruta real de tu página de registro
+	        }
+	    } catch (Exception e) {
+	        // Error interno, agregar mensaje de error al modelo
+	        model.addAttribute("error", "Error interno del servidor");
+	        // Redirige a la página de registro
+	        return "redirect:/admin/pagos"; // Cambiar según la ruta real de tu página de registro
 	    }
 	}
 	

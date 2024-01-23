@@ -16,6 +16,7 @@ public interface ISostenedorService {
 	
 	List<SostenedorDTO> SostenedorFindAll();
 	void SostenedorSave(SostenedorDTO sostenedor);
+	void SostenedorDelete(int id);
 	ResponseEntity<List<ColegioDTO>> getColegios(@PathVariable("sostenedorid") int sostenedorid);
 	ResponseEntity<Optional<SostenedorDTO>> findById(int id);
 	ResponseEntity<String> actualizarSostenedor(@PathVariable int id, @RequestBody SostenedorDTO sostenedorActualizado);

@@ -64,6 +64,12 @@ public class ColegioServiceImpl implements IColegioService {
 	        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
 	}
+	
+	
+	@Override
+	public void ColegioDelete(int id) {
+		colegioClient.delete(id);
+	}
 
 
 

@@ -51,6 +51,12 @@ public class SostenedorServiceImpl implements ISostenedorService {
         ResponseEntity<String> responseEntity = sostenedorClient.actualizarSostenedor(id, sostenedorActualizado);
         return responseEntity;
     }
+	
+	
+	@Override
+	public void SostenedorDelete(int id) {
+		sostenedorClient.delete(id);
+	}
 
 
 	

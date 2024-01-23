@@ -6,6 +6,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,6 +35,9 @@ public interface SostenedorClient {
     
     @PutMapping("api/sostenedor/actualizar/{id}")
     ResponseEntity<String> actualizarSostenedor(@PathVariable int id, @RequestBody SostenedorDTO sostenedorActualizado);
+    
+	@DeleteMapping("/api/sostenedor/borrar/{id}")
+	public void delete(@PathVariable int id);
 }
 
 	

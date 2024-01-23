@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,5 +35,8 @@ public interface ColegioClient {
     
     @GetMapping("/api/colegio/ls/{sostenedorId}")
     public ResponseEntity<List<ColegioDTO>> findBySostenedorId(@PathVariable("sostenedorId") int sostenedorId);
+    
+	@DeleteMapping("/api/colegio/borrar/{id}")
+	public void delete(@PathVariable int id);
 
  }
