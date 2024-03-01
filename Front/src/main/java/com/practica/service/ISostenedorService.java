@@ -5,7 +5,8 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.practica.dto.ColegioDTO;
+
+import com.practica.dto.EstablecimientoDTO;
 import com.practica.dto.SostenedorDTO;
 
 
@@ -20,6 +21,6 @@ public interface ISostenedorService {
 	
 	public SostenedorDTO deleteREST(int id);
 	
-	public List<ColegioDTO> getColegios(int sostenedorId);
+	public List<EstablecimientoDTO> getEstablecimientos(int sostenedorId);
 
 }

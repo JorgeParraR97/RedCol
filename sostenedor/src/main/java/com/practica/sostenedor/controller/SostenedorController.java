@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -83,7 +84,7 @@ public class SostenedorController {
     public ResponseEntity<String> actualizarSostenedor(@PathVariable int id, @RequestBody SostenedorDTO sostenedorActualizado) {
 		Optional<SostenedorDTO> optionalSostenedorExistente = servicio.findById(id);
         if (optionalSostenedorExistente.isEmpty()) {
-            return new ResponseEntity<>("Proyecto no encontrado", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Sostenedor no encontrado", HttpStatus.NOT_FOUND);
         }
         
         SostenedorDTO sostenedorExistente = optionalSostenedorExistente.get();
@@ -91,17 +92,17 @@ public class SostenedorController {
         sostenedorExistente.setRepresentante(sostenedorActualizado.getRepresentante());
         sostenedorExistente.setRut(sostenedorActualizado.getRut());
         sostenedorExistente.setEmail(sostenedorActualizado.getEmail());
-        sostenedorExistente.setContra(sostenedorActualizado.getContra());
+        sostenedorExistente.setContrasena(sostenedorActualizado.getContrasena());
         servicio.save(sostenedorExistente);
-        return new ResponseEntity<>("Proyecto actualizado con éxito. ID: " + sostenedorExistente.getId(), HttpStatus.OK);
+        return new ResponseEntity<>("Sostenedor actualizado con éxito. ID: " + sostenedorExistente.getId(), HttpStatus.OK);
     }
 	
 	@PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
         String email = loginDTO.getEmail();
-        String contra = loginDTO.getContra();
+        String contra = loginDTO.getContrasena();
 
-        Optional<SostenedorDTO> result = servicio.findByEmailAndContra(email, contra);
+        Optional<SostenedorDTO> result = servicio.findByEmailAndContrasena(email, contra);
 
         if (result.isPresent()) {
             return ResponseEntity.ok(result.get());
@@ -110,6 +111,18 @@ public class SostenedorController {
         }
     }
 	
+	@DeleteMapping("/borrar/{id}")
+	 public ResponseEntity<?> deleteById(@PathVariable int id) {
+	    try {
+	        servicio.deleteById(id);
+	        return ResponseEntity.ok().build();
+	    } catch (Exception e) {
+	    	return ResponseEntity.status(500).body("Error al eliminar el proyecto");
+	        	}
+	    }
+	
+	
+
 	
 
 }

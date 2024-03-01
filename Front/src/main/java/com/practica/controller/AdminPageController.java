@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.practica.dto.ColegioDTO;
+import com.practica.dto.EstablecimientoDTO;
 import com.practica.dto.PagosDTO;
 import com.practica.dto.SostenedorDTO;
-import com.practica.service.IColegioService;
+import com.practica.service.IEstablecimientoService;
 import com.practica.service.IPagosService;
 import com.practica.service.ISostenedorService;
 
@@ -33,7 +33,7 @@ public class AdminPageController {
 	ISostenedorService sosServicio;
 	
 	@Autowired
-	IColegioService colServicio;
+	IEstablecimientoService estServicio;
 	
 	@Autowired
 	IPagosService pagServicio;
@@ -92,12 +92,12 @@ public class AdminPageController {
 	    }
 	}
 	
-	@GetMapping("/csREST/{id}")
+	@GetMapping("/esREST/{id}")
 	@ResponseBody // Indica que el valor devuelto debe ser serializado como respuesta HTTP
-	public ResponseEntity<List<ColegioDTO>> getColegios(@PathVariable("id") int id) {
+	public ResponseEntity<List<EstablecimientoDTO>> getEstablecimientos(@PathVariable("id") int id) {
 	    try {
-	        List<ColegioDTO> colegios = sosServicio.getColegios(id);
-	        return new ResponseEntity<>(colegios, HttpStatus.OK);
+	        List<EstablecimientoDTO> establecimientos = sosServicio.getEstablecimientos(id);
+	        return new ResponseEntity<>(establecimientos, HttpStatus.OK);
 	    } catch (Exception e) {
 	        // Manejar errores
 	        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -105,54 +105,57 @@ public class AdminPageController {
 	}
 	
 	
-	@GetMapping("colegio")
+	@GetMapping("establecimiento")
 	public String colegio(Model model) {
-		List<ColegioDTO> colegio = colServicio.findAllREST(); 
-		model.addAttribute("colegio", colegio);
-		return "/AdminPage/mantenedor_colegios";
+		List<EstablecimientoDTO> establecimiento = estServicio.findAllREST();
+		List<SostenedorDTO> sostenedor = sosServicio.findAllREST();
+		
+		model.addAttribute("sostenedor", sostenedor);
+		model.addAttribute("establecimiento", establecimiento);
+		return "/AdminPage/mantenedor_establecimiento";
 	}
 	
 	
-	@PostMapping("/gcREST")
-	public String saveREST(@Valid ColegioDTO colegioDTO, Model model) {
+	@PostMapping("/geREST")
+	public String saveREST(@Valid EstablecimientoDTO establecimientoDTO, Model model) {
 	    try {
-	        ResponseEntity<String> response = colServicio.saveREST(colegioDTO);
+	        ResponseEntity<String> response = estServicio.saveREST(establecimientoDTO);
 
 	        if (response != null && response.getStatusCode().is2xxSuccessful()) {
 	            // Si la creación en el BffAdminController es exitosa, redirige a la página de login
-	            return "redirect:/admin/colegio";
+	            return "redirect:/admin/establecimiento";
 	        } else {
 	            // Creación fallida, agregar mensaje de error al modelo
-	            model.addAttribute("error", "Error al crear colegio");
+	            model.addAttribute("error", "Error al crear establecimiento");
 	            // Redirige a la página de registro
-	            return "redirect:/admin/colegio"; // Cambiar según la ruta real de tu página de registro
+	            return "redirect:/admin/establecimiento"; // Cambiar según la ruta real de tu página de registro
 	        }
 	    } catch (Exception e) {
 	        // Error interno, agregar mensaje de error al modelo
 	        model.addAttribute("error", "Error interno del servidor");
 	        // Redirige a la página de registro
-	        return "redirect:/admin/colegio"; // Cambiar según la ruta real de tu página de registro
+	        return "redirect:/admin/establecimiento"; // Cambiar según la ruta real de tu página de registro
 	    }
 	}
 	
-	@PostMapping("/acREST")
-    public String actualizarColegio(@Valid ColegioDTO colegioDTO, Model model) {
+	@PostMapping("/aeREST")
+    public String actualizarEstablecimiento(@Valid EstablecimientoDTO establecimientoDTO, Model model) {
         try {
-        	colServicio.actualizarColegio(colegioDTO);
+        	estServicio.actualizarEstablecimiento(establecimientoDTO);
             // Si la actualización en el servicio es exitosa, redirige a la página adecuada
-            return "redirect:/admin/colegio";
+            return "redirect:/admin/establecimiento";
         } catch (Exception e) {
             // Manejar el error adecuadamente
-            model.addAttribute("error", "Error al actualizar colegio");
-            return "redirect:/admin/colegio";
+            model.addAttribute("error", "Error al actualizar establecimiento");
+            return "redirect:/admin/establecimiento";
         }
     }
 	
 	
-	@DeleteMapping("/bcREST/{id}")
-	public ResponseEntity<String> deleteColegio(@PathVariable int id) {
+	@DeleteMapping("/beREST/{id}")
+	public ResponseEntity<String> deleteEstablecimiento(@PathVariable int id) {
 	    try {
-	        colServicio.deleteREST(id);
+	        estServicio.deleteREST(id);
 	        return ResponseEntity.ok("Eliminado exitosamente");
 	    } catch (Exception e) {
 	        e.printStackTrace();
@@ -163,10 +166,11 @@ public class AdminPageController {
 	@GetMapping("pagos")
 	public String pagos(Model model) {
 		List<PagosDTO> pagos = pagServicio.findAllREST(); 
-		List<ColegioDTO> colegio = colServicio.findAllREST();
+		List<EstablecimientoDTO> establecimiento = estServicio.findAllREST();
 		List<SostenedorDTO> sostenedor = sosServicio.findAllREST();
+		
 		model.addAttribute("pagos", pagos);
-		model.addAttribute("colegio", colegio);
+		model.addAttribute("establecimiento", establecimiento);
 		model.addAttribute("sostenedor", sostenedor);
 		return "/AdminPage/mantenedor_pagos";
 	}
@@ -177,9 +181,9 @@ public class AdminPageController {
         return sosServicio.findAllREST();
     }
     
-    @GetMapping("/findCol")
-    public List<ColegioDTO> findAllCol() {
-        return colServicio.findAllREST();
+    @GetMapping("/findEst")
+    public List<EstablecimientoDTO> findAllCol() {
+        return estServicio.findAllREST();
     }
     
     @PostMapping("/gpREST")

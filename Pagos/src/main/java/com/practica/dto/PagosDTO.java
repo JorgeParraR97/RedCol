@@ -1,6 +1,6 @@
 package com.practica.dto;
 
-import java.util.Date;
+import org.hibernate.type.DateType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -28,6 +28,6 @@ private int id;
 	private int monto;
 	
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	private Date vencimiento;
+	private DateType vencimiento;
 
 }

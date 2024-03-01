@@ -32,7 +32,7 @@ public class SostenedorEntity {
 	private String email;
 	
 	
-	private String contra;
+	private String contrasena;
 	
 	
 	private String representante;

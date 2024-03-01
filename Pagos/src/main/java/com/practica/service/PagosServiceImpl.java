@@ -10,14 +10,14 @@ import org.springframework.stereotype.Service;
 
 import com.practica.dto.PagosDTO;
 import com.practica.entity.PagosEntity;
-import com.practica.repository.PagosRespository;
+import com.practica.repository.PagosRepository;
 
 @Service
 public class PagosServiceImpl implements IPagosService {
 	
 	
 	@Autowired
-	private PagosRespository data;
+	private PagosRepository data;
 	
 	
 	public PagosEntity pagosDTO2Entity(PagosDTO pDTO) {

@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.practica.dto.ColegioDTO;
+import com.practica.dto.EstablecimientoDTO;
 import com.practica.dto.SostenedorDTO;
 
 
@@ -116,13 +116,13 @@ public class SostenedorServiceImpl implements ISostenedorService {
 	
 	
 	@Override
-    public List<ColegioDTO> getColegios(int sostenedorId) {
+    public List<EstablecimientoDTO> getEstablecimientos(int sostenedorId) {
         String url = "http://localhost:8080/api/bff/sostenedor/colegio/{sostenedorId}";
-        ResponseEntity<List<ColegioDTO>> responseEntity = restTemplate.exchange(
+        ResponseEntity<List<EstablecimientoDTO>> responseEntity = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<List<ColegioDTO>>() {},
+                new ParameterizedTypeReference<List<EstablecimientoDTO>>() {},
                 sostenedorId
         );
 

@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.microservice.bff.Client.SostenedorClient;
-import com.microservice.bff.DTO.ColegioDTO;
+import com.microservice.bff.DTO.EstablecimientoDTO;
 import com.microservice.bff.DTO.SostenedorDTO;
 
 @Service
@@ -30,8 +30,8 @@ public class SostenedorServiceImpl implements ISostenedorService {
 	}
 
 	@Override
-	public ResponseEntity<List<ColegioDTO>> getColegios(int sostenedorid) {
-		ResponseEntity<List<ColegioDTO>> responseEntity = sostenedorClient.getColegios(sostenedorid);
+	public ResponseEntity<List<EstablecimientoDTO>> getColegios(int sostenedorid) {
+		ResponseEntity<List<EstablecimientoDTO>> responseEntity = sostenedorClient.getColegios(sostenedorid);
         return responseEntity;
 	}
 

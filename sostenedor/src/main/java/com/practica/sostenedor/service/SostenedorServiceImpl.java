@@ -32,7 +32,7 @@ public class SostenedorServiceImpl implements ISostenedorService {
 		sEntity.setId(sDTO.getId());
 		sEntity.setNombre(sDTO.getNombre());
 		sEntity.setEmail(sDTO.getEmail());
-		sEntity.setContra(sDTO.getContra());
+		sEntity.setContrasena(sDTO.getContrasena());
 		sEntity.setRut(sDTO.getRut());
 		sEntity.setRepresentante(sDTO.getRepresentante());
 		return sEntity;
@@ -44,7 +44,7 @@ public class SostenedorServiceImpl implements ISostenedorService {
 		sDTO.setId(sE.getId());
 		sDTO.setNombre(sE.getNombre());
 		sDTO.setEmail(sE.getEmail());
-		sDTO.setContra(sE.getContra());
+		sDTO.setContrasena(sE.getContrasena());
 		sDTO.setRepresentante(sE.getRepresentante());
 		sDTO.setRut(sE.getRut());
 		return sDTO;
@@ -94,7 +94,7 @@ public class SostenedorServiceImpl implements ISostenedorService {
 	}
 
 	@Override
-	public void delete(int id) {
+	public void deleteById(int id) {
 		data.deleteById(id);
 
 	}
@@ -115,12 +115,12 @@ public class SostenedorServiceImpl implements ISostenedorService {
         }
     }
 	
-    public Optional<SostenedorDTO> findByEmailAndContra(String email, String contra) {
+    public Optional<SostenedorDTO> findByEmailAndContrasena(String email, String contra) {
         Optional<SostenedorEntity> optionalSostenedorEntity = data.findByEmail(email);
 
         // Verifica si el sostenedor existe y si la contraseña coincide
         return optionalSostenedorEntity.map(sostenedorEntity -> {
-            if (sostenedorEntity.getContra().equals(contra)) {
+            if (sostenedorEntity.getContrasena().equals(contra)) {
                 SostenedorDTO sostenedorDTO = sostenedorEntity2DTO(sostenedorEntity);
                 return Optional.ofNullable(sostenedorDTO);
             } else {

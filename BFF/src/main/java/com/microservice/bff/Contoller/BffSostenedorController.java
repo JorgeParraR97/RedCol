@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.microservice.bff.DTO.ColegioDTO;
 
+import com.microservice.bff.DTO.EstablecimientoDTO;
 import com.microservice.bff.DTO.SostenedorDTO;
 import com.microservice.bff.Service.ISostenedorService;
 
@@ -62,9 +62,9 @@ public class BffSostenedorController {
 	}
 	
 	@GetMapping("/colegio/{sostenedorid}")
-    public ResponseEntity<List<ColegioDTO>> getColegios(@PathVariable("sostenedorid") int sostenedorid) {
+    public ResponseEntity<List<EstablecimientoDTO>> getColegios(@PathVariable("sostenedorid") int sostenedorid) {
 		
-		ResponseEntity<List<ColegioDTO>> responseEntity = sostenedorService.getColegios(sostenedorid);
+		ResponseEntity<List<EstablecimientoDTO>> responseEntity = sostenedorService.getColegios(sostenedorid);
         return responseEntity;
     }
 	

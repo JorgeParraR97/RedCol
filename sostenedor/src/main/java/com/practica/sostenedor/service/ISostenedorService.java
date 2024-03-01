@@ -18,9 +18,9 @@ public interface ISostenedorService {
     public List<SostenedorDTO> findAll();
     public Optional<SostenedorDTO> findById(int id);
     public SostenedorDTO save(SostenedorDTO sostenedor);
-    public void delete(int id);
+    public void deleteById(int id);
     public List<ColegioDTO> getColegios(int sostenedorid);
-    public Optional<SostenedorDTO> findByEmailAndContra(String email, String contra);
+    public Optional<SostenedorDTO> findByEmailAndContrasena(String email, String contra);
     public Optional<SostenedorEntity> findByEmail(String email);
     
 	

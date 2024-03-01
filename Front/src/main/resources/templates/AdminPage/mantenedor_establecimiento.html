@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>REDCOL</title>
+
+	<!-- Google Font: Source Sans Pro -->
+	<link rel="stylesheet"
+		th:href="@{https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback}" />
+	<!-- Font Awesome Icons -->
+	<link rel="stylesheet" th:href="@{/AdminLTE-3.2.0/plugins/fontawesome-free/css/all.min.css}" />
+	<!-- Theme style -->
+	<link rel="stylesheet" th:href="@{/AdminLTE-3.2.0/dist/css/adminlte.min.css}" />
+
+	<!-- DataTables -->
+	<link rel="stylesheet" th:href="@{/AdminLTE-3.2.0/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css}" />
+	<link rel="stylesheet"
+		th:href="@{/AdminLTE-3.2.0/plugins/datatables-responsive/css/responsive.bootstrap4.min.css}" />
+	<link rel="stylesheet" th:href="@{/AdminLTE-3.2.0/plugins/datatables-buttons/css/buttons.bootstrap4.min.css}" />
+</head>
+
+<body class="hold-transition sidebar-mini">
+	<div class="wrapper">
+		<!-- Navbar -->
+		<nav class="main-header navbar navbar-expand navbar-white navbar-light">
+			<!-- Left navbar links -->
+			<ul class="navbar-nav">
+				<li class="nav-item">
+					<a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+				</li>
+				<!-- Puedes dejar estos enlaces si los necesitas -->
+				<li class="nav-item d-none d-sm-inline-block">
+					<a th:href="@{/AdminPage/index3}" class="nav-link">Home</a>
+				</li>
+				<li class="nav-item d-none d-sm-inline-block">
+					<a href="#" class="nav-link">Contact</a>
+				</li>
+			</ul>
+
+			<!-- Right navbar links -->
+			<ul class="navbar-nav ml-auto">
+				<!-- Coloca aquí los elementos del menú derecho si los necesitas -->
+			</ul>
+		</nav>
+		<!-- /.navbar -->
+
+		<!-- Main Sidebar Container -->
+		<aside class="main-sidebar sidebar-dark-primary elevation-4">
+			<!-- Brand Logo -->
+			<a href="index3.html" class="brand-link">
+				<img th:src="@{/AdminLTE-3.2.0/dist/img/AdminLTELogo.png}" alt="AdminLTE Logo"
+					class="brand-image img-circle elevation-3" style="opacity: .8">
+				<span class="brand-text font-weight-light">AdminLTE 3</span>
+			</a>
+
+			<!-- Sidebar -->
+			<div class="sidebar">
+				<!-- Sidebar user panel (optional) -->
+				<div class="user-panel mt-3 pb-3 mb-3 d-flex">
+
+					<div class="info">
+						<a href="#" class="d-block">Alexander Pierce</a>
+					</div>
+				</div>
+
+				<!-- SidebarSearch Form -->
+				<div class="form-inline">
+					<div class="input-group" data-widget="sidebar-search">
+						<input class="form-control form-control-sidebar" type="search" placeholder="Search"
+							aria-label="Search">
+						<div class="input-group-append">
+							<button class="btn btn-sidebar">
+								<i class="fas fa-search fa-fw"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+
+				<!-- Sidebar Menu -->
+				<nav class="mt-2">
+					<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+						data-accordion="false">
+						<!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+						<li class="nav-item menu-open">
+							<a href="#" class="nav-link active">
+								<i class="nav-icon fas fa-tachometer-alt"></i>
+								<p>
+									Administración
+									<i class="right fas fa-angle-left"></i>
+								</p>
+							</a>
+							<ul class="nav nav-treeview">
+								<li class="nav-item">
+									<a th:href="@{/admin/sostenedor}" class="nav-link">
+										<i class="far fa-circle nav-icon"></i>
+										<p>Sostenedor</p>
+									</a>
+								</li>
+								<li class="nav-item">
+									<a th:href="@{/admin/establecimiento}" class="nav-link active">
+										<i class="far fa-circle nav-icon"></i>
+										<p>Establecimiento</p>
+									</a>
+								</li>
+							</ul>
+						</li>
+						<li class="nav-item menu-open">
+							<a href="#" class="nav-link active">
+								<i class="nav-icon fas fa-tachometer-alt"></i>
+								<p>
+									Finanzas
+									<i class="right fas fa-angle-left"></i>
+								</p>
+							</a>
+							<ul class="nav nav-treeview">
+								<li class="nav-item">
+									<a th:href="@{/admin/pagos}" class="nav-link">
+										<i class="far fa-circle nav-icon"></i>
+										<p>Pagos</p>
+									</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</nav>
+				<!-- /.sidebar-menu -->
+			</div>
+			<!-- /.sidebar -->
+		</aside>
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Aquí iría el contenido central, pero está vacío en este ejemplo -->
+			<div class="content-wrapper" style="margin-left: 0; padding-left: 10px;">
+				<!-- Content Header (Page header) -->
+				<div class="content-header">
+					<div class="container-fluid">
+						<div class="row mb-2">
+							<div class="col-sm-6">
+								<h1 class="m-0">Mantenedor Establecimiento</h1>
+							</div><!-- /.col -->
+							<div class="col-sm-6">
+								<ol class="breadcrumb float-sm-right">
+
+									<li class="breadcrumb-item active">Establecimiento</li>
+								</ol>
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+					</div><!-- /.container-fluid -->
+				</div>
+				<!-- /.content-header -->
+
+				<div class="content">
+
+					<div class="card-body">
+
+						<!-- Botón para abrir el modal -->
+						<button type="button" class="btn btn-primary" data-toggle="modal"
+							data-target="#registrarEstablecimientoModal">
+							Registrar Establecimiento
+						</button>
+
+						<!-- Tabla de Establecimientos -->
+						<table id="example1" class="table table-bordered table-striped">
+							<thead>
+								<tr>
+									<th>ID</th>
+									<th>NOMBRE</th>
+									<th>RBD</th>
+									<th>DIRECCION</th>
+									<th>NOMBRE DE CONTACTO</th>
+									<th>EMAIL DE CONTACTO</th>
+									<th>CARGO DE CONTACTO</th>
+									<th>TELEFONO DE CONTACTO</th>
+									<th>ID DE SOSTENEDOR</th>
+									<th>EDITAR/ELIMINAR</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td th:text="${establecimiento.id}"></td>
+									<td th:text="${establecimiento.nombre}"></td>
+									<td th:text="${establecimiento.rbd}"></td>
+									<td th:text="${establecimiento.direccion}"></td>
+									<td th:text="${establecimiento.contactonombre}"></td>
+									<td th:text="${establecimiento.contactoemail}"></td>
+									<td th:text="${establecimiento.contactocargo}"></td>
+									<td th:text="${establecimiento.contactotelefono}"></td>
+									<td th:text="${establecimiento.sostenedorid}"></td>
+									<td>
+										<button type="button" class="btn btn-warning btn-editar-establecimiento"
+											data-toggle="modal" data-target="#editarEstablecimientoModal"
+											th:data-id="${establecimiento.id}"
+											th:data-nombre="${establecimiento.nombre}"
+											th:data-rbd="${establecimiento.rbd}"
+											th:data-direccion="${establecimiento.direccion}"
+											th:data-contactonombre="${establecimiento.contactonombre}"
+											th:data-contactoemail="${establecimiento.contactoemail}"
+											th:data-contactocargo="${establecimiento.contactocargo}"
+											th:data-contactotelefono="${establecimiento.contactotelefono}"
+											th:data-sostenedorId="${establecimiento.sostenedorid}">
+											Editar
+										</button>
+										<a class="btn btn-danger" th:attr="data-id=${establecimiento.id}"
+											onclick="fxJSeliminar(this.getAttribute('data-id'))">Borrar</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+
+
+					</div>
+					<!-- /.card-body -->
+				</div>
+				<!-- Modal para editar establecimiento -->
+				<div class="modal fade" id="editarEstablecimientoModal" tabindex="-1" role="dialog"
+					aria-labelledby="editarEstablecimientoModalLabel" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="editarEstablecimientoModalLabel">Editar Establecimiento</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<form id="editarEstablecimientoForm" action="/admin/acREST" method="POST">
+									<input type="hidden" id="id" name="id" />
+									<!-- Otros campos ocultos si es necesario -->
+
+									<div class="form-group">
+										<label for="nombre">Nombre:</label>
+										<input type="text" class="form-control" id="nombre" name="nombre" />
+									</div>
+									<div class="form-group">
+										<label for="rbd">RBD:</label>
+										<input type="text" class="form-control" id="rbd" name="rbd" />
+									</div>
+
+									<div class="form-group">
+										<label for="direccion">Dirección:</label>
+										<input type="text" class="form-control" id="direccion" name="direccion" />
+									</div>
+
+									<div class="form-group">
+										<label for="contactonombre">Nombre de Contacto:</label>
+										<input type="text" class="form-control" id="contactonombre"
+											name="contactonombre" />
+									</div>
+
+									<div class="form-group">
+										<label for="contactoemail">Email de Contacto:</label>
+										<input type="email" class="form-control" id="contactoemail"
+											name="contactoemail" />
+									</div>
+
+									<div class="form-group">
+										<label for="contactocargo">Cargo de Contacto:</label>
+										<input type="text" class="form-control" id="contactocargo"
+											name="contactocargo" />
+									</div>
+
+									<div class="form-group">
+										<label for="contactotelefono">Teléfono de Contacto:</label>
+										<input type="text" class="form-control" id="contactotelefono"
+											name="contactotelefono" />
+									</div>
+
+									<div class="form-group">
+										<label for="sostenedorid">ID de Sostenedor:</label>
+										<input type="text" class="form-control" id="sostenedorid" name="sostenedorid" />
+									</div>
+
+									<!-- ... Otros campos del formulario ... -->
+
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary"
+											data-dismiss="modal">Cancelar</button>
+										<button type="submit" class="btn btn-primary">Guardar cambios</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Modal para registrar establecimiento -->
+				<div class="modal fade" id="registrarEstablecimientoModal" tabindex="-1" role="dialog"
+					aria-labelledby="registrarEstablecimientoModalLabel" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="registrarEstablecimientoModalLabel">Registrar
+									Establecimiento</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+
+							<!-- Formulario en el cuerpo del modal -->
+							<div class="modal-body">
+								<form th:action="@{/admin/gcREST}" method="POST">
+									<div class="form-group">
+										<label for="nombre">Nombre:</label>
+										<input type="text" class="form-control" id="nombre" name="nombre" />
+									</div>
+									<div class="form-group">
+										<label for="rbd">RBD:</label>
+										<input type="text" class="form-control" id="rbd" name="rbd" />
+									</div>
+
+									<div class="form-group">
+										<label for="direccion">Dirección:</label>
+										<input type="text" class="form-control" id="direccion" name="direccion" />
+									</div>
+
+									<div class="form-group">
+										<label for="contactonombre">Nombre de Contacto:</label>
+										<input type="text" class="form-control" id="contactonombre"
+											name="contactonombre" />
+									</div>
+
+									<div class="form-group">
+										<label for="contactoemail">Email de Contacto:</label>
+										<input type="email" class="form-control" id="contactoemail"
+											name="contactoemail" />
+									</div>
+
+									<div class="form-group">
+										<label for="contactocargo">Cargo de Contacto:</label>
+										<input type="text" class="form-control" id="contactocargo"
+											name="contactocargo" />
+									</div>
+
+									<div class="form-group">
+										<label for="contactotelefono">Teléfono de Contacto:</label>
+										<input type="text" class="form-control" id="contactotelefono"
+											name="contactotelefono" />
+									</div>
+
+									<div class="form-group">
+										<label for="sostenedorid">ID de Sostenedor:</label>
+										<input type="text" class="form-control" id="sostenedorid" name="sostenedorid" />
+									</div>
+
+									<!-- ... Otros campos del formulario ... -->
+
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary"
+											data-dismiss="modal">Cerrar</button>
+										<button type="submit" class="btn btn-primary">Guardar</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+			</div>
+			<!-- /.col-md-6 -->
+
+			<!-- /.col-md-6 -->
+		</div>
+		<!-- /.row -->
+	</div><!-- /.container-fluid -->
+	</div>
+
+	<!-- /.content -->
+	</div>
+	</div>
+	<!-- /.content-wrapper -->
+	</div>
+	<!-- ./wrapper -->
+
+	<!-- REQUIRED SCRIPTS -->
+	<!-- jQuery -->
+	<script th:src="@{/AdminLTE-3.2.0/plugins/jquery/jquery.min.js}"></script>
+	<!-- Bootstrap 4 -->
+	<script th:src="@{/AdminLTE-3.2.0/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+	<!-- AdminLTE -->
+	<script th:src="@{/AdminLTE-3.2.0/dist/js/adminlte.js}"></script>
+	<!-- DataTables & Plugins -->
+	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables/jquery.dataTables.min.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-responsive/js/dataTables.responsive.min.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-responsive/js/responsive.bootstrap4.min.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-buttons/js/dataTables.buttons.min.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.bootstrap4.min.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/jszip/jszip.min.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/pdfmake/pdfmake.min.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/pdfmake/vfs_fonts.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.html5.min.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.print.min.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
+	<script th:src="@{https://cdn.jsdelivr.net/npm/sweetalert2@11}"></script>
+	<script th:inline="javascript">
+		$(document).on("click", ".btn-editar-establecimiento", function () {
+			var id = this.dataset.id;
+			var nombre = this.dataset.nombre;
+			var rbd = this.dataset.rbd;
+			var direccion = this.dataset.direccion;
+			var email = this.dataset.email;
+			var telefono = this.dataset.telefono;
+
+			console.log("establecimientoid:", id);
+
+
+			// Puedes utilizar estos valores para actualizar el modal de edición, por ejemplo
+			$("#id").val(id);
+			$("#nombre").val(nombre);
+			$("#rbd").val(rbd);
+			$("#direccion").val(direccion);
+			$("#email").val(email);
+			$("#telefono").val(telefono);
+
+
+		});
+
+		function fxJSeliminar(id) {
+			console.log("ID a eliminar:", id);
+			swal.fire({
+				title: 'Eliminar Establecimiento',
+				text: '¿Estás seguro de eliminar este establecimiento?',
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Sí, eliminar',
+				cancelButtonText: 'Cancelar'
+			}).then((result) => {
+				if (result.isConfirmed) {
+					// Aquí debes realizar la llamada AJAX para eliminar el establecimiento con el ID proporcionado
+					// Puedes usar el parámetro 'id' para enviarlo al servidor y realizar la eliminación
+					// Una vez completada la eliminación, puedes recargar la página o actualizar la tabla con los datos actualizados
+					swal.fire(
+						'Eliminado',
+						'El establecimiento ha sido eliminado.',
+						'success'
+					);
+				}
+			});
+		}
+
+		$(function () {
+			$("#example1").DataTable({
+				"responsive": true,
+				"lengthChange": false,
+				"autoWidth": false,
+				"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+			}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+			// $('#example1').DataTable({
+			//     "paging": true,
+			//     "lengthChange": false,
+			//     "searching": false,
+			//     "ordering": true,
+			//     "info": true,
+			//     "autoWidth": false,
+			//     "responsive": true,
+			// });
+		});
+	</script>
+
+</body>
+
+</html>

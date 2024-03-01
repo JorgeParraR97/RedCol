@@ -316,7 +316,7 @@
 											</div>
 											<div class="form-group">
 												<label for="monto">Monto</label>
-												<input type="text" class="form-control" id="monto" name="monto" />
+												<input type="number" class="form-control" id="monto" name="monto" />
 											</div>
 											<div class="form-group">
 												<label for="estado">Estado</label>
@@ -324,7 +324,7 @@
 											</div>
 											<div class="form-group">
 												<label for="vencimiento">Vencimiento</label>
-												<input type="text" class="form-control" id="vencimiento"
+												<input type="date" class="form-control" id="vencimiento"
 													name="vencimiento" />
 											</div>
 									</div>
@@ -337,6 +337,7 @@
 								</div>
 							</div>
 						</div>
+
 
 
 
@@ -486,8 +487,9 @@
 				fila += "<td>" + datos[i].monto + "</td>";
 				fila += "<td>" + datos[i].estado + "</td>";
 				fila += "<td>" + datos[i].vencimiento + "</td>";
-				fila += "<td><button class='btn btn-warning btn-editar' data-toggle='modal' data-target='#editarPagoModal' data-id='" + datos[i].id + "'>Editar</button></td>";
-				fila += "</tr>";
+				fila += "<td><button class='btn btn-warning btn-editar' data-id='" + datos[i].id + "' data-deudor='" + datos[i].deudor + "' data-tipoPago='" + datos[i].tipoPago + "' data-monto='" + datos[i].monto + "' data-estado='" + datos[i].estado + "' data-vencimiento='" + datos[i].vencimiento + "' onclick='abrirEditarPagoModal(this)'>Editar</button></td>";
+
+
 				tablaCuerpo.innerHTML += fila;
 			}
 		}
@@ -615,6 +617,39 @@
 		}
 
 	</script>
+
+	<script th:inline="javascript">
+		$(document).on("click", ".btn-editar", function (event) {
+			event.stopPropagation();
+			abrirEditarPagoModal(this);
+		});
+
+		// Función para abrir el modal y cargar la información del pago
+		function abrirEditarPagoModal(btn) {
+			// Obtener los valores del botón
+			var id = btn.getAttribute("data-id");
+			var deudor = btn.getAttribute("data-deudor");
+			var tipoPago = btn.getAttribute("data-tipoPago");
+			var monto = btn.getAttribute("data-monto");
+			var estado = btn.getAttribute("data-estado");
+			var vencimiento = btn.getAttribute("data-vencimiento");
+
+			// Rellenar los campos del formulario con los valores
+			$("#id").val(id);
+			$("#deudor").val(deudor);
+			$("#tipoPago").val(tipoPago);
+			$("#monto").val(monto);
+			$("#estado").val(estado);
+			$("#vencimiento").val(vencimiento);
+
+			// Mostrar el modal de edición
+			$('#editarPagoModal').modal('show');
+		}
+	</script>
+
+
+
+
 
 
 

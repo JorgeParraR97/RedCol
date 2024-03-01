@@ -24,7 +24,7 @@ public class SostenedorDTO {
 	private String email;
 	
 	
-	private String contra;
+	private String contrasena;
 	
 	
 	private String representante;

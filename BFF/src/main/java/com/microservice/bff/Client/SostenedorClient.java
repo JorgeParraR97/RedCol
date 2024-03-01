@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
-import com.microservice.bff.DTO.ColegioDTO;
 
+import com.microservice.bff.DTO.EstablecimientoDTO;
 import com.microservice.bff.DTO.SostenedorDTO;
 
 @FeignClient(name = "SostenedorMicro")
@@ -27,8 +27,8 @@ public interface SostenedorClient {
 	@PostMapping("/api/sostenedor/crear")
 	public SostenedorDTO save(@RequestBody @Valid SostenedorDTO sostenedor);
 	
-    @GetMapping("api/sostenedor/colegio/{sostenedorid}")
-    public ResponseEntity<List<ColegioDTO>> getColegios(@PathVariable("sostenedorid") int sostenedorid);
+    @GetMapping("api/sostenedor/establecimiento/{sostenedorid}")
+    public ResponseEntity<List<EstablecimientoDTO>> getColegios(@PathVariable("sostenedorid") int sostenedorid);
     
     @GetMapping("api/sostenedor/buscar/{id}")
     public ResponseEntity<Optional<SostenedorDTO>> findById(@PathVariable("id") int id);

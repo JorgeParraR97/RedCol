@@ -13,7 +13,7 @@ import com.practica.sostenedor.entity.SostenedorEntity;
 @Repository
 public interface SostenedorRepository extends JpaRepository<SostenedorEntity, Integer>{
 	
-	Optional<SostenedorDTO> findByEmailAndContra(String email, String contra);
+	Optional<SostenedorDTO> findByEmailAndContrasena(String email, String contra);
 	Optional<SostenedorEntity> findByEmail(String email);
 
 }

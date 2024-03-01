@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.practica.dto.PagosDTO;
 
-
-
 @Service
 public interface IPagosService {
 	

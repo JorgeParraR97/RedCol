@@ -1,6 +1,6 @@
 package com.practica.entity;
 
-import java.util.Date;
+
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.type.DateType;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -38,7 +39,7 @@ public class PagosEntity {
 	private int monto;
 	
 	
-	private Date vencimiento;
+	private DateType vencimiento;
 	
 
 }
