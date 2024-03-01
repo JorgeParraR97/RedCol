@@ -1,0 +1,48 @@
+-- Cambiar el tipo de datos de contraseña
+ALTER TABLE sostenedor
+ALTER COLUMN contrasena TYPE character varying(50);
+
+-- Cambiar el tipo de datos de email
+ALTER TABLE sostenedor
+ALTER COLUMN email TYPE character varying(50);
+
+-- Cambiar el tipo de datos de nombre
+ALTER TABLE sostenedor
+ALTER COLUMN nombre TYPE character varying(50);
+
+-- Cambiar el tipo de datos de representante
+ALTER TABLE sostenedor
+ALTER COLUMN representante TYPE character varying(50);
+
+-- Cambiar el tipo de datos de rut
+ALTER TABLE sostenedor
+ALTER COLUMN rut TYPE character varying(12);
+
+
+-- Cambiar el tipo de datos de nombre
+ALTER TABLE establecimiento
+ALTER COLUMN nombre TYPE character varying(50);
+
+-- Cambiar el tipo de datos de rbd
+ALTER TABLE establecimiento
+ALTER COLUMN rbd TYPE character varying(10);
+
+-- Cambiar el tipo de datos de dirección
+ALTER TABLE establecimiento
+ALTER COLUMN direccion TYPE character varying(50);
+
+-- Cambiar el tipo de datos de contactonombre
+ALTER TABLE establecimiento
+ALTER COLUMN contactonombre TYPE character varying(50);
+
+-- Cambiar el tipo de datos de contactocargo
+ALTER TABLE establecimiento
+ALTER COLUMN contactocargo TYPE character varying(25);
+
+-- Cambiar el tipo de datos de contactotelefono
+ALTER TABLE establecimiento
+ALTER COLUMN contactotelefono TYPE character varying(9);
+
+-- Cambiar el tipo de datos de contactoemail
+ALTER TABLE establecimiento
+ALTER COLUMN contactoemail TYPE character varying(50);
