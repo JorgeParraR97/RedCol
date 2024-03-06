@@ -122,6 +122,12 @@
 										<p>Pagos</p>
 									</a>
 								</li>
+								<li class="nav-item">
+									<a th:href="@{/admin/tarifa}" class="nav-link">
+										<i class="far fa-circle nav-icon"></i>
+										<p>Tarifa</p>
+									</a>
+								</li>
 							</ul>
 						</li>
 					</ul>
@@ -180,7 +186,9 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
+								<tr th:each="establecimiento, iterStat : ${establecimiento}">
+
+
 									<td th:text="${establecimiento.id}"></td>
 									<td th:text="${establecimiento.nombre}"></td>
 									<td th:text="${establecimiento.rbd}"></td>
@@ -189,7 +197,7 @@
 									<td th:text="${establecimiento.contactoemail}"></td>
 									<td th:text="${establecimiento.contactocargo}"></td>
 									<td th:text="${establecimiento.contactotelefono}"></td>
-									<td th:text="${establecimiento.sostenedorid}"></td>
+									<td th:text="${establecimiento.sostenedorId}"></td>
 									<td>
 										<button type="button" class="btn btn-warning btn-editar-establecimiento"
 											data-toggle="modal" data-target="#editarEstablecimientoModal"
@@ -201,7 +209,7 @@
 											th:data-contactoemail="${establecimiento.contactoemail}"
 											th:data-contactocargo="${establecimiento.contactocargo}"
 											th:data-contactotelefono="${establecimiento.contactotelefono}"
-											th:data-sostenedorId="${establecimiento.sostenedorid}">
+											th:data-sostenedorId="${establecimiento.sostenedorId}">
 											Editar
 										</button>
 										<a class="btn btn-danger" th:attr="data-id=${establecimiento.id}"
@@ -227,7 +235,7 @@
 								</button>
 							</div>
 							<div class="modal-body">
-								<form id="editarEstablecimientoForm" action="/admin/acREST" method="POST">
+								<form id="editarEstablecimientoForm" action="/admin/aeREST" method="POST">
 									<input type="hidden" id="id" name="id" />
 									<!-- Otros campos ocultos si es necesario -->
 
@@ -302,7 +310,7 @@
 
 							<!-- Formulario en el cuerpo del modal -->
 							<div class="modal-body">
-								<form th:action="@{/admin/gcREST}" method="POST">
+								<form th:action="@{/admin/geREST}" method="POST">
 									<div class="form-group">
 										<label for="nombre">Nombre:</label>
 										<input type="text" class="form-control" id="nombre" name="nombre" />
@@ -403,8 +411,10 @@
 			var nombre = this.dataset.nombre;
 			var rbd = this.dataset.rbd;
 			var direccion = this.dataset.direccion;
-			var email = this.dataset.email;
-			var telefono = this.dataset.telefono;
+			var contactoemail = this.dataset.contactoemail;
+			var contactotelefono = this.dataset.contactotelefono;
+			var contactocargo = this.dataset.contactocargo;
+			var contactonombre = this.dataset.contactonombre;
 
 			console.log("establecimientoid:", id);
 
@@ -414,8 +424,10 @@
 			$("#nombre").val(nombre);
 			$("#rbd").val(rbd);
 			$("#direccion").val(direccion);
-			$("#email").val(email);
-			$("#telefono").val(telefono);
+			$("#contactoemail").val(contactoemail);
+			$("#contactotelefono").val(contactotelefono);
+			$("#contactocargo").val(contactocargo);
+			$("#contactonombre").val(contactonombre);
 
 
 		});

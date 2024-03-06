@@ -14,16 +14,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.practica.dto.EstablecimientoDTO;
 import com.practica.dto.PagosDTO;
 import com.practica.dto.SostenedorDTO;
+import com.practica.dto.TarifaDTO;
 import com.practica.service.IEstablecimientoService;
 import com.practica.service.IPagosService;
 import com.practica.service.ISostenedorService;
+import com.practica.service.ITarifaService;
 
 @Controller
 @RequestMapping("admin")
@@ -37,6 +38,9 @@ public class AdminPageController {
 	
 	@Autowired
 	IPagosService pagServicio;
+	
+	@Autowired
+	ITarifaService tarServicio;
 	
 	@GetMapping("sostenedor")
 	public String sostenedor(Model model) {
@@ -205,6 +209,62 @@ public class AdminPageController {
 	        model.addAttribute("error", "Error interno del servidor");
 	        // Redirige a la página de registro
 	        return "redirect:/admin/pagos"; // Cambiar según la ruta real de tu página de registro
+	    }
+	}
+    
+    
+    @GetMapping("tarifa")
+	public String tarifa(Model model) {
+		List<TarifaDTO> tarifa = tarServicio.findAllREST();
+		model.addAttribute("tarifa", tarifa);
+		return "/AdminPage/mantenedor_tarifa";
+	}
+	
+	
+	@PostMapping("/gtREST")
+	public String saveREST(@Valid TarifaDTO tarifaDTO, Model model) {
+	    try {
+	        ResponseEntity<String> response = tarServicio.saveREST(tarifaDTO);
+
+	        if (response != null && response.getStatusCode().is2xxSuccessful()) {
+	            // Si la creación en el BffAdminController es exitosa, redirige a la página de login
+	            return "redirect:/admin/tarifa";
+	        } else {
+	            // Creación fallida, agregar mensaje de error al modelo
+	            model.addAttribute("error", "Error al crear tarifa");
+	            // Redirige a la página de registro
+	            return "redirect:/admin/tarifa"; // Cambiar según la ruta real de tu página de registro
+	        }
+	    } catch (Exception e) {
+	        // Error interno, agregar mensaje de error al modelo
+	        model.addAttribute("error", "Error interno del servidor");
+	        // Redirige a la página de registro
+	        return "redirect:/admin/tarifa"; // Cambiar según la ruta real de tu página de registro
+	    }
+	}
+	
+	@PostMapping("/atREST")
+    public String actualizarTarifa(@Valid TarifaDTO tarifaDTO, Model model) {
+        try {
+        	tarServicio.actualizarTarifa(tarifaDTO);
+            // Si la actualización en el servicio es exitosa, redirige a la página adecuada
+            return "redirect:/admin/tarifa";
+        } catch (Exception e) {
+            // Manejar el error adecuadamente
+            model.addAttribute("error", "Error al actualizar tarifa");
+            return "redirect:/admin/tarifa";
+        }
+    }
+	
+	
+	@DeleteMapping("/btREST/{id}")
+	public ResponseEntity<String> deleteTarifa(@PathVariable int id) {
+	    try {
+	        tarServicio.deleteREST(id);
+	        return ResponseEntity.ok("Eliminado exitosamente");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(500).body("Error al intentar eliminar");
 	    }
 	}
 	

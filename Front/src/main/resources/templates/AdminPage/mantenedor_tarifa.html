@@ -146,12 +146,12 @@
 					<div class="container-fluid">
 						<div class="row mb-2">
 							<div class="col-sm-6">
-								<h1 class="m-0">Mantenedor Sostenedor</h1>
+								<h1 class="m-0">Mantenedor Tarifa</h1>
 							</div><!-- /.col -->
 							<div class="col-sm-6">
 								<ol class="breadcrumb float-sm-right">
 
-									<li class="breadcrumb-item active">Sostenedor</li>
+									<li class="breadcrumb-item active">Tarifa</li>
 								</ol>
 							</div><!-- /.col -->
 						</div><!-- /.row -->
@@ -165,40 +165,31 @@
 
 						<!-- Botón para abrir el modal -->
 						<button type="button" class="btn btn-primary" data-toggle="modal"
-							data-target="#registrarSostenedorModal">
-							Registrar Sostenedor
+							data-target="#registrarTarifaModal">
+							Registrar Tarifa
 						</button>
 
 						<table id="example1" class="table table-bordered table-striped">
 							<thead>
 								<tr>
 									<th>ID</th>
-									<th>NOMBRE</th>
-									<th>RUT</th>
-									<th>EMAIL</th>
-									<th>REPRESENTANTE</th>
+									<th>DESCRIPCION</th>
+									<th>MONTO</th>
 									<th>EDITAR/ELIMINAR</th>
-								</tr>
+								</tr>	
 							</thead>
 							<tbody>
 								<!-- Aquí deberías reemplazar este bloque con los datos de tu modelo de persona -->
-								<tr th:each="sostenedor, iterStat : ${sostenedor}">
+								<tr th:each="tarifa, iterStat : ${tarifa}">
 
 
-									<td th:text="${sostenedor.id}"></td>
-									<td th:text="${sostenedor.nombre}" <a class="nombre-sostenedor"
-										th:data-id="${sostenedor.id}" style="cursor: pointer;"></a>>
-									</td>
-									<td th:text="${sostenedor.rut}"></td>
-									<td th:text="${sostenedor.email}"></td>
-									<td th:text="${sostenedor.representante}"></td>
+									<td th:text="${tarifa.id}"></td>
+									<td th:text="${tarifa.descripcion}"></td>
+									<td th:text="${tarifa.monto}"></td>
 									<td>
 										<button type="button" class="btn btn-warning btn-editar" data-toggle="modal"
-											data-target="#editarSostenedorModal" th:data-id="${sostenedor.id}"
-											th:data-nombre="${sostenedor.nombre}" th:data-rut="${sostenedor.rut}"
-											th:data-email="${sostenedor.email}"
-											th:data-representante="${sostenedor.representante}">Editar</button>
-										<a class="btn btn-danger" th:attr="data-id=${sostenedor.id}"
+											data-target="#editarTarifaModal">Editar</button>
+										<a class="btn btn-danger" th:attr="data-id=${tarifa.id}"
 											onclick="fxJSeliminar(this.getAttribute('data-id'))">Borrar</a>
 									</td>
 
@@ -211,36 +202,28 @@
 					</div>
 					<!-- /.card-body -->
 				</div>
-				<div class="modal fade" id="editarSostenedorModal" tabindex="-1" role="dialog"
-					aria-labelledby="editarSostenedorModalLabel" aria-hidden="true">
+				<div class="modal fade" id="editarTarifaModal" tabindex="-1" role="dialog"
+					aria-labelledby="editarTarifaModalLabel" aria-hidden="true">
 					<div class="modal-dialog" role="document">
 						<div class="modal-content">
 							<div class="modal-header">
-								<h5 class="modal-title" id="editarSostenedorModalLabel">Editar sostenedor</h5>
+								<h5 class="modal-title" id="editarTarifaModalLabel">Editar tarifa</h5>
 								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 									<span aria-hidden="true">&times;</span>
 								</button>
 							</div>
 							<div class="modal-body">
-								<form id="editarSostenedorForm" action="/admin/asREST" method="POST">
+								<form id="editarTarifaForm" action="/admin/atREST" method="POST">
 									<input type="hidden" name="id" id="id" />
 									<div class="form-group">
-										<label for="nombre">Nombre</label>
-										<input type="text" class="form-control" id="nombre" name="nombre" />
+										<label for="descripcion">DESCRIPCION</label>
+										<input type="text" class="form-control" id="descripcion" name="descripcion" />
 									</div>
 									<div class="form-group">
-										<label for="rut">RUT</label>
-										<input type="text" class="form-control" id="rut" name="rut" />
+										<label for="monto">Monto</label>
+										<input type="text" class="form-control" id="monto" name="monto" />
 									</div>
-									<div class="form-group">
-										<label for="email">Correo electrónico</label>
-										<input type="email" class="form-control" id="email" name="email" />
-									</div>
-									<div class="form-group">
-										<label for="representante">Representante</label>
-										<input type="text" class="form-control" id="representante"
-											name="representante" />
-									</div>
+								
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -250,12 +233,12 @@
 						</div>
 					</div>
 				</div>
-				<div class="modal fade" id="registrarSostenedorModal" tabindex="-1" role="dialog"
+				<div class="modal fade" id="registrarTarifaModal" tabindex="-1" role="dialog"
 					aria-labelledby="exampleModalLabel" aria-hidden="true">
 					<div class="modal-dialog" role="document">
 						<div class="modal-content">
 							<div class="modal-header">
-								<h5 class="modal-title" id="exampleModalLabel">Registrar Sostenedor</h5>
+								<h5 class="modal-title" id="exampleModalLabel">Registrar Tarifa</h5>
 								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 									<span aria-hidden="true">&times;</span>
 								</button>
@@ -263,26 +246,16 @@
 
 							<!-- Formulario en el modal body -->
 							<div class="modal-body">
-								<form th:action="@{/admin/gsREST}" method="POST">
+								<form th:action="@{/admin/gtREST}" method="POST">
 									<div class="form-group">
-										<label for="nombre">Nombre:</label>
-										<input type="text" class="form-control" id="nombre" name="nombre" required>
+										<label for="descripcion">DESCRIPCION:</label>
+										<input type="text" class="form-control" id="descripcion" name="descripcion" required>
 									</div>
 									<div class="form-group">
-										<label for="rut">RUT:</label>
-										<input type="text" class="form-control" id="rut" name="rut" required>
-									</div>
-
-									<div class="form-group">
-										<label for="representante">Representante:</label>
-										<input type="text" class="form-control" id="representante" name="representante"
-											required>
+										<label for="monto">MONTO:</label>
+										<input type="text" class="form-control" id="monto" name="monto" required>
 									</div>
 
-									<div class="form-group">
-										<label for="email">Email:</label>
-										<input type="email" class="form-control" id="email" name="email" required>
-									</div>
 									<!-- ... Otros campos del formulario ... -->
 
 									<div class="modal-footer">
@@ -341,17 +314,14 @@
 	<script th:inline="javascript">
 		$(document).on("click", ".btn-editar", function () {
 			var id = this.dataset.id;
-			var nombre = this.dataset.nombre;
-			var rut = this.dataset.rut;
-			var email = this.dataset.email;
-			var representante = this.dataset.representante;
+			var descripcion = this.dataset.descripcion;
+			var monto = this.dataset.monto;
 
 			// Puedes utilizar estos valores para actualizar el modal de edición, por ejemplo
 			$("#id").val(id);
-			$("#nombre").val(nombre);
-			$("#rut").val(rut);
-			$("#email").val(email);
-			$("#representante").val(representante);
+			$("#descripcion").val(descripcion);
+			$("#monto").val(monto);
+
 		});
 	</script>
 	<script th:inline="javascript">
@@ -367,7 +337,7 @@
 			}).then((result) => {
 				if (result.isConfirmed) {
 					$.ajax({
-						url: "http://localhost:7777/admin/bsREST/" + id,
+						url: "http://localhost:7777/admin/btREST/" + id,
 						type: 'DELETE',
 						success: function (res) {
 							console.log(res);
@@ -399,59 +369,6 @@
 			});
 		}
 	</script>
-	<script th:inline="javascript">
-		$(document).ready(function () {
-			// Agrega un evento clic a los elementos con la clase "nombre-sostenedor"
-			$(document).on("click", ".nombre-sostenedor", function () {
-				var idSostenedor = $(this).data("id");
-
-				// Realiza una solicitud AJAX para obtener la información de los colegios
-				$.ajax({
-					url: "http://localhost:7777/admin/csREST/" + idSostenedor,
-					type: "GET",
-					success: function (data) {
-						console.log(data);
-						// Muestra los datos en un modal
-						mostrarInformacionEnModal(data);
-					},
-					error: function () {
-						alert("Error al obtener la información de los colegios.");
-					}
-				});
-			});
-
-			// Función para mostrar la información en un modal
-			function mostrarInformacionEnModal(data) {
-				// Crea el contenido HTML de la tabla con la información de los colegios
-				var tablaHtml = "<table class='table'>";
-				tablaHtml += "<thead><tr><th>RBD</th><th>Nombre</th><th>Dirección</th><th>Email</th><th>Teléfono</th></tr></thead>";
-				tablaHtml += "<tbody>";
-
-				// Itera sobre los datos para construir las filas de la tabla
-				for (var i = 0; i < data.length; i++) {
-					tablaHtml += "<tr>";
-					tablaHtml += "<td>" + data[i].rbd + "</td>";
-					tablaHtml += "<td>" + data[i].nombre + "</td>";
-					tablaHtml += "<td>" + data[i].direccion + "</td>";
-					tablaHtml += "<td>" + data[i].email + "</td>";
-					// Asegúrate de que tengas un campo 'telefono' en tu objeto ColegioDTO
-					tablaHtml += "<td>" + (data[i].telefono || '') + "</td>";
-					tablaHtml += "</tr>";
-				}
-
-				tablaHtml += "</tbody></table>";
-
-				// Muestra el modal con la tabla
-				Swal.fire({
-					title: "Información de colegios asociados",
-					html: tablaHtml,
-					confirmButtonColor: "#007BFF"
-				});
-			}
-		});
-	</script>
-
-
 </body>
 
 </html>
