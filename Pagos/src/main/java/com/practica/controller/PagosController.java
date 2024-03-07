@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.practica.dto.PagosDTO;
+import com.practica.dto.TipopagoDTO;
 import com.practica.service.IPagosService;
+import com.practica.service.ITipopagoService;
 
 
 @RestController
@@ -33,6 +35,10 @@ public class PagosController {
 	
 	@Autowired
 	private IPagosService servicio;
+	
+	
+	@Autowired
+	private ITipopagoService tpservicio; 
 	
 	
 	@PostMapping("/crear")
@@ -98,6 +104,15 @@ public class PagosController {
 	    	return ResponseEntity.status(500).body("Error al eliminar el proyecto");
 	        	}
 	    }
+	
+	
+    @ResponseBody @GetMapping("/listartp")
+    public List<TipopagoDTO> getAllTipopago() {
+    	List<TipopagoDTO> l = tpservicio.findAll();
+    	return l;
+    }
+	
+	
 	
 	
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.microservice.bff.DTO.MapamensualidadDTO;
 import com.microservice.bff.DTO.TarifaDTO;
 
 
@@ -36,6 +37,22 @@ public interface TarifaClient {
     
 	@DeleteMapping("/api/tarifa/borrar/{id}")
 	public void delete(@PathVariable int id);
+	
+	@GetMapping("/api/tarifa/listarmm")
+    public List<MapamensualidadDTO> findmmAll();
+	
+	@PostMapping("/api/tarifa/crearmm")
+	public MapamensualidadDTO savemm(@RequestBody @Valid MapamensualidadDTO mapa);
+	
+  
+    @GetMapping("api/tarifa/buscarmm/{id}")
+    public ResponseEntity<Optional<MapamensualidadDTO>> findmmById(@PathVariable("id") int id);
+    
+    @PutMapping("api/tarifa/actualizarmm/{id}")
+    ResponseEntity<String> actualizarMapa(@PathVariable int id, @RequestBody MapamensualidadDTO mapaActualizado);
+    
+	@DeleteMapping("/api/tarifa/borrarmm/{id}")
+	public void deletemm(@PathVariable int id);
 }
 
 	

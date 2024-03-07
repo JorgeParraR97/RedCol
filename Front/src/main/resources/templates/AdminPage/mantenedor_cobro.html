@@ -123,13 +123,13 @@
 									</a>
 								</li>
 								<li class="nav-item">
-									<a th:href="@{/admin/tarifa}" class="nav-link active">
+									<a th:href="@{/admin/tarifa}" class="nav-link">
 										<i class="far fa-circle nav-icon"></i>
 										<p>Tarifa</p>
 									</a>
 								</li>
 								<li class="nav-item">
-									<a th:href="@{/admin/cobro}" class="nav-link">
+									<a th:href="@{/admin/cobro}" class="nav-link active">
 										<i class="far fa-circle nav-icon"></i>
 										<p>Cobro</p>
 									</a>
@@ -152,12 +152,12 @@
 					<div class="container-fluid">
 						<div class="row mb-2">
 							<div class="col-sm-6">
-								<h1 class="m-0">Mantenedor Tarifa</h1>
+								<h1 class="m-0">Mantenedor Cobro</h1>
 							</div><!-- /.col -->
 							<div class="col-sm-6">
 								<ol class="breadcrumb float-sm-right">
 
-									<li class="breadcrumb-item active">Tarifa</li>
+									<li class="breadcrumb-item active">Cobro</li>
 								</ol>
 							</div><!-- /.col -->
 						</div><!-- /.row -->
@@ -165,130 +165,51 @@
 				</div>
 				<!-- /.content-header -->
 
-				<div class="content">
-
-					<div class="card-body">
-
-						<!-- Botón para abrir el modal -->
-						<button type="button" class="btn btn-primary" data-toggle="modal"
-							data-target="#registrarTarifaModal">
-							Registrar Tarifa
-						</button>
-
-						<table id="example1" class="table table-bordered table-striped">
-							<thead>
-								<tr>
-									<th>ID</th>
-									<th>DESCRIPCION</th>
-									<th>MONTO</th>
-									<th>EDITAR/ELIMINAR</th>
-								</tr>	
-							</thead>
-							<tbody>
-								<!-- Aquí deberías reemplazar este bloque con los datos de tu modelo de persona -->
-								<tr th:each="tarifa, iterStat : ${tarifa}">
-
-
-									<td th:text="${tarifa.id}"></td>
-									<td th:text="${tarifa.descripcion}"></td>
-									<td th:text="${tarifa.monto}"></td>
-									<td>
-										<button type="button" class="btn btn-warning btn-editar" data-toggle="modal"
-											data-target="#editarTarifaModal">Editar</button>
-										<a class="btn btn-danger" th:attr="data-id=${tarifa.id}"
-											onclick="fxJSeliminar(this.getAttribute('data-id'))">Borrar</a>
-									</td>
-
-								</tr>
-								<!-- Fin del bloque a reemplazar -->
-							</tbody>
-
-						</table>
-
-					</div>
-					<!-- /.card-body -->
-				</div>
-				<div class="modal fade" id="editarTarifaModal" tabindex="-1" role="dialog"
-					aria-labelledby="editarTarifaModalLabel" aria-hidden="true">
-					<div class="modal-dialog" role="document">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title" id="editarTarifaModalLabel">Editar tarifa</h5>
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-							</div>
-							<div class="modal-body">
-								<form id="editarTarifaForm" action="/admin/atREST" method="POST">
-									<input type="hidden" name="id" id="id" />
-									<div class="form-group">
-										<label for="descripcion">DESCRIPCION</label>
-										<input type="text" class="form-control" id="descripcion" name="descripcion" />
-									</div>
-									<div class="form-group">
-										<label for="monto">Monto</label>
-										<input type="number" class="form-control" id="monto" name="monto" />
-									</div>
-								
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-								<button type="submit" class="btn btn-primary">Guardar</button>
-							</div>
-							</form>
+				<!-- Desplegable para seleccionar establecimiento -->
+				<div class="row">
+					<div class="col">
+						<div class="form-group">
+							<label for="establecimiento">Seleccione Establecimiento:</label>
+							<select class="form-control" id="establecimiento" name="establecimiento">
+								<option value="">Seleccione un establecimiento</option>
+								<!-- Iterar sobre los establecimientos disponibles y mostrar solo los nombres -->
+								<option th:each="establecimiento : ${establecimiento}" th:value="${establecimiento.id}"
+									th:text="${establecimiento.nombre}"></option>
+							</select>
 						</div>
 					</div>
 				</div>
-				<div class="modal fade" id="registrarTarifaModal" tabindex="-1" role="dialog"
-					aria-labelledby="exampleModalLabel" aria-hidden="true">
-					<div class="modal-dialog" role="document">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title" id="exampleModalLabel">Registrar Tarifa</h5>
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-							</div>
 
-							<!-- Formulario en el modal body -->
-							<div class="modal-body">
-								<form th:action="@{/admin/gtREST}" method="POST">
-									<div class="form-group">
-										<label for="descripcion">DESCRIPCION:</label>
-										<input type="text" class="form-control" id="descripcion" name="descripcion" required>
-									</div>
-									<div class="form-group">
-										<label for="monto">MONTO:</label>
-										<input type="number" class="form-control" id="monto" name="monto" required>
-									</div>
-
-									<!-- ... Otros campos del formulario ... -->
-
-									<div class="modal-footer">
-										<button type="button" class="btn btn-secondary"
-											data-dismiss="modal">Cerrar</button>
-										<button type="submit" class="btn btn-primary">Registrar</button>
-									</div>
-								</form>
-							</div>
-						</div>
-					</div>
+				<div class="form-group" id="selectAnioDiv" style="display:none;">
+					<label for="anio">Seleccione Año:</label>
+					<select id="anio" class="form-control">
+						<option value="">Seleccione un año</option>
+						<!-- Aquí irán los años disponibles -->
+					</select>
 				</div>
-			</div>
-			<!-- /.card-body -->
-		</div>
 
 
-	</div>
-	<!-- /.col-md-6 -->
+				<div id="tablaContenedor" style="display:none;">
+					<table id="tablaMeses" class="table">
+						<thead>
+							<tr>
+								<th>Mes</th>
+								<th>Tarifa</th>
+								<!-- Aquí podrías agregar más columnas si es necesario -->
+							</tr>
+						</thead>
+						<tbody>
+							<!-- Las filas de la tabla se agregarán aquí dinámicamente -->
+						</tbody>
+					</table>
+					<button id="guardarCambiosBtn" class="btn btn-primary">Guardar Cambios</button>
+				</div>
+			</div><!-- /.container-fluid -->
+		</div><!-- /.content-header -->
 
-	<!-- /.col-md-6 -->
-	</div>
-	<!-- /.row -->
-	</div><!-- /.container-fluid -->
-	</div>
 
-	<!-- /.content -->
+
+		<!-- /.content -->
 	</div>
 	</div>
 	<!-- /.content-wrapper -->
@@ -316,20 +237,92 @@
 	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.print.min.js}"></script>
 	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
 	<script th:src="@{https://cdn.jsdelivr.net/npm/sweetalert2@11}"></script>
-
 	<script th:inline="javascript">
-		$(document).on("click", ".btn-editar", function () {
-			var id = this.dataset.id;
-			var descripcion = this.dataset.descripcion;
-			var monto = this.dataset.monto;
+		var tarifas = /*[[${tarifa}]]*/[];
 
-			// Puedes utilizar estos valores para actualizar el modal de edición, por ejemplo
-			$("#id").val(id);
-			$("#descripcion").val(descripcion);
-			$("#monto").val(monto);
+	</script>
 
+	<script>
+		document.getElementById('establecimiento').addEventListener('change', function () {
+			var selectAnioDiv = document.getElementById('selectAnioDiv');
+			var selectAnio = document.getElementById('anio');
+
+			if (this.value !== '') {
+				selectAnio.innerHTML = ''; // Limpiar las opciones anteriores
+
+				// Agregar opciones de años desde 2020 hasta 2025
+				for (var i = 2020; i <= 2025; i++) {
+					var option = document.createElement('option');
+					option.value = i;
+					option.textContent = i;
+					selectAnio.appendChild(option);
+				}
+
+				selectAnioDiv.style.display = 'block'; // Mostrar el desplegable de años si se selecciona un establecimiento
+			} else {
+				selectAnioDiv.style.display = 'none'; // Ocultar el desplegable de años si no se selecciona un establecimiento
+			}
 		});
 	</script>
+
+	<script>
+		document.getElementById('anio').addEventListener('change', function () {
+			var anioSeleccionado = this.value;
+			var tablaContenedor = document.getElementById('tablaContenedor');
+			var tablaMeses = document.getElementById('tablaMeses');
+			var tbody = tablaMeses.querySelector('tbody');
+
+			if (anioSeleccionado !== '') {
+				// Limpiar el contenido anterior de la tabla
+				tbody.innerHTML = '';
+
+				// Crear filas y columnas para cada mes del año seleccionado
+				var meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+				meses.forEach(function (mes, index) {
+					var row = document.createElement('tr');
+
+					// Columna para el nombre del mes
+					var mesCell = document.createElement('td');
+					mesCell.textContent = mes;
+					row.appendChild(mesCell);
+
+					// Columna para el desplegable de tarifas
+					var tarifaCell = document.createElement('td');
+					var select = document.createElement('select');
+					select.name = 'tarifa-' + (index + 1); // Ajustar el nombre del desplegable según el mes
+					select.classList.add('form-control');
+
+					// Opción por defecto "Seleccione una tarifa"
+					var defaultOption = document.createElement('option');
+					defaultOption.value = '';
+					defaultOption.textContent = 'Seleccione una tarifa';
+					select.appendChild(defaultOption);
+
+					// Agregar opciones de tarifas al desplegable
+					tarifas.forEach(function (tarifa) {
+						var option = document.createElement('option');
+						option.value = tarifa.id; // Asignar el ID de la tarifa como valor
+						option.textContent = tarifa.descripcion; // Asignar el nombre de la tarifa como texto
+						select.appendChild(option);
+					});
+
+					tarifaCell.appendChild(select);
+					row.appendChild(tarifaCell);
+
+					tbody.appendChild(row);
+				});
+
+				// Mostrar la tabla
+				tablaContenedor.style.display = 'block';
+			} else {
+				// Ocultar la tabla si no se selecciona ningún año
+				tablaContenedor.style.display = 'none';
+			}
+		});
+
+	</script>
+
+
 	<script th:inline="javascript">
 		function fxJSeliminar(id) {
 			Swal.fire({

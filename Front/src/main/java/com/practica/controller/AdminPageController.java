@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.practica.dto.EstablecimientoDTO;
+import com.practica.dto.MapamensualidadDTO;
 import com.practica.dto.PagosDTO;
 import com.practica.dto.SostenedorDTO;
 import com.practica.dto.TarifaDTO;
@@ -266,6 +267,18 @@ public class AdminPageController {
 	        e.printStackTrace();
 	        return ResponseEntity.status(500).body("Error al intentar eliminar");
 	    }
+	}
+	
+	
+    @GetMapping("cobro")
+	public String cobro(Model model) {
+		List<TarifaDTO> tarifa = tarServicio.findAllREST();
+		List<EstablecimientoDTO> establecimiento = estServicio.findAllREST();
+		List<MapamensualidadDTO> mapamensualidad = tarServicio.findmmAllREST();
+		model.addAttribute("tarifa", tarifa);
+		model.addAttribute("establecimiento", establecimiento);
+		model.addAttribute("mapamensualidad", mapamensualidad);
+		return "/AdminPage/mantenedor_cobro";
 	}
 	
 	

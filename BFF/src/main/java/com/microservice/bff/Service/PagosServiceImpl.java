@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.microservice.bff.Client.PagosClient;
 import com.microservice.bff.DTO.PagosDTO;
+import com.microservice.bff.DTO.TipopagoDTO;
 
 
 @Service
@@ -48,6 +49,13 @@ public class PagosServiceImpl implements IPagosService {
 	@Override
 	public void PagosDelete(int id) {
 		pagosClient.delete(id);
+	}
+	
+	
+	@Override
+	public List<TipopagoDTO> FindAlltp() {
+		return pagosClient.findAlltp();
+
 	}
 
 }

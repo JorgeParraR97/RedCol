@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.microservice.bff.DTO.MapamensualidadDTO;
 import com.microservice.bff.DTO.TarifaDTO;
 import com.microservice.bff.Service.ITarifaService;
 
@@ -81,6 +82,56 @@ public class BffTarifaController {
         }
 
         tarifaService.TarifaDelete(id);
+        return ResponseEntity.noContent().build();
+    }
+    
+    
+	@GetMapping("/findmmAll")
+    public List<MapamensualidadDTO> MapaFindAll(){
+		return tarifaService.MapaFindAll(); 
+    }
+	
+	@PostMapping("/createmm")
+	public ResponseEntity<String> MapaSave(@RequestBody @Valid MapamensualidadDTO mapa) {
+	    try {
+	        if (mapa == null) {
+	            logger.error("Datos de mapa no válidos. Rechazando la solicitud. Datos: {}", mapa);
+	            return ResponseEntity.badRequest().body("Datos de mapa no válidos");
+	        }
+
+	        logger.info("Recibida solicitud para crear mapa. Datos: {}", mapa);
+
+	        tarifaService.MapaSave(mapa);
+
+	        logger.info("Mapa creada exitosamente. Datos: {}", mapa);
+	        return ResponseEntity.status(HttpStatus.CREATED).body("Mapa creado exitosamente");
+	    } catch (Exception e) {
+	        logger.error("Error interno al procesar la solicitud de creación de mapa. Datos: {}", mapa, e);
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor");
+	    }
+	}
+	
+	
+	@GetMapping("/buscarmm/{id}")
+    public ResponseEntity<Optional<MapamensualidadDTO>> findmmById(@PathVariable("id") int id){
+		
+		return tarifaService.findmmById(id);
+	}
+	
+	@PutMapping("/actualizarmm/{id}")
+    public ResponseEntity<String> actualizarMapa(@PathVariable int id, @RequestBody MapamensualidadDTO mapaActualizado) {
+		
+		ResponseEntity<String> responseEntity = tarifaService.actualizarMapa(id, mapaActualizado);
+        return responseEntity;
+    }
+	
+    @DeleteMapping("/deletemm/{id}")
+    public ResponseEntity<Void> MapaDelete(@PathVariable("id") Integer id) {
+        if (id == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        tarifaService.MapaDelete(id);
         return ResponseEntity.noContent().build();
     }
 	

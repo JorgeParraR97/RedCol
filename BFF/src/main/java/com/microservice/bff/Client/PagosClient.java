@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.microservice.bff.DTO.PagosDTO;
+import com.microservice.bff.DTO.TipopagoDTO;
 
 
 
@@ -36,4 +37,9 @@ public interface PagosClient {
     
 	@DeleteMapping("/api/pagos/borrar/{id}")
 	public void delete(@PathVariable int id);
+	
+	@GetMapping("/api/pagos/listartp")
+    public List<TipopagoDTO> findAlltp();
+	
+	
 }

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.microservice.bff.DTO.PagosDTO;
+import com.microservice.bff.DTO.TipopagoDTO;
 import com.microservice.bff.Service.IPagosService;
 
 
@@ -37,6 +38,11 @@ public class BffPagosController {
 	@GetMapping("/findAll")
     public List<PagosDTO> PagosFindAll(){
 		return pagosService.PagosFindAll(); 
+    }
+	
+	@GetMapping("/findAlltp")
+    public List<TipopagoDTO> FindAlltp(){
+		return pagosService.FindAlltp(); 
     }
 	
 	@PostMapping("/create")

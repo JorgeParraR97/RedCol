@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.practica.dto.MapamensualidadDTO;
 import com.practica.dto.TarifaDTO;
 
 @Service
@@ -99,6 +100,94 @@ public class TarifaServiceImpl implements ITarifaService {
 				TarifaDTO dto = responseEntity.getBody();
 
 				restTemplate.delete("http://localhost:8080/api/bff/tarifa/delete" + "/" + id);
+
+				return dto;
+			} else {
+				System.out.println("A ocurrido un error");
+				return null;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
+	
+	@Override
+	public List<MapamensualidadDTO> findmmAllREST() {
+		try {
+			ObjectMapper unMapper = new ObjectMapper();
+
+			List<MapamensualidadDTO> mapas = Arrays
+					.asList(unMapper.readValue(new URL("http://localhost:8080/api/bff/tarifa/findmmAll"), MapamensualidadDTO[].class));
+			return mapas;
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	@Override
+	public ResponseEntity<String> savemmREST(MapamensualidadDTO mm) {
+	    try {
+	        HttpHeaders headers = new HttpHeaders();
+	        headers.setContentType(MediaType.APPLICATION_JSON);
+
+	        HttpEntity<MapamensualidadDTO> requestEntity = new HttpEntity<>(mm, headers);
+
+	        RestTemplate restTemplate = new RestTemplate();
+	        ResponseEntity<String> responseEntity = restTemplate.postForEntity(
+	                "http://localhost:8080/api/bff/tarifa/createmm", requestEntity, String.class);
+
+	        if (responseEntity.getStatusCode().is2xxSuccessful()) {
+	            String responseBody = responseEntity.getBody();
+	            return ResponseEntity.ok(responseBody);
+	        } else {
+	            System.out.println("Ha ocurrido un error");
+	            return ResponseEntity.status(responseEntity.getStatusCode()).body("Error en la creación del mapa");
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor");
+	    }
+	}
+	
+	@Override
+	public void actualizarMapa(MapamensualidadDTO mapamensualidadDTO) {
+        HttpHeaders headers = new HttpHeaders();
+        // Puedes agregar headers si es necesario
+        HttpEntity<MapamensualidadDTO> requestEntity = new HttpEntity<>(mapamensualidadDTO, headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+        		"http://localhost:8080/api/bff/tarifa/actualizarmm/{id}",
+                HttpMethod.PUT,
+                requestEntity,
+                String.class,
+                mapamensualidadDTO.getId() // Reemplaza con el valor correcto
+        );
+
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            throw new RuntimeException("Error al actualizar mapa en el BFF");
+        }
+    }
+	
+	
+	@Override
+	public MapamensualidadDTO deletemmREST(int id) {
+		try {
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+
+			RestTemplate restTemplate = new RestTemplate();
+			ResponseEntity<MapamensualidadDTO> responseEntity = restTemplate
+					.getForEntity("http://localhost:8080/api/bff/tarifa/buscarmm" + "/" + id, MapamensualidadDTO.class);
+
+			if (responseEntity.getStatusCode().is2xxSuccessful()) {
+				MapamensualidadDTO dto = responseEntity.getBody();
+
+				restTemplate.delete("http://localhost:8080/api/bff/tarifa/deletemm" + "/" + id);
 
 				return dto;
 			} else {
