@@ -164,7 +164,6 @@
 					</div><!-- /.container-fluid -->
 				</div>
 				<!-- /.content-header -->
-
 				<!-- Desplegable para seleccionar establecimiento -->
 				<div class="row">
 					<div class="col">
@@ -174,6 +173,7 @@
 								<option value="">Seleccione un establecimiento</option>
 								<!-- Iterar sobre los establecimientos disponibles y mostrar solo los nombres -->
 								<option th:each="establecimiento : ${establecimiento}" th:value="${establecimiento.id}"
+									th:data-sostenedor-id="${establecimiento.sostenedorId}"
 									th:text="${establecimiento.nombre}"></option>
 							</select>
 						</div>
@@ -188,7 +188,6 @@
 					</select>
 				</div>
 
-
 				<div id="tablaContenedor" style="display:none;">
 					<table id="tablaMeses" class="table">
 						<thead>
@@ -202,8 +201,13 @@
 							<!-- Las filas de la tabla se agregarán aquí dinámicamente -->
 						</tbody>
 					</table>
-					<button id="guardarCambiosBtn" class="btn btn-primary">Guardar Cambios</button>
+					<button class="btn btn-primary" onclick="enviarSolicitud()">Guardar Cambios</button>
 				</div>
+
+
+
+
+
 			</div><!-- /.container-fluid -->
 		</div><!-- /.content-header -->
 
@@ -237,10 +241,13 @@
 	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.print.min.js}"></script>
 	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
 	<script th:src="@{https://cdn.jsdelivr.net/npm/sweetalert2@11}"></script>
+	<script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
 	<script th:inline="javascript">
 		var tarifas = /*[[${tarifa}]]*/[];
-
+		var registros = /*[[${mapamensualidad}]]*/[];
 	</script>
+
+
 
 	<script>
 		document.getElementById('establecimiento').addEventListener('change', function () {
@@ -268,106 +275,132 @@
 	<script>
 		document.getElementById('anio').addEventListener('change', function () {
 			var anioSeleccionado = this.value;
-			var tablaContenedor = document.getElementById('tablaContenedor');
-			var tablaMeses = document.getElementById('tablaMeses');
-			var tbody = tablaMeses.querySelector('tbody');
+			var establecimientoSeleccionado = document.getElementById('establecimiento').value;
 
-			if (anioSeleccionado !== '') {
-				// Limpiar el contenido anterior de la tabla
-				tbody.innerHTML = '';
+			if (anioSeleccionado !== '' && establecimientoSeleccionado !== '') {
+				// Obtener la lista de mapamensualidad de la variable registros
+				var mapamensualidad = registros;
 
-				// Crear filas y columnas para cada mes del año seleccionado
-				var meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-				meses.forEach(function (mes, index) {
-					var row = document.createElement('tr');
-
-					// Columna para el nombre del mes
-					var mesCell = document.createElement('td');
-					mesCell.textContent = mes;
-					row.appendChild(mesCell);
-
-					// Columna para el desplegable de tarifas
-					var tarifaCell = document.createElement('td');
-					var select = document.createElement('select');
-					select.name = 'tarifa-' + (index + 1); // Ajustar el nombre del desplegable según el mes
-					select.classList.add('form-control');
-
-					// Opción por defecto "Seleccione una tarifa"
-					var defaultOption = document.createElement('option');
-					defaultOption.value = '';
-					defaultOption.textContent = 'Seleccione una tarifa';
-					select.appendChild(defaultOption);
-
-					// Agregar opciones de tarifas al desplegable
-					tarifas.forEach(function (tarifa) {
-						var option = document.createElement('option');
-						option.value = tarifa.id; // Asignar el ID de la tarifa como valor
-						option.textContent = tarifa.descripcion; // Asignar el nombre de la tarifa como texto
-						select.appendChild(option);
-					});
-
-					tarifaCell.appendChild(select);
-					row.appendChild(tarifaCell);
-
-					tbody.appendChild(row);
+				// Filtrar la lista de mapamensualidad por establecimiento y año seleccionados
+				var mapamensualidadFiltrada = mapamensualidad.filter(function (registro) {
+					return registro.periodo == anioSeleccionado && registro.establecimientoId == establecimientoSeleccionado;
 				});
 
-				// Mostrar la tabla
-				tablaContenedor.style.display = 'block';
-			} else {
-				// Ocultar la tabla si no se selecciona ningún año
-				tablaContenedor.style.display = 'none';
+				// Actualizar la tabla con los registros filtrados
+				updateTable(mapamensualidadFiltrada);
 			}
 		});
 
+		function updateTable(registros) {
+			var tablaContenedor = document.getElementById('tablaContenedor');
+			var tbody = document.getElementById('tablaMeses').querySelector('tbody');
+
+			// Limpiar el contenido anterior de la tabla
+			tbody.innerHTML = '';
+
+			// Crear filas y columnas para cada mes del año seleccionado
+			var meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+			meses.forEach(function (mes, index) {
+				var row = document.createElement('tr');
+
+				// Columna para el nombre del mes
+				var mesCell = document.createElement('td');
+				mesCell.textContent = mes;
+				row.appendChild(mesCell);
+
+				// Columna para el desplegable de tarifas
+				var tarifaCell = document.createElement('td');
+				var select = document.createElement('select');
+				select.name = 'tarifa-' + (index + 1); // Ajustar el nombre del desplegable según el mes
+				select.classList.add('form-control');
+
+				// Agregar opción predeterminada "Seleccione una tarifa"
+				var defaultOption = document.createElement('option');
+				defaultOption.value = '';
+				defaultOption.textContent = 'Seleccione una tarifa';
+				select.appendChild(defaultOption);
+
+				// Agregar opciones de tarifas disponibles
+				tarifas.forEach(function (tarifa) {
+					var option = document.createElement('option');
+					option.value = tarifa.id;
+					option.textContent = tarifa.descripcion;
+					select.appendChild(option);
+				});
+
+				// Si hay un registro para el mes actual, seleccionar la tarifa correspondiente
+				var registroMesActual = registros.find(function (registro) {
+					return registro.mes === mes;
+				});
+				if (registroMesActual) {
+					select.value = registroMesActual.tarifaId;
+				}
+
+				tarifaCell.appendChild(select);
+				row.appendChild(tarifaCell);
+
+				tbody.appendChild(row);
+			});
+
+			// Mostrar la tabla
+			tablaContenedor.style.display = 'block';
+		}
 	</script>
 
 
-	<script th:inline="javascript">
-		function fxJSeliminar(id) {
-			Swal.fire({
-				title: "¿Está seguro de eliminar?",
-				text: "Una vez eliminado, no se podrá deshacer esta acción",
-				icon: "warning",
-				showCancelButton: true,
-				confirmButtonColor: '#3085d6',
-				cancelButtonColor: '#d33',
-				confirmButtonText: 'Sí, eliminarlo'
-			}).then((result) => {
-				if (result.isConfirmed) {
-					$.ajax({
-						url: "http://localhost:7777/admin/btREST/" + id,
-						type: 'DELETE',
-						success: function (res) {
-							console.log(res);
-							Swal.fire(
-								'¡Eliminado!',
-								'Se ha eliminado exitosamente.',
-								'success'
-							).then((ok) => {
-								if (ok.value) {
-									location.href = "/admin/sostenedor";
-								}
-							});
-						},
-						error: function () {
-							Swal.fire(
-								'Error',
-								'Hubo un error al intentar eliminar.',
-								'error'
-							);
-						}
-					});
-				} else {
-					Swal.fire(
-						'Cancelado',
-						'Tu información no sufrió cambios',
-						'info'
-					);
-				}
+
+
+
+
+	<script>
+		function enviarSolicitud() {
+			// Obtener el año seleccionado y convertirlo a entero
+			var anioSeleccionado = parseInt(document.getElementById('anio').value);
+
+			// Obtener el ID del establecimiento seleccionado y convertirlo a entero
+			var establecimientoId = parseInt(document.getElementById('establecimiento').value);
+
+			// Obtener el sostenedorId del establecimiento seleccionado directamente desde el desplegable y convertirlo a entero
+			var sostenedorId = parseInt(document.getElementById('establecimiento').options[document.getElementById('establecimiento').selectedIndex].dataset.sostenedorId);
+
+			// Iterar sobre cada fila de la tabla
+			var filas = document.querySelectorAll('#tablaMeses tbody tr');
+			filas.forEach(function (fila) {
+				// Obtener el mes de la primera celda de la fila
+				var mes = fila.querySelector('td:first-child').textContent;
+
+				// Obtener el ID de la tarifa seleccionada en la segunda celda de la fila y convertirlo a entero
+				var tarifaId = parseInt(fila.querySelector('select').value);
+
+				// Crear un objeto con los datos de la fila
+				var data = {
+					mes: mes,
+					periodo: anioSeleccionado,
+					tarifaId: tarifaId,
+					sostenedorId: sostenedorId,
+					establecimientoId: establecimientoId
+				};
+
+				console.log('Enviando datos al servidor:', data);
+
+				$.ajax({
+					url: "http://localhost:7777/admin/gmmREST/",
+					type: 'POST',
+					contentType: 'application/json',
+					data: JSON.stringify(data),
+					success: function (response) {
+
+					},
+					error: function (error) {
+						console.error('Error al enviar datos al servidor:', error);
+					}
+				});
+
 			});
 		}
 	</script>
+
+
 </body>
 
 </html>

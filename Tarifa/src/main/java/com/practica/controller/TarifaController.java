@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.practica.dto.MapamensualidadDTO;
 import com.practica.dto.TarifaDTO;
+import com.practica.service.IMapamensualidadService;
 import com.practica.service.ITarifaService;
 
 @RestController
@@ -32,6 +34,9 @@ public class TarifaController {
 	
 	@Autowired
 	private ITarifaService servicio;
+	
+	@Autowired
+	private IMapamensualidadService mmservicio;
 	
 	
 	@PostMapping("/crear")
@@ -92,6 +97,71 @@ public class TarifaController {
 	        return ResponseEntity.ok().build();
 	    } catch (Exception e) {
 	    	return ResponseEntity.status(500).body("Error al eliminar la Tarifa");
+	        	}
+	    }
+	
+	
+	@PostMapping("/crearmm")
+    @ResponseStatus(HttpStatus.CREATED)
+    public MapamensualidadDTO agregarMapamensualidad(@RequestBody MapamensualidadDTO mapa) {
+        if (mapa == null) {
+            logger.error("Solicitud de creación de mapa con datos nulos. No se puede procesar.");
+            throw new IllegalArgumentException("Los datos del mapa no pueden ser nulos.");
+        }
+
+        try {
+            logger.info("Recibida solicitud para crear mapa. Datos: {}", mapa);
+
+            MapamensualidadDTO mapaGuardado = mmservicio.save(mapa);
+
+            logger.info("Mapa creado exitosamente. ID: {}", mapaGuardado.getId());
+            return mapaGuardado;
+        } catch (Exception e) {
+            logger.error("Error al procesar la solicitud de creación de mapa.", e);
+            throw new RuntimeException("Error al procesar la solicitud de creación de mapa.", e);
+        }
+    }
+	
+	
+    @ResponseBody @GetMapping("/listarmm")
+    public List<MapamensualidadDTO> getAllMapa() {
+    	List<MapamensualidadDTO> l = mmservicio.findAll();
+    	return l;
+    }
+    
+    
+    @GetMapping("/buscarmm/{id}")
+    public ResponseEntity<Optional<MapamensualidadDTO>> findmmById(@PathVariable("id") int id) {
+        Optional<MapamensualidadDTO> t = mmservicio.findById(id);
+        return ResponseEntity.ok(t);
+    }
+    
+    
+	@PutMapping("/actualizarmm/{id}")
+    public ResponseEntity<String> actualizarMapa(@PathVariable int id, @RequestBody MapamensualidadDTO mapaActualizado) {
+		Optional<MapamensualidadDTO> optionalMapaExistente = mmservicio.findById(id);
+        if (optionalMapaExistente.isEmpty()) {
+            return new ResponseEntity<>("Mapa no encontrado", HttpStatus.NOT_FOUND);
+        }
+        
+        MapamensualidadDTO mapaExistente = optionalMapaExistente.get();
+        mapaExistente.setMes(mapaActualizado.getMes());
+        mapaExistente.setPeriodo(mapaActualizado.getPeriodo());
+        mapaExistente.setEstablecimientoId(mapaActualizado.getEstablecimientoId());
+        mapaExistente.setSostenedorId(mapaActualizado.getSostenedorId());
+        mapaExistente.setTarifaId(mapaActualizado.getTarifaId());
+        mmservicio.save(mapaExistente);
+        return new ResponseEntity<>("Mapa actualizado con éxito. ID: " + mapaExistente.getId(), HttpStatus.OK);
+    }
+	
+	
+	@DeleteMapping("/borrarmm/{id}")
+	 public ResponseEntity<?> deletemmById(@PathVariable int id) {
+	    try {
+	        mmservicio.deleteById(id);
+	        return ResponseEntity.ok().build();
+	    } catch (Exception e) {
+	    	return ResponseEntity.status(500).body("Error al eliminar el Mapa");
 	        	}
 	    }
 	

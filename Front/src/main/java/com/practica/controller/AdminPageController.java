@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -275,10 +276,60 @@ public class AdminPageController {
 		List<TarifaDTO> tarifa = tarServicio.findAllREST();
 		List<EstablecimientoDTO> establecimiento = estServicio.findAllREST();
 		List<MapamensualidadDTO> mapamensualidad = tarServicio.findmmAllREST();
+		System.out.println("Datos recibidos en el controlador: " + mapamensualidad.toString());
 		model.addAttribute("tarifa", tarifa);
 		model.addAttribute("establecimiento", establecimiento);
 		model.addAttribute("mapamensualidad", mapamensualidad);
 		return "/AdminPage/mantenedor_cobro";
+	}
+    
+    @PostMapping("/gmmREST")
+	public String savemmREST(@RequestBody MapamensualidadDTO mapamensualidadDTO, Model model) {
+	    try {
+	    	
+	    	System.out.println("Datos recibidos en el controlador: " + mapamensualidadDTO.toString());
+	        ResponseEntity<String> response = tarServicio.savemmREST(mapamensualidadDTO);
+
+	        if (response != null && response.getStatusCode().is2xxSuccessful()) {
+	            // Si la creación en el BffAdminController es exitosa, redirige a la página de login
+	            return "redirect:/admin/cobro";
+	        } else {
+	            // Creación fallida, agregar mensaje de error al modelo
+	            model.addAttribute("error", "Error al crear Mapa");
+	            // Redirige a la página de registro
+	            return "redirect:/admin/cobro"; // Cambiar según la ruta real de tu página de registro
+	        }
+	    } catch (Exception e) {
+	        // Error interno, agregar mensaje de error al modelo
+	        model.addAttribute("error", "Error interno del servidor");
+	        // Redirige a la página de registro
+	        return "redirect:/admin/cobro"; // Cambiar según la ruta real de tu página de registro
+	    }
+	}
+	
+	@PostMapping("/ammREST")
+    public String actualizarMapa(@Valid MapamensualidadDTO mapamensualidadDTO, Model model) {
+        try {
+        	tarServicio.actualizarMapa(mapamensualidadDTO);
+            // Si la actualización en el servicio es exitosa, redirige a la página adecuada
+            return "redirect:/admin/cobro";
+        } catch (Exception e) {
+            // Manejar el error adecuadamente
+            model.addAttribute("error", "Error al actualizar Mapa");
+            return "redirect:/admin/cobro";
+        }
+    }
+	
+	
+	@DeleteMapping("/bmmREST/{id}")
+	public ResponseEntity<String> deleteMapa(@PathVariable int id) {
+	    try {
+	        tarServicio.deletemmREST(id);
+	        return ResponseEntity.ok("Eliminado exitosamente");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(500).body("Error al intentar eliminar");
+	    }
 	}
 	
 	

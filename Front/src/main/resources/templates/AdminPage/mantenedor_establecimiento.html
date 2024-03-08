@@ -356,8 +356,15 @@
 									</div>
 
 									<div class="form-group">
-										<label for="sostenedorid">ID de Sostenedor:</label>
-										<input type="text" class="form-control" id="sostenedorid" name="sostenedorid" />
+										<label for="sostenedorId">Nombre del Sostenedor:</label>
+										<select class="form-control" id="sostenedorId" name="sostenedorId">
+											<option value="">Seleccionar Sostenedor</option> <!-- Opción por defecto -->
+											<!-- Iterar sobre la lista de sostenedores y crear una opción por cada uno -->
+											<th:block th:each="sostenedor : ${sostenedor}">
+												<option th:value="${sostenedor.id}" th:text="${sostenedor.nombre}">
+												</option>
+											</th:block>
+										</select>
 									</div>
 
 									<!-- ... Otros campos del formulario ... -->
@@ -438,31 +445,6 @@
 
 		});
 
-		function fxJSeliminar(id) {
-			console.log("ID a eliminar:", id);
-			swal.fire({
-				title: 'Eliminar Establecimiento',
-				text: '¿Estás seguro de eliminar este establecimiento?',
-				icon: 'warning',
-				showCancelButton: true,
-				confirmButtonColor: '#3085d6',
-				cancelButtonColor: '#d33',
-				confirmButtonText: 'Sí, eliminar',
-				cancelButtonText: 'Cancelar'
-			}).then((result) => {
-				if (result.isConfirmed) {
-					// Aquí debes realizar la llamada AJAX para eliminar el establecimiento con el ID proporcionado
-					// Puedes usar el parámetro 'id' para enviarlo al servidor y realizar la eliminación
-					// Una vez completada la eliminación, puedes recargar la página o actualizar la tabla con los datos actualizados
-					swal.fire(
-						'Eliminado',
-						'El establecimiento ha sido eliminado.',
-						'success'
-					);
-				}
-			});
-		}
-
 		$(function () {
 			$("#example1").DataTable({
 				"responsive": true,
@@ -480,6 +462,56 @@
 			//     "responsive": true,
 			// });
 		});
+	</script>
+
+	<script th:inline="javascript">
+
+		function fxJSeliminar(id) {
+			console.log("ID a eliminar:", id);
+			swal.fire({
+				title: 'Eliminar Establecimiento',
+				text: '¿Estás seguro de eliminar este establecimiento?',
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Sí, eliminar',
+				cancelButtonText: 'Cancelar'
+			}).then((result) => {
+				if (result.isConfirmed) {
+					$.ajax({
+						url: "http://localhost:7777/admin/beREST/" + id,
+						type: 'DELETE',
+						success: function (res) {
+							console.log(res);
+							Swal.fire(
+								'¡Eliminado!',
+								'Se ha eliminado exitosamente.',
+								'success'
+							).then((ok) => {
+								if (ok.value) {
+									location.href = "/admin/establecimiento";
+								}
+							});
+						},
+						error: function () {
+							Swal.fire(
+								'Error',
+								'Hubo un error al intentar eliminar.',
+								'error'
+							);
+						}
+					});
+				} else {
+					Swal.fire(
+						'Cancelado',
+						'Tu información no sufrió cambios',
+						'info'
+					);
+				}
+			});
+		}
+
 	</script>
 
 </body>
