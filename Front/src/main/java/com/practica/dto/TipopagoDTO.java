@@ -1,4 +1,4 @@
-package com.practica.AdminRC.dto;
+package com.practica.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,9 +7,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginDTO {
+public class TipopagoDTO {
 	
-	private String email;
-	private String contrasena;
-
-}
+    private int id;
+	
+	
+	private String descripcion;
+	}
+	

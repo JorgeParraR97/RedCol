@@ -23,6 +23,7 @@ import com.practica.dto.MapamensualidadDTO;
 import com.practica.dto.PagosDTO;
 import com.practica.dto.SostenedorDTO;
 import com.practica.dto.TarifaDTO;
+import com.practica.dto.TipopagoDTO;
 import com.practica.service.IEstablecimientoService;
 import com.practica.service.IPagosService;
 import com.practica.service.ISostenedorService;
@@ -172,12 +173,17 @@ public class AdminPageController {
 	@GetMapping("pagos")
 	public String pagos(Model model) {
 		List<PagosDTO> pagos = pagServicio.findAllREST(); 
+		List<TipopagoDTO> tipopago = pagServicio.findtpAllREST();
 		List<EstablecimientoDTO> establecimiento = estServicio.findAllREST();
 		List<SostenedorDTO> sostenedor = sosServicio.findAllREST();
+		List<MapamensualidadDTO> mapa = tarServicio.findmmAllREST();
 		
+		
+		model.addAttribute("mapa", mapa);
 		model.addAttribute("pagos", pagos);
 		model.addAttribute("establecimiento", establecimiento);
 		model.addAttribute("sostenedor", sostenedor);
+		model.addAttribute("tipopago", tipopago);
 		return "/AdminPage/mantenedor_pagos";
 	}
 	

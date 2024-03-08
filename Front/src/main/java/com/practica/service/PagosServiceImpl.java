@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.practica.dto.PagosDTO;
+import com.practica.dto.TipopagoDTO;
 
 
 @Service
@@ -33,6 +34,22 @@ public class PagosServiceImpl implements IPagosService {
 			List<PagosDTO> proyectos = Arrays
 					.asList(unMapper.readValue(new URL("http://localhost:8080/api/bff/pagos/findAll"), PagosDTO[].class));
 			return proyectos;
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	
+	@Override
+	public List<TipopagoDTO> findtpAllREST() {
+		try {
+			ObjectMapper unMapper = new ObjectMapper();
+
+			List<TipopagoDTO> tipopago = Arrays
+					.asList(unMapper.readValue(new URL("http://localhost:8080/api/bff/pagos/findAlltp"), TipopagoDTO[].class));
+			return tipopago;
 
 		} catch (IOException e) {
 			e.printStackTrace();

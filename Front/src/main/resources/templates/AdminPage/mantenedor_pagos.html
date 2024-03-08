@@ -162,58 +162,41 @@
 							</div><!-- /.col -->
 						</div><!-- /.row -->
 
-
 						<div class="row">
 							<div class="col">
 								<div class="form-group">
-									<label for="tipoPago">Tipo de Pago:</label>
-									<select class="form-control" id="tipoPago" onchange="mostrarDesplegable()">
-										<option value="" selected disabled>Seleccione un tipo de pago</option>
-										<option value="colegio">Mensualidad Colegio</option>
-										<option value="sostenedor">Mensualidad Sostenedor</option>
-										<option value="eventos">Eventos</option>
+									<label for="tipoPago">Seleccione tipo de pago:</label>
+									<select class="form-control" id="tipoPago" name="tipoPago">
+										<option value="">Seleccione tipo de pago</option>
+										<!-- Iterar sobre los tipos de pago disponibles -->
 									</select>
 								</div>
 							</div>
 						</div>
-						<!-- Fin del desplegable principal -->
+						<!-- Fin del desplegable para seleccionar tipo de pago -->
 
-						<!-- Desplegables específicos -->
-						<div class="row" id="desplegableColegio" style="display: none;">
+						<!-- Desplegable para seleccionar establecimiento -->
+						<div class="row" id="establecimientoLabelDiv" style="display: none;">
+							<div class="col">
+								<label for="establecimiento">Seleccione un establecimiento:</label>
+							</div>
+						</div>
+
+						<!-- Desplegable para seleccionar establecimiento -->
+						<div class="row">
 							<div class="col">
 								<div class="form-group">
-									<label for="colegio">Seleccione un colegio:</label>
-									<select class="form-control" id="colegioSelect" onchange="actualizarTablaColegio()">
-										<!-- Opciones cargadas dinámicamente desde el servidor -->
+									<select class="form-control" id="establecimiento" name="establecimiento">
+										<option value="">Seleccione un establecimiento</option>
+										<!-- Iterar sobre los establecimientos disponibles -->
 									</select>
 								</div>
 							</div>
 						</div>
-
-						<div class="row" id="desplegableSostenedor" style="display: none;">
-							<div class="col">
-								<div class="form-group">
-									<label for="sostenedor">Seleccione un sostenedor:</label>
-									<select class="form-control" id="sostenedorSelect"
-										onchange="actualizarTablaSostenedor()">
-										<!-- Opciones cargadas dinámicamente desde el servidor -->
-									</select>
-								</div>
-							</div>
-						</div>
+						<!-- Fin del desplegable para seleccionar establecimiento -->
 
 
-						<div class="row" id="desplegableAnios" style="display: none;">
-							<div class="col">
-								<div class="form-group">
-									<label for="anio">Seleccione un año:</label>
-									<select class="form-control" id="anioSelect" onchange="actualizarTabla()">
-										<!-- Opciones cargadas dinámicamente desde el servidor -->
-										<!-- Aquí se cargarán las opciones de manera dinámica mediante JavaScript -->
-									</select>
-								</div>
-							</div>
-						</div>
+
 
 
 					</div><!-- /.container-fluid -->
@@ -221,149 +204,40 @@
 				<!-- /.content-header -->
 
 				<div class="content">
+					<button class="btn btn-primary mb-3" id="registrarPagoBtn">Registrar Pago</button>
 
-					<div class="card-body">
-						<!-- Tabla de pagos -->
-						<button type="button" class="btn btn-primary" onclick="mostrarFormulario()">
-							Registrar Pago
-						</button>
-						<div class="row">
-							<div class="col">
-								<table id="example1" class="table table-bordered table-striped">
-									<thead>
-										<tr>
-											<th>ID</th>
-											<th>DEUDOR</th>
-											<th>TIPO</th>
-											<th>MONTO</th>
-											<th>ESTADO</th>
-											<th>VENCIMIENTO</th>
-											<th>EDITAR</th>
-										</tr>
-									</thead>
-									<tbody id="tablaCuerpo">
-										<!-- Aquí deberías reemplazar este bloque con los datos de tu modelo de persona -->
-										<!-- Fin del bloque a reemplazar -->
-									</tbody>
-								</table>
-							</div>
-						</div>
-
-
-						<div class="modal fade" id="modalRegistrarPago" tabindex="-1" role="dialog"
-							aria-labelledby="modalRegistrarPagoLabel" aria-hidden="true">
-							<div class="modal-dialog modal-dialog-centered" role="document">
-								<div class="modal-content">
-									<div class="modal-header bg-primary">
-										<h5 class="modal-title text-white" id="modalRegistrarPagoLabel">Registrar Pago
-										</h5>
-										<button type="button" class="close text-white" data-dismiss="modal"
-											aria-label="Close">
-											<span aria-hidden="true">&times;</span>
-										</button>
-									</div>
-									<div class="modal-body">
-										<form id="registroPagoForm" th:action="@{/admin/gpREST}" method="POST">
-											<div class="form-group">
-												<label for="modalTipoPago">Tipo de Pago:</label>
-												<input type="hidden" id="tipo" name="tipo">
-												<span id="modaltipo" class="form-control"></span>
-											</div>
-											<div class="form-group">
-												<label for="modalDeudor">Deudor:</label>
-												<input type="hidden" id="deudor" name="deudor">
-												<span id="modaldeudor" class="form-control"></span>
-											</div>
-											<div class="form-group">
-												<label for="modalMonto">Monto:</label>
-												<input type="number" class="form-control" id="monto" name="monto"
-													placeholder="Monto" required>
-											</div>
-											<div class="form-group">
-												<label for="modalEstado">Estado:</label>
-												<select id="estado" class="form-control" name="estado">
-													<option value="">Seleccionar</option>
-													<option value="No pagado">No pagado</option>
-													<option value="Pagado">Pagado</option>
-												</select>
-											</div>
-											<div class="form-group">
-												<label for="modalFechaVencimiento">Fecha de Vencimiento:</label>
-												<input type="date" class="form-control" id="vencimiento"
-													name="vencimiento" placeholder="Fecha de Vencimiento">
-											</div>
-										</form>
-									</div>
-									<div class="modal-footer">
-										<button type="button" class="btn btn-secondary"
-											data-dismiss="modal">Cancelar</button>
-										<button type="button" class="btn btn-primary"
-											onclick="validarYRegistrarPago()">Registrar</button>
-									</div>
-								</div>
-							</div>
-						</div>
-
-
-						<div class="modal fade" id="editarPagoModal" tabindex="-1" role="dialog"
-							aria-labelledby="editarPagoModalLabel" aria-hidden="true">
-							<div class="modal-dialog" role="document">
-								<div class="modal-content">
-									<div class="modal-header">
-										<h5 class="modal-title" id="editarPagoModalLabel">Editar pago</h5>
-										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-											<span aria-hidden="true">&times;</span>
-										</button>
-									</div>
-									<div class="modal-body">
-										<form id="editarPagoForm" action="/ruta/para/actualizar/pago" method="POST">
-											<input type="hidden" name="id" id="id" />
-											<div class="form-group">
-												<label for="deudor">Deudor</label>
-												<input type="text" class="form-control" id="deudor" name="deudor" />
-											</div>
-											<div class="form-group">
-												<label for="tipoPago">Tipo de Pago</label>
-												<input type="text" class="form-control" id="tipoPago" name="tipoPago" />
-											</div>
-											<div class="form-group">
-												<label for="monto">Monto</label>
-												<input type="number" class="form-control" id="monto" name="monto" />
-											</div>
-											<div class="form-group">
-												<label for="estado">Estado</label>
-												<input type="text" class="form-control" id="estado" name="estado" />
-											</div>
-											<div class="form-group">
-												<label for="vencimiento">Vencimiento</label>
-												<input type="date" class="form-control" id="vencimiento"
-													name="vencimiento" />
-											</div>
-									</div>
-									<div class="modal-footer">
-										<button type="button" class="btn btn-secondary"
-											data-dismiss="modal">Cancelar</button>
-										<button type="submit" class="btn btn-primary">Guardar</button>
-									</div>
-									</form>
-								</div>
-							</div>
-						</div>
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Número de Documento</th>
+								<th>Monto</th>
+								<th>Fecha de Registro</th>
+								<th>Periodo</th>
+								<th>Mes</th>
+								<th>Saldo</th>
+							</tr>
+						</thead>
+						<tbody id="tablaPagosBody">
+							<!-- Los datos de los pagos se agregarán aquí dinámicamente -->
+						</tbody>
+					</table>
 
 
 
 
 
-					</div>
+
+
 				</div>
-				<!-- /.card-body -->
 			</div>
-
-
+			<!-- /.card-body -->
 		</div>
-		<!-- /.col-md-6 -->
 
-		<!-- /.col-md-6 -->
+
+	</div>
+	<!-- /.col-md-6 -->
+
+	<!-- /.col-md-6 -->
 	</div>
 	<!-- /.row -->
 	</div><!-- /.container-fluid -->
@@ -398,266 +272,69 @@
 	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
 	<script th:src="@{https://cdn.jsdelivr.net/npm/sweetalert2@11}"></script>
 	<script th:inline="javascript">
-		var colegios = /*[[${colegio}]]*/[];
+		var establecimiento = /*[[${establecimiento}]]*/[];
 		var sostenedores = /*[[${sostenedor}]]*/[];
 		var listaPagosCompleta = /*[[${pagos}]]*/[];
+		var tipopago = /*[[${tipopago}]]*/[];
 	</script>
 
-	<!-- Script para funciones de desplegables y tabla -->
 	<script>
-		function mostrarDesplegable() {
-			var tipoPago = document.getElementById("tipoPago").value;
+		document.addEventListener("DOMContentLoaded", function () {
+			var tipoPagoSelect = document.getElementById('tipoPago');
+			var establecimientoLabelDiv = document.getElementById('establecimientoLabelDiv');
+			var establecimientoSelectDiv = document.getElementById('establecimiento');
 
-			// Oculta todos los desplegables
-			document.getElementById("desplegableColegio").style.display = "none";
-			document.getElementById("desplegableSostenedor").style.display = "none";
+			// Ocultar el desplegable y el label del establecimiento inicialmente
+			establecimientoLabelDiv.style.display = 'none';
+			establecimientoSelectDiv.style.display = 'none';
 
-			// Muestra el desplegable específico según la opción seleccionada
-			if (tipoPago === "colegio") {
-				document.getElementById("desplegableColegio").style.display = "block";
-				cargarOpcionesColegios();
-			} else if (tipoPago === "sostenedor") {
-				document.getElementById("desplegableSostenedor").style.display = "block";
-				cargarOpcionesSostenedores();
-			}
-		}
+			tipoPagoSelect.addEventListener('change', function () {
+				var tipoPagoSeleccionado = tipoPagoSelect.value;
 
-		function cargarOpcionesColegios() {
-			// Llena el desplegable de colegios con las opciones recibidas
-			var colegioSelect = document.getElementById("colegioSelect");
-			colegioSelect.innerHTML = ""; // Limpia las opciones existentes
-
-			// Itera sobre los datos y agrega opciones al desplegable
-			for (var i = 0; i < colegios.length; i++) {
-				var option = document.createElement("option");
-				option.text = colegios[i].nombre; // Reemplaza con el campo correcto de tu objeto colegio
-				option.value = colegios[i].id; // Reemplaza con el campo correcto de tu objeto colegio
-				colegioSelect.add(option);
-			}
-		}
-
-		function cargarOpcionesSostenedores() {
-			// Llena el desplegable de sostenedores con las opciones recibidas
-			var sostenedorSelect = document.getElementById("sostenedorSelect");
-			sostenedorSelect.innerHTML = ""; // Limpia las opciones existentes
-
-			// Itera sobre los datos y agrega opciones al desplegable
-			for (var i = 0; i < sostenedores.length; i++) {
-				var option = document.createElement("option");
-				option.text = sostenedores[i].nombre; // Reemplaza con el campo correcto de tu objeto sostenedor
-				option.value = sostenedores[i].id; // Reemplaza con el campo correcto de tu objeto sostenedor
-				sostenedorSelect.add(option);
-			}
-		}
-	</script>
-	<script>
-		function cargarAniosDisponibles(deudorNombre, tipoPagoTexto) {
-			// Filtrar pagos según el deudor y tipo seleccionados
-			var pagosFiltrados = listaPagosCompleta.filter(function (pago) {
-				return pago.deudor === deudorNombre && pago.tipo === tipoPagoTexto;
+				if (tipoPagoSeleccionado === '1') {
+					establecimientoLabelDiv.style.display = 'block';
+					establecimientoSelectDiv.style.display = 'block';
+				} else {
+					establecimientoLabelDiv.style.display = 'none';
+					establecimientoSelectDiv.style.display = 'none';
+				}
 			});
 
-			// Obtener los años únicos de la variable de vencimiento
-			var aniosUnicos = [...new Set(pagosFiltrados.map(pago => pago.vencimiento.substring(0, 4)))];
-
-			var anioSelect = document.getElementById("anioSelect");
-			anioSelect.innerHTML = ""; // Limpia las opciones existentes
-
-			// Agrega la opción "Todos" como la primera opción
-			var optionTodos = document.createElement("option");
-			optionTodos.text = "Todos";
-			optionTodos.value = "";
-			anioSelect.add(optionTodos);
-
-			// Agrega las opciones de años al desplegable
-			for (var i = 0; i < aniosUnicos.length; i++) {
-				var option = document.createElement("option");
-				option.text = aniosUnicos[i];
-				option.value = aniosUnicos[i];
-				anioSelect.add(option);
-			}
-
-			// Muestra el desplegable de años
-			document.getElementById("desplegableAnios").style.display = "block";
-
-			// Llama a la función actualizarTabla cuando se cargan los años
-			actualizarTabla();
-		}
-
-		// Función para actualizar la tabla con datos proporcionados
-		function actualizarTablaConDatos(datos) {
-			console.log("datos:", datos);
-			var tablaCuerpo = document.getElementById("tablaCuerpo");
-			tablaCuerpo.innerHTML = ""; // Limpiar contenido existente
-
-			// Iterar sobre los datos y agregar filas a la tabla
-			for (var i = 0; i < datos.length; i++) {
-				var fila = "<tr>";
-				fila += "<td>" + datos[i].id + "</td>";
-				fila += "<td>" + datos[i].deudor + "</td>";
-				fila += "<td>" + datos[i].tipo + "</td>";
-				fila += "<td>" + datos[i].monto + "</td>";
-				fila += "<td>" + datos[i].estado + "</td>";
-				fila += "<td>" + datos[i].vencimiento + "</td>";
-				fila += "<td><button class='btn btn-warning btn-editar' data-id='" + datos[i].id + "' data-deudor='" + datos[i].deudor + "' data-tipoPago='" + datos[i].tipoPago + "' data-monto='" + datos[i].monto + "' data-estado='" + datos[i].estado + "' data-vencimiento='" + datos[i].vencimiento + "' onclick='abrirEditarPagoModal(this)'>Editar</button></td>";
-
-
-				tablaCuerpo.innerHTML += fila;
-			}
-		}
-
-		// Función para actualizar la tabla desde el desplegable de colegios
-		function actualizarTablaColegio() {
-			var tipoPagoSelect = document.getElementById("tipoPago");
-			var tipoPago = tipoPagoSelect.value;
-			var tipoPagoTexto = tipoPagoSelect.options[tipoPagoSelect.selectedIndex].text;
-
-			// Obtener el ID del colegio seleccionado
-			var colegioSelect = document.getElementById("colegioSelect");
-			var deudorNombre = colegioSelect.options[colegioSelect.selectedIndex].text;
-
-			// Llama a cargarAniosDisponibles con la lógica específica del colegio
-			cargarAniosDisponibles(deudorNombre, tipoPagoTexto);
-		}
-
-		// Función para actualizar la tabla desde el desplegable de sostenedores
-		function actualizarTablaSostenedor() {
-			var tipoPagoSelect = document.getElementById("tipoPago");
-			var tipoPago = tipoPagoSelect.value;
-			var tipoPagoTexto = tipoPagoSelect.options[tipoPagoSelect.selectedIndex].text;
-
-			// Obtener el ID del sostenedor seleccionado
-			var sostenedorSelect = document.getElementById("sostenedorSelect");
-			var deudorNombre = sostenedorSelect.options[sostenedorSelect.selectedIndex].text;
-
-			// Llama a cargarAniosDisponibles con la lógica específica del sostenedor
-			cargarAniosDisponibles(deudorNombre, tipoPagoTexto);
-		}
-
-		// Función para actualizar la tabla desde el desplegable de años
-		function actualizarTabla() {
-			var tipoPagoSelect = document.getElementById("tipoPago");
-			var tipoPago = tipoPagoSelect.value;
-			var tipoPagoTexto = tipoPagoSelect.options[tipoPagoSelect.selectedIndex].text;
-			var deudorNombre;
-
-			// Obtener el ID del deudor según el tipo de pago seleccionado
-			if (tipoPago === "colegio") {
-				var colegioSelect = document.getElementById("colegioSelect");
-				deudorNombre = colegioSelect.options[colegioSelect.selectedIndex].text;
-			} else if (tipoPago === "sostenedor") {
-				var sostenedorSelect = document.getElementById("sostenedorSelect");
-				deudorNombre = sostenedorSelect.options[sostenedorSelect.selectedIndex].text;
-			}
-
-			// Obtener el año seleccionado
-			var anioSelect = document.getElementById("anioSelect");
-			var anioSeleccionado = anioSelect.value;
-
-			// Filtrar pagos según el tipo de pago, el deudor y el año seleccionado
-			var pagosFiltrados = listaPagosCompleta.filter(function (pago) {
-				return (pago.tipo === tipoPagoTexto && pago.deudor === deudorNombre) &&
-					(!anioSeleccionado || pago.vencimiento.startsWith(anioSeleccionado));
+			// Cargar opciones de tipo de pago
+			tipopago.forEach(function (tipoPago) {
+				var option = document.createElement('option');
+				option.value = tipoPago.id;
+				option.textContent = tipoPago.descripcion;
+				tipoPagoSelect.appendChild(option);
 			});
-
-			// Actualizar la tabla con los pagos filtrados
-			actualizarTablaConDatos(pagosFiltrados);
-		}
-
-	</script>
-
-
-	<script>
-		function mostrarFormulario() {
-			var tipoPagoSelect = document.getElementById("tipoPago");
-			var tipoPago = tipoPagoSelect.value;
-			var tipoPagoTexto = tipoPagoSelect.options[tipoPagoSelect.selectedIndex].text;
-			var deudorNombre;
-
-			// Obtener el nombre del deudor según el tipo de pago seleccionado
-			if (tipoPago === "colegio") {
-				var colegioSelect = document.getElementById("colegioSelect");
-				deudorNombre = colegioSelect.options[colegioSelect.selectedIndex].text;
-			} else if (tipoPago === "sostenedor") {
-				var sostenedorSelect = document.getElementById("sostenedorSelect");
-				deudorNombre = sostenedorSelect.options[sostenedorSelect.selectedIndex].text;
-			}
-
-			// Setear valores en el modal
-			document.getElementById("tipo").value = tipoPagoTexto;
-			document.getElementById("deudor").value = deudorNombre;
-			document.getElementById("modaltipo").innerText = tipoPagoTexto;
-			document.getElementById("modaldeudor").innerText = deudorNombre;
-
-			$('#modalRegistrarPago').modal('show');
-		}
-
-	</script>
-	<script>
-		function validarYRegistrarPago() {
-			// Recopilar valores
-			var tipoPago = document.getElementById("tipo").value;
-			var deudor = document.getElementById("deudor").value;
-			var monto = document.getElementById("monto").value;
-			var estado = document.getElementById("estado").value;
-			var fechaVencimiento = document.getElementById("vencimiento").value;
-
-
-
-			// Validar campos si es necesario
-			if (!monto || isNaN(monto) || parseFloat(monto) <= 0) {
-				alert("Ingrese un monto válido.");
-				return;
-			}
-
-			var fechaFormateada = new Date(fechaVencimiento).toISOString().split('T')[0];
-
-
-
-
-
-
-			// Configurar valores en campos ocultos del formulario
-			document.getElementById("tipo").value = tipoPago;
-			document.getElementById("deudor").value = deudor;
-			document.getElementById("monto").value = monto;
-			document.getElementById("estado").value = estado;
-			document.getElementById("vencimiento").value = fechaFormateada;
-
-			// Enviar el formulario
-			document.getElementById("registroPagoForm").submit();
-		}
-
-	</script>
-
-	<script th:inline="javascript">
-		$(document).on("click", ".btn-editar", function (event) {
-			event.stopPropagation();
-			abrirEditarPagoModal(this);
 		});
-
-		// Función para abrir el modal y cargar la información del pago
-		function abrirEditarPagoModal(btn) {
-			// Obtener los valores del botón
-			var id = btn.getAttribute("data-id");
-			var deudor = btn.getAttribute("data-deudor");
-			var tipoPago = btn.getAttribute("data-tipoPago");
-			var monto = btn.getAttribute("data-monto");
-			var estado = btn.getAttribute("data-estado");
-			var vencimiento = btn.getAttribute("data-vencimiento");
-
-			// Rellenar los campos del formulario con los valores
-			$("#id").val(id);
-			$("#deudor").val(deudor);
-			$("#tipoPago").val(tipoPago);
-			$("#monto").val(monto);
-			$("#estado").val(estado);
-			$("#vencimiento").val(vencimiento);
-
-			// Mostrar el modal de edición
-			$('#editarPagoModal').modal('show');
-		}
 	</script>
+
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			var establecimientoSelect = document.getElementById('establecimiento');
+
+			// Función para cargar las opciones del desplegable de establecimiento
+			function cargarEstablecimientos() {
+				// Limpiar las opciones anteriores
+				establecimientoSelect.innerHTML = '';
+				// Iterar sobre los establecimientos disponibles
+				establecimiento.forEach(function (establecimiento) {
+					// Crear una opción para cada establecimiento
+					var option = document.createElement('option');
+					option.value = establecimiento.id;
+					option.textContent = establecimiento.nombre;
+					establecimientoSelect.appendChild(option);
+				});
+			}
+
+			// Cargar las opciones del desplegable de establecimiento
+			cargarEstablecimientos();
+		});
+	</script>
+
+
 
 
 

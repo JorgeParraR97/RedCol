@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.practica.AdminRC.dto.AdminDTO;
@@ -44,9 +43,9 @@ public class AdminController {
 	@PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
         String email = loginDTO.getEmail();
-        String contra = loginDTO.getContra();
+        String contra = loginDTO.getContrasena();
 
-        Optional<AdminDTO> result = servicio.findByEmailAndContra(email, contra);
+        Optional<AdminDTO> result = servicio.findByEmailAndContrasena(email, contra);
 
         if (result.isPresent()) {
             return ResponseEntity.ok(result.get());

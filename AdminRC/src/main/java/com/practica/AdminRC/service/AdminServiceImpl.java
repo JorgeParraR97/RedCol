@@ -27,7 +27,7 @@ public class AdminServiceImpl implements IAdminService {
     	aEntity.setNombre(aDTO.getNombre());
     	aEntity.setEmail(aDTO.getEmail());
     	aEntity.setTelefono(aDTO.getTelefono());
-    	aEntity.setContra(aDTO.getContra());
+    	aEntity.setContrasena(aDTO.getContrasena());
     	aEntity.setRut(aDTO.getRut());
     	return aEntity;
     }
@@ -41,7 +41,7 @@ public class AdminServiceImpl implements IAdminService {
     	aDTO.setEmail(aE.getEmail());
     	aDTO.setTelefono(aE.getTelefono());
     	aDTO.setRut(aE.getRut());
-    	aDTO.setContra(aE.getContra());
+    	aDTO.setContrasena(aE.getContrasena());
     	return aDTO;
     }
 	
@@ -102,12 +102,12 @@ public class AdminServiceImpl implements IAdminService {
 		
 	}
 	
-    public Optional<AdminDTO> findByEmailAndContra(String email, String contra) {
+    public Optional<AdminDTO> findByEmailAndContrasena(String email, String contra) {
         Optional<AdminEntity> optionalAdminEntity = data.findByEmail(email);
 
         // Verifica si el sostenedor existe y si la contraseña coincide
         return optionalAdminEntity.map(adminEntity -> {
-            if (adminEntity.getContra().equals(contra)) {
+            if (adminEntity.getContrasena().equals(contra)) {
                 AdminDTO adminDTO = adminEntity2DTO(adminEntity);
                 return Optional.ofNullable(adminDTO);
             } else {

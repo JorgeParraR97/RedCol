@@ -9,7 +9,7 @@ import com.practica.AdminRC.entity.AdminEntity;
 
 public interface AdminRepository extends JpaRepository<AdminEntity, Integer> {
 	
-	Optional<AdminDTO> findByEmailAndContra(String email, String contra);
+	Optional<AdminDTO> findByEmailAndContrasena(String email, String contra);
 	Optional<AdminEntity> findByEmail(String email);
 
 }

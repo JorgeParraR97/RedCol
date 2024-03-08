@@ -17,7 +17,7 @@ public interface IAdminService {
     public Optional<AdminDTO> findById(int id);
     public AdminDTO save(AdminDTO admin);
     public void delete(int id);
-	public Optional<AdminDTO> findByEmailAndContra(String email, String contra);
+	public Optional<AdminDTO> findByEmailAndContrasena(String email, String contra);
 	public Optional<AdminEntity> findByEmail(String email);
 
 }

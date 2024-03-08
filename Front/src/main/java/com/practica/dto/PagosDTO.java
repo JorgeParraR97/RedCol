@@ -2,11 +2,6 @@ package com.practica.dto;
 
 import java.util.Date;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,23 +11,25 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PagosDTO {
 	
-    private int id;
+	private int id;
 	
-    @JsonProperty("tipo")
-	private String tipo;
+	private String numerodocumento;
 	
-    @JsonProperty("deudor")
-	private String deudor;
+	private int tipopago;
 	
-    @JsonProperty("estado")
-	private String estado;
-	
-    @JsonProperty("monto")
 	private int monto;
 	
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "America/Santiago")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonProperty("vencimiento")
-	private Date vencimiento;
-
+	private Date fecharegistro;
+	
+	private int entidadId;
+	
+	private int periodo;
+	
+	private String mes;
+	
+	private int pagado;
+	
+	private int saldo;
+	
+	
 }
