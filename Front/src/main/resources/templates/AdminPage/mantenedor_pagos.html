@@ -182,18 +182,10 @@
 							</div>
 						</div>
 
-						<!-- Desplegable para seleccionar establecimiento -->
-						<div class="row">
-							<div class="col">
-								<div class="form-group">
-									<select class="form-control" id="establecimiento" name="establecimiento">
-										<option value="">Seleccione un establecimiento</option>
-										<!-- Iterar sobre los establecimientos disponibles -->
-									</select>
-								</div>
-							</div>
-						</div>
-						<!-- Fin del desplegable para seleccionar establecimiento -->
+						<select class="form-control" id="establecimiento" name="establecimiento" style="display: none;">
+							<!-- Esta opción se agregará dinámicamente con JavaScript -->
+							<option value="">Seleccione un establecimiento</option>
+						</select>
 
 
 
@@ -211,7 +203,7 @@
 							<tr>
 								<th>Número de Documento</th>
 								<th>Monto</th>
-								<th>Fecha de Registro</th>
+								<th>Fecha y Hora de Registro</th>
 								<th>Periodo</th>
 								<th>Mes</th>
 								<th>Saldo</th>
@@ -228,6 +220,31 @@
 
 
 
+				</div>
+
+
+				<!-- Modal para el registro de pago -->
+				<div class="modal fade" id="registroPagoModal" tabindex="-1" aria-labelledby="registroPagoModalLabel"
+					aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="registroPagoModalLabel">Registro de Pago</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal"
+									aria-label="Close"></button>
+							</div>
+							<div class="modal-body">
+								<!-- Aquí puedes colocar el formulario para el registro de pago -->
+								<form id="registroPagoForm">
+									<!-- Campos del formulario -->
+								</form>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+								<button type="submit" form="registroPagoForm" class="btn btn-primary">Registrar</button>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 			<!-- /.card-body -->
@@ -278,7 +295,8 @@
 		var tipopago = /*[[${tipopago}]]*/[];
 	</script>
 
-	<script>
+
+	<script th:inline="javascript">
 		document.addEventListener("DOMContentLoaded", function () {
 			var tipoPagoSelect = document.getElementById('tipoPago');
 			var establecimientoLabelDiv = document.getElementById('establecimientoLabelDiv');
@@ -307,12 +325,7 @@
 				option.textContent = tipoPago.descripcion;
 				tipoPagoSelect.appendChild(option);
 			});
-		});
-	</script>
 
-
-	<script>
-		document.addEventListener("DOMContentLoaded", function () {
 			var establecimientoSelect = document.getElementById('establecimiento');
 
 			// Función para cargar las opciones del desplegable de establecimiento
@@ -321,10 +334,15 @@
 				establecimientoSelect.innerHTML = '';
 				// Iterar sobre los establecimientos disponibles
 				establecimiento.forEach(function (establecimiento) {
-					// Crear una opción para cada establecimiento
+					// Encontrar el sostenedor correspondiente al ID de sostenedor del establecimiento actual
+					var sostenedor = sostenedores.find(function (sostenedor) {
+						return sostenedor.id === establecimiento.sostenedorId;
+					});
+
+					// Crear una opción para cada establecimiento con el nombre del establecimiento y el nombre del sostenedor entre paréntesis
 					var option = document.createElement('option');
 					option.value = establecimiento.id;
-					option.textContent = establecimiento.nombre;
+					option.textContent = establecimiento.nombre + ' (' + sostenedor.nombre + ')';
 					establecimientoSelect.appendChild(option);
 				});
 			}
@@ -333,9 +351,6 @@
 			cargarEstablecimientos();
 		});
 	</script>
-
-
-
 
 
 

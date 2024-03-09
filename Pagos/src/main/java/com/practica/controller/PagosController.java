@@ -85,11 +85,14 @@ public class PagosController {
         }
         
         PagosDTO pagosExistente = optionalPagosExistente.get();
-        pagosExistente.setTipo(pagosActualizado.getTipo());
-        pagosExistente.setDeudor(pagosActualizado.getDeudor());
-        pagosExistente.setEstado(pagosActualizado.getEstado());
+        pagosExistente.setTipopago(pagosActualizado.getTipopago());
         pagosExistente.setMonto(pagosActualizado.getMonto());
-        pagosExistente.setVencimiento(pagosActualizado.getVencimiento());
+        pagosExistente.setFecharegistro(pagosActualizado.getFecharegistro());
+        pagosExistente.setEntidadId(pagosActualizado.getEntidadId());
+        pagosExistente.setPeriodo(pagosActualizado.getPeriodo());
+        pagosExistente.setMes(pagosActualizado.getMes());
+        pagosExistente.setPagado(pagosActualizado.getPagado());
+        pagosExistente.setSaldo(pagosActualizado.getSaldo());
         servicio.save(pagosExistente);
         return new ResponseEntity<>("Pagos actualizado con éxito. ID: " + pagosExistente.getId(), HttpStatus.OK);
     }

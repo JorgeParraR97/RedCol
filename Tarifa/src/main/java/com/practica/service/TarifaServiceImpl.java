@@ -21,6 +21,7 @@ public class TarifaServiceImpl implements ITarifaService {
 	public TarifaEntity tarifaDTO2Entity(TarifaDTO tDTO) {
 		TarifaEntity tEntity = new TarifaEntity();
 		tEntity.setId(tDTO.getId());
+		tEntity.setPeriodo(tDTO.getPeriodo());
 		tEntity.setDescripcion(tDTO.getDescripcion());
 		tEntity.setMonto(tDTO.getMonto());
 		return tEntity;
@@ -30,6 +31,7 @@ public class TarifaServiceImpl implements ITarifaService {
 
 		TarifaDTO tDTO = new TarifaDTO();
 		tDTO.setId(tE.getId());
+		tDTO.setPeriodo(tE.getPeriodo());
 		tDTO.setDescripcion(tE.getDescripcion());
 		tDTO.setMonto(tE.getMonto());
 		return tDTO;

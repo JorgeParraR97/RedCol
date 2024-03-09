@@ -187,14 +187,12 @@
 									<th>EMAIL DE CONTACTO</th>
 									<th>CARGO DE CONTACTO</th>
 									<th>TELEFONO DE CONTACTO</th>
-									<th>ID DE SOSTENEDOR</th>
+									<th>SOSTENEDOR</th>
 									<th>EDITAR/ELIMINAR</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr th:each="establecimiento, iterStat : ${establecimiento}">
-
-
 									<td th:text="${establecimiento.id}"></td>
 									<td th:text="${establecimiento.nombre}"></td>
 									<td th:text="${establecimiento.rbd}"></td>
@@ -203,7 +201,11 @@
 									<td th:text="${establecimiento.contactoemail}"></td>
 									<td th:text="${establecimiento.contactocargo}"></td>
 									<td th:text="${establecimiento.contactotelefono}"></td>
-									<td th:text="${establecimiento.sostenedorId}"></td>
+									<!-- Obtener el nombre del sostenedor a través de su ID -->
+									<td class="sostenedor-name" th:data-sostenedor-id="${establecimiento.sostenedorId}">
+									</td>
+
+
 									<td>
 										<button type="button" class="btn btn-warning btn-editar-establecimiento"
 											data-toggle="modal" data-target="#editarEstablecimientoModal"
@@ -418,6 +420,41 @@
 	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.print.min.js}"></script>
 	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
 	<script th:src="@{https://cdn.jsdelivr.net/npm/sweetalert2@11}"></script>
+
+	<script th:inline="javascript">
+		var sostenedores = /*[[${sostenedor}]]*/[];
+		// Obtener todos los elementos con la clase "sostenedor-name"
+		var sostenedorElements = document.querySelectorAll('.sostenedor-name');
+
+		// Iterar sobre cada elemento
+		sostenedorElements.forEach(function (element) {
+			// Obtener el ID del sostenedor
+			var sostenedorId = element.getAttribute('data-sostenedor-id');
+
+			// Buscar el nombre correspondiente en la lista de sostenedores
+			var nombreSostenedor = getSostenedorNombre(sostenedorId);
+
+			// Actualizar el contenido del elemento HTML con el nombre del sostenedor
+			element.textContent = nombreSostenedor;
+		});
+
+		// Función para obtener el nombre del sostenedor por su ID
+		function getSostenedorNombre(id) {
+			// Recorre la lista de sostenedores
+			for (var i = 0; i < sostenedores.length; i++) {
+				// Comprueba si el ID coincide
+				if (sostenedores[i].id === id) {
+					// Retorna el nombre del sostenedor
+					return sostenedores[i].nombre;
+				}
+			}
+			// Retorna un valor predeterminado si no se encuentra el nombre
+			return 'Nombre no encontrado';
+		}
+	</script>
+
+
+
 	<script th:inline="javascript">
 		$(document).on("click", ".btn-editar-establecimiento", function () {
 			var id = this.dataset.id;
@@ -463,6 +500,32 @@
 			// });
 		});
 	</script>
+
+	<script th:inline="javascript">
+		var sostenedores = /*[[${sostenedor}]]*/[];
+
+		document.addEventListener("DOMContentLoaded", function () {
+			// Iterar sobre las celdas con clase 'sostenedor-name'
+			document.querySelectorAll('.sostenedor-name').forEach(function (cell) {
+				// Obtener el ID del sostenedor desde el atributo 'data-sostenedor-id'
+				var sostenedorId = cell.dataset.sostenedorId;
+
+				// Buscar el sostenedor en la lista 'sostenedores' por su ID
+				var sostenedor = sostenedores.find(function (s) {
+					return s.id == sostenedorId;
+				});
+
+				// Si se encuentra el sostenedor, mostrar su nombre en la celda
+				if (sostenedor) {
+					cell.textContent = sostenedor.nombre;
+				} else {
+					// Si no se encuentra el sostenedor, mostrar un mensaje de error
+					console.error('No se encontró el sostenedor con ID:', sostenedorId);
+				}
+			});
+		});
+	</script>
+
 
 	<script th:inline="javascript">
 

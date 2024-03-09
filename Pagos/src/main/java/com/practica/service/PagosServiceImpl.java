@@ -23,11 +23,13 @@ public class PagosServiceImpl implements IPagosService {
 	public PagosEntity pagosDTO2Entity(PagosDTO pDTO) {
 		PagosEntity pEntity = new PagosEntity();
 		pEntity.setId(pDTO.getId());
-		pEntity.setTipo(pDTO.getTipo());
-		pEntity.setDeudor(pDTO.getDeudor());
-		pEntity.setEstado(pDTO.getEstado());
+		pEntity.setTipopago(pDTO.getTipopago());
 		pEntity.setMonto(pDTO.getMonto());
-		pEntity.setVencimiento(pDTO.getVencimiento());
+		pEntity.setFecharegistro(pDTO.getFecharegistro());
+		pEntity.setEntidadId(pDTO.getEntidadId());
+		pEntity.setPeriodo(pDTO.getPeriodo());
+		pEntity.setMes(pDTO.getMes());
+		pEntity.setPagado(pDTO.getPagado());
 		return pEntity;
 	}
 
@@ -35,11 +37,15 @@ public class PagosServiceImpl implements IPagosService {
 
 		PagosDTO pDTO = new PagosDTO();
 		pDTO.setId(pE.getId());
-		pDTO.setTipo(pE.getTipo());
-		pDTO.setDeudor(pE.getDeudor());
-		pDTO.setEstado(pE.getEstado());
+		pDTO.setTipopago(pE.getTipopago());
 		pDTO.setMonto(pE.getMonto());
-		pDTO.setVencimiento(pE.getVencimiento());
+		pDTO.setFecharegistro(pE.getFecharegistro());
+		pDTO.setEntidadId(pE.getEntidadId());
+		pDTO.setPeriodo(pE.getPeriodo());
+		pDTO.setMes(pE.getMes());
+		pDTO.setPagado(pE.getPagado());
+		pDTO.setSaldo(pE.getSaldo());
+		
 		return pDTO;
 	}
 	

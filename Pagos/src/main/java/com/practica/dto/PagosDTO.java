@@ -1,8 +1,6 @@
 package com.practica.dto;
 
-import org.hibernate.type.DateType;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,21 +11,25 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PagosDTO {
 	
-    private int id;
+	private int id;
 	
+	private String numerodocumento;
 	
-	private String tipo;
-	
-	
-	private String deudor;
-	
-	
-	private String estado;
-	
+	private int tipopago;
 	
 	private int monto;
 	
-	@JsonFormat(pattern = "yyyy-MM-dd")
-	private DateType vencimiento;
-
+	private Date fecharegistro;
+	
+	private int entidadId;
+	
+	private int periodo;
+	
+	private String mes;
+	
+	private int pagado;
+	
+	private int saldo;
+	
+	
 }

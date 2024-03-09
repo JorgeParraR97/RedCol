@@ -102,12 +102,12 @@ public class AdminServiceImpl implements IAdminService {
 		
 	}
 	
-    public Optional<AdminDTO> findByEmailAndContrasena(String email, String contra) {
+    public Optional<AdminDTO> findByEmailAndContrasena(String email, String contrasena) {
         Optional<AdminEntity> optionalAdminEntity = data.findByEmail(email);
 
         // Verifica si el sostenedor existe y si la contraseña coincide
         return optionalAdminEntity.map(adminEntity -> {
-            if (adminEntity.getContrasena().equals(contra)) {
+            if (adminEntity.getContrasena().equals(contrasena)) {
                 AdminDTO adminDTO = adminEntity2DTO(adminEntity);
                 return Optional.ofNullable(adminDTO);
             } else {

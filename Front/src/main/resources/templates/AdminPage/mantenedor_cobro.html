@@ -170,11 +170,8 @@
 						<div class="form-group">
 							<label for="establecimiento">Seleccione Establecimiento:</label>
 							<select class="form-control" id="establecimiento" name="establecimiento">
+								<!-- Esta opción se agregará dinámicamente con JavaScript -->
 								<option value="">Seleccione un establecimiento</option>
-								<!-- Iterar sobre los establecimientos disponibles y mostrar solo los nombres -->
-								<option th:each="establecimiento : ${establecimiento}" th:value="${establecimiento.id}"
-									th:data-sostenedor-id="${establecimiento.sostenedorId}"
-									th:text="${establecimiento.nombre}"></option>
 							</select>
 						</div>
 					</div>
@@ -245,6 +242,39 @@
 	<script th:inline="javascript">
 		var tarifas = /*[[${tarifa}]]*/[];
 		var registros = /*[[${mapamensualidad}]]*/[];
+	</script>
+
+	<script th:inline="javascript">
+		// Obtener la lista de establecimientos y sostenedores
+		var establecimientos = /*[[${establecimiento}]]*/[];
+		var sostenedores = /*[[${sostenedor}]]*/[];
+
+		// Función para actualizar el desplegable de establecimiento con el nombre del establecimiento y el nombre del sostenedor
+		function actualizarDesplegable() {
+			var selectEstablecimiento = document.getElementById('establecimiento');
+
+			// Limpiar el desplegable de establecimiento
+			selectEstablecimiento.innerHTML = '<option value="">Seleccione un establecimiento</option>';
+
+			// Iterar sobre los establecimientos y agregar cada opción al desplegable
+			establecimientos.forEach(function (establecimiento) {
+				// Encontrar el sostenedor correspondiente al ID de sostenedor del establecimiento actual
+				var sostenedor = sostenedores.find(function (sostenedor) {
+					return sostenedor.id === establecimiento.sostenedorId;
+				});
+
+				// Crear la opción con el nombre del establecimiento y el nombre del sostenedor entre paréntesis
+				var option = document.createElement('option');
+				option.value = establecimiento.id;
+				option.textContent = establecimiento.nombre + ' (' + sostenedor.nombre + ')';
+				selectEstablecimiento.appendChild(option);
+			});
+		}
+
+		// Llamar a la función para actualizar el desplegable cuando se cargue la página
+		document.addEventListener("DOMContentLoaded", function () {
+			actualizarDesplegable();
+		});
 	</script>
 
 
@@ -352,7 +382,7 @@
 
 
 
-	<script>
+	<script th:inline="javascript">
 		function enviarSolicitud() {
 			// Obtener el año seleccionado y convertirlo a entero
 			var anioSeleccionado = parseInt(document.getElementById('anio').value);
@@ -365,6 +395,7 @@
 
 			// Iterar sobre cada fila de la tabla
 			var filas = document.querySelectorAll('#tablaMeses tbody tr');
+			var errores = false;
 			filas.forEach(function (fila) {
 				// Obtener el mes de la primera celda de la fila
 				var mes = fila.querySelector('td:first-child').textContent;
@@ -389,14 +420,33 @@
 					contentType: 'application/json',
 					data: JSON.stringify(data),
 					success: function (response) {
-
+						console.log('Guardado exitoso');
 					},
 					error: function (error) {
 						console.error('Error al enviar datos al servidor:', error);
+						errores = true;
 					}
 				});
 
 			});
+
+			if (!errores) {
+				Swal.fire(
+					'Guardado exitoso',
+					'',
+					'success'
+				).then((ok) => {
+					if (ok.value) {
+						location.reload(); // Recargar la página si no hubo errores
+					}
+				});
+			} else {
+				Swal.fire(
+					'Error',
+					'Hubo un error al guardar',
+					'error'
+				);
+			}
 		}
 	</script>
 

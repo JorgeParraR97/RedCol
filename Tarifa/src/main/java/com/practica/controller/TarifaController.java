@@ -83,6 +83,7 @@ public class TarifaController {
         }
         
         TarifaDTO tarifaExistente = optionalTarifaExistente.get();
+        tarifaExistente.setPeriodo(tarifaActualizado.getPeriodo());
         tarifaExistente.setDescripcion(tarifaActualizado.getDescripcion());
         tarifaExistente.setMonto(tarifaActualizado.getMonto());
         servicio.save(tarifaExistente);

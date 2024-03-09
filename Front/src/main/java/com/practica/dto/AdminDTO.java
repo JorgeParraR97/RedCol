@@ -24,8 +24,8 @@ public class AdminDTO {
     @JsonProperty("email")
     private String email;
 
-    @JsonProperty("contra")
-    private String contra;
+    @JsonProperty("contrasena")
+    private String contrasena;
 
     @JsonProperty("telefono")
     private String telefono;

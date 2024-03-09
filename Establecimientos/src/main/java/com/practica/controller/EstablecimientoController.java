@@ -24,6 +24,7 @@ import com.practica.service.IEstablecimientoService;
 
 
 
+
 @RestController
 @RequestMapping("api/establecimiento")
 public class EstablecimientoController {
@@ -45,6 +46,11 @@ public class EstablecimientoController {
     	return l;
     }
     
+    @GetMapping("/buscar/{id}")
+    public ResponseEntity<Optional<EstablecimientoDTO>> findById(@PathVariable("id") int id) {
+        Optional<EstablecimientoDTO> es = servicio.findById(id);
+        return ResponseEntity.ok(es);
+    }
     
     @GetMapping("/ls/{sostenedorId}")
     public ResponseEntity<List<EstablecimientoDTO>> findBySostenedorId(@PathVariable int sostenedorId) {

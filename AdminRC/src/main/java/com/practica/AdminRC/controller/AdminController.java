@@ -43,9 +43,9 @@ public class AdminController {
 	@PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
         String email = loginDTO.getEmail();
-        String contra = loginDTO.getContrasena();
+        String contrasena = loginDTO.getContrasena();
 
-        Optional<AdminDTO> result = servicio.findByEmailAndContrasena(email, contra);
+        Optional<AdminDTO> result = servicio.findByEmailAndContrasena(email, contrasena);
 
         if (result.isPresent()) {
             return ResponseEntity.ok(result.get());

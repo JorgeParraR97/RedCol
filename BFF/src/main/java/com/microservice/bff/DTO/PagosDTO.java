@@ -2,9 +2,6 @@ package com.microservice.bff.DTO;
 
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,22 +11,25 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PagosDTO {
 	
-    private int id;
+	private int id;
 	
-    @JsonProperty("tipo")
-	private String tipo;
+	private String numerodocumento;
 	
-    @JsonProperty("deudor")
-	private String deudor;
+	private int tipopago;
 	
-    @JsonProperty("estado")
-	private String estado;
-	
-    @JsonProperty("monto")
 	private int monto;
 	
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonProperty("vencimiento")
-	private Date vencimiento;
-
+	private Date fecharegistro;
+	
+	private int entidadId;
+	
+	private int periodo;
+	
+	private String mes;
+	
+	private int pagado;
+	
+	private int saldo;
+	
+	
 }

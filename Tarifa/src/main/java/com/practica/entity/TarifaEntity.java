@@ -22,6 +22,8 @@ public class TarifaEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
+	private int periodo;
+	
 	
 	private String descripcion;
 

@@ -12,6 +12,8 @@ public class TarifaDTO {
 	
 	private int id;
 	
+	private int periodo;
+	
 	
 	private String descripcion;
 

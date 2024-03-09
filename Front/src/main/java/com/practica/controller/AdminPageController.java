@@ -282,7 +282,9 @@ public class AdminPageController {
 		List<TarifaDTO> tarifa = tarServicio.findAllREST();
 		List<EstablecimientoDTO> establecimiento = estServicio.findAllREST();
 		List<MapamensualidadDTO> mapamensualidad = tarServicio.findmmAllREST();
-		System.out.println("Datos recibidos en el controlador: " + mapamensualidad.toString());
+		List<SostenedorDTO> sostenedor = sosServicio.findAllREST();
+		
+		model.addAttribute("sostenedor" , sostenedor);
 		model.addAttribute("tarifa", tarifa);
 		model.addAttribute("establecimiento", establecimiento);
 		model.addAttribute("mapamensualidad", mapamensualidad);
