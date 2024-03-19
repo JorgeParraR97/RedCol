@@ -2,6 +2,8 @@ package com.microservice.bff.DTO;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +21,8 @@ public class PagosDTO {
 	
 	private int monto;
 	
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date fecharegistro;
 	
 	private int entidadId;

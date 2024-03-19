@@ -6,6 +6,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>REDCOL</title>
 
+	<link rel="stylesheet" th:href="@{/css/estilotabla.css}" />
+
 	<!-- Google Font: Source Sans Pro -->
 	<link rel="stylesheet"
 		th:href="@{https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback}" />
@@ -195,6 +197,69 @@
 				</div>
 				<!-- /.content-header -->
 
+				<!-- Agrega el botón para abrir el modal -->
+				<button class="btn btn-primary mb-3" id="abrirModalBtn">Revisar saldos</button>
+
+				<!-- Modal para seleccionar el año -->
+				<div class="modal fade" id="seleccionarAnioModal" tabindex="-1"
+					aria-labelledby="seleccionarAnioModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="seleccionarAnioModalLabel">Seleccionar Año</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal"
+									aria-label="Close"></button>
+							</div>
+							<div class="modal-body">
+								<label for="anio">Seleccione el Año:</label>
+								<select class="form-control" id="anio">
+									<!-- Las opciones de años se agregarán dinámicamente con JavaScript -->
+								</select>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+								<button type="button" class="btn btn-primary" id="confirmarAnioBtn">Confirmar</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Modal para mostrar el mapa de mensualidad -->
+				<div class="modal fade" id="mapaMensualidadModal" tabindex="-1"
+					aria-labelledby="mapaMensualidadModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-lg"> <!-- Agregamos la clase modal-lg para un modal grande -->
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="mapaMensualidadModalLabel">Mapa de Mensualidad</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal"
+									aria-label="Close"></button>
+							</div>
+							<div class="modal-body">
+								<!-- Contenedor scrollable -->
+								<div class="table">
+									<table class="table-scrollable">
+										<thead>
+											<tr>
+												<th>Año</th>
+												<th>Mes</th>
+												<th>Saldo</th>
+											</tr>
+										</thead>
+										<tbody id="mapaMensualidadBody">
+											<!-- Contenido de la tabla -->
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+
 				<div class="content">
 					<button class="btn btn-primary mb-3" id="registrarPagoBtn">Registrar Pago</button>
 
@@ -206,20 +271,12 @@
 								<th>Fecha y Hora de Registro</th>
 								<th>Periodo</th>
 								<th>Mes</th>
-								<th>Saldo</th>
 							</tr>
 						</thead>
 						<tbody id="tablaPagosBody">
 							<!-- Los datos de los pagos se agregarán aquí dinámicamente -->
 						</tbody>
 					</table>
-
-
-
-
-
-
-
 				</div>
 
 
@@ -234,18 +291,60 @@
 									aria-label="Close"></button>
 							</div>
 							<div class="modal-body">
-								<!-- Aquí puedes colocar el formulario para el registro de pago -->
+								<!-- Formulario para el registro de pago -->
 								<form id="registroPagoForm">
-									<!-- Campos del formulario -->
+									<!-- Campo de número de documento -->
+									<div class="mb-3">
+										<label for="numerodocumento" class="form-label">Número de Documento</label>
+										<input type="text" class="form-control" id="numerodocumento"
+											name="numerodocumento" required>
+									</div>
+									<!-- Campo de monto -->
+									<div class="mb-3">
+										<label for="monto" class="form-label">Monto</label>
+										<input type="number" class="form-control" id="monto" name="monto" required>
+									</div>
+									<!-- Campo de año (período) -->
+									<div class="mb-3">
+										<label for="periodo" class="form-label">Periodo</label>
+										<select class="form-control" id="periodo" name="periodo" required>
+											<!-- Las opciones de años se agregarán dinámicamente con JavaScript -->
+										</select>
+									</div>
+									<!-- Campo de mes -->
+									<div class="mb-3">
+										<label for="mes" class="form-label">Mes</label>
+										<select class="form-control" id="mes" name="mes" required>
+											<option value="" selected>Seleccione un mes</option>
+											<option value="Enero">Enero</option>
+											<option value="Febrero">Febrero</option>
+											<option value="Marzo">Marzo</option>
+											<option value="Abril">Abril</option>
+											<option value="Mayo">Mayo</option>
+											<option value="Junio">Junio</option>
+											<option value="Julio">Julio</option>
+											<option value="Agosto">Agosto</option>
+											<option value="Septiembre">Septiembre</option>
+											<option value="Octubre">Octubre</option>
+											<option value="Noviembre">Noviembre</option>
+											<option value="Diciembre">Diciembre</option>
+										</select>
+									</div>
+									<!-- Campo oculto para el tipo de pago -->
+									<input type="hidden" id="tipopago" name="tipopago">
+									<!-- Campo oculto para el ID de la entidad (establecimiento) -->
+									<input type="hidden" id="entidadId" name="entidadId">
 								</form>
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-								<button type="submit" form="registroPagoForm" class="btn btn-primary">Registrar</button>
+								<button type="button" class="btn btn-secondary" id="cerrarModalBtn"
+									data-bs-dismiss="modal">Cerrar</button>
+								<button type="button" class="btn btn-primary" id="registrarPagoBtn2">Registrar</button>
 							</div>
 						</div>
 					</div>
 				</div>
+
 			</div>
 			<!-- /.card-body -->
 		</div>
@@ -293,6 +392,8 @@
 		var sostenedores = /*[[${sostenedor}]]*/[];
 		var listaPagosCompleta = /*[[${pagos}]]*/[];
 		var tipopago = /*[[${tipopago}]]*/[];
+		var listaMapamensualidad = /*[[${mapamensualidad}]]*/[];
+		var tarifa = /*[[${tarifa}]]*/[];
 	</script>
 
 
@@ -300,21 +401,22 @@
 		document.addEventListener("DOMContentLoaded", function () {
 			var tipoPagoSelect = document.getElementById('tipoPago');
 			var establecimientoLabelDiv = document.getElementById('establecimientoLabelDiv');
-			var establecimientoSelectDiv = document.getElementById('establecimiento');
+			var establecimientoSelect = document.getElementById('establecimiento');
 
 			// Ocultar el desplegable y el label del establecimiento inicialmente
 			establecimientoLabelDiv.style.display = 'none';
-			establecimientoSelectDiv.style.display = 'none';
+			establecimientoSelect.style.display = 'none';
 
 			tipoPagoSelect.addEventListener('change', function () {
 				var tipoPagoSeleccionado = tipoPagoSelect.value;
 
 				if (tipoPagoSeleccionado === '1') {
 					establecimientoLabelDiv.style.display = 'block';
-					establecimientoSelectDiv.style.display = 'block';
+					establecimientoSelect.style.display = 'block';
+					cargarEstablecimientos();
 				} else {
 					establecimientoLabelDiv.style.display = 'none';
-					establecimientoSelectDiv.style.display = 'none';
+					establecimientoSelect.style.display = 'none';
 				}
 			});
 
@@ -326,12 +428,15 @@
 				tipoPagoSelect.appendChild(option);
 			});
 
-			var establecimientoSelect = document.getElementById('establecimiento');
-
 			// Función para cargar las opciones del desplegable de establecimiento
 			function cargarEstablecimientos() {
 				// Limpiar las opciones anteriores
 				establecimientoSelect.innerHTML = '';
+				// Agregar la opción predeterminada
+				var defaultOption = document.createElement('option');
+				defaultOption.value = "";
+				defaultOption.textContent = "Seleccione un establecimiento";
+				establecimientoSelect.appendChild(defaultOption);
 				// Iterar sobre los establecimientos disponibles
 				establecimiento.forEach(function (establecimiento) {
 					// Encontrar el sostenedor correspondiente al ID de sostenedor del establecimiento actual
@@ -346,15 +451,427 @@
 					establecimientoSelect.appendChild(option);
 				});
 			}
-
-			// Cargar las opciones del desplegable de establecimiento
-			cargarEstablecimientos();
 		});
 	</script>
 
 
 
 
+
+	<script th:inline="javascript">
+		document.addEventListener("DOMContentLoaded", function () {
+			// Obtener referencia al desplegable de establecimiento, al botón y al modal
+			var establecimientoSelect = document.getElementById('establecimiento');
+			var abrirModalBtn = document.getElementById('abrirModalBtn');
+			var modal = new bootstrap.Modal(document.getElementById('seleccionarAnioModal'));
+
+			// Ocultar el botón al cargar la página
+			abrirModalBtn.style.display = 'none';
+
+			// Manejar el cambio en el desplegable de establecimiento
+			establecimientoSelect.addEventListener('change', function () {
+				// Mostrar el botón al seleccionar un establecimiento
+				abrirModalBtn.style.display = 'block';
+				// Lógica para cargar los años disponibles en el desplegable
+				cargarAniosDisponibles();
+			});
+
+			// Función para cargar los años disponibles en el desplegable
+			function cargarAniosDisponibles() {
+				var anioSelect = document.getElementById('anio');
+				// Obtener los registros de mapa de mensualidad para el establecimiento seleccionado
+				var mapaMensualidadEstablecimiento = obtenerMapaMensualidadPorEstablecimiento();
+				// Filtrar y obtener años únicos
+				var aniosUnicos = [...new Set(mapaMensualidadEstablecimiento.map(registro => registro.periodo))];
+				// Limpiar las opciones anteriores
+				anioSelect.innerHTML = '';
+				// Agregar la opción por defecto
+				var defaultOption = document.createElement('option');
+				defaultOption.value = '';
+				defaultOption.textContent = 'Seleccione el año:';
+				anioSelect.appendChild(defaultOption);
+				// Agregar las opciones de años al desplegable
+				aniosUnicos.forEach(function (anio) {
+					var option = document.createElement('option');
+					option.value = anio;
+					option.textContent = anio;
+					anioSelect.appendChild(option);
+				});
+			}
+
+			// Función para obtener los registros de mapa de mensualidad para el establecimiento seleccionado
+			function obtenerMapaMensualidadPorEstablecimiento() {
+				var establecimientoId = establecimientoSelect.value;
+
+				return listaMapamensualidad.filter(function (registro) {
+					return registro.establecimientoId == establecimientoId;
+				});
+			}
+
+			// Manejar el clic en el botón para abrir el modal
+			abrirModalBtn.addEventListener('click', function () {
+				// Mostrar el modal
+				modal.show();
+			});
+
+			// Manejar el clic en el botón de confirmar del modal
+			var confirmarAnioBtn = document.getElementById('confirmarAnioBtn');
+			confirmarAnioBtn.addEventListener('click', function () {
+				// Aquí puedes obtener el año seleccionado y realizar la lógica necesaria
+				var anioSeleccionado = document.getElementById('anio').value;
+				// Por ejemplo, puedes mostrar una alerta con el año seleccionado
+				if (anioSeleccionado) {
+				} else {
+					alert('Por favor, seleccione un año.');
+				}
+				// Cerrar el modal
+				modal.hide();
+			});
+		});
+	</script>
+
+
+	<script th:inline="javascript">
+		document.addEventListener("DOMContentLoaded", function () {
+			// Obtener referencia al botón de "Registrar Pago" y al modal
+			var registrarPagoBtn = document.getElementById('registrarPagoBtn');
+			var modalRegistroPago = new bootstrap.Modal(document.getElementById('registroPagoModal'));
+
+			// Manejar el clic en el botón de "Registrar Pago" para mostrar el modal
+			registrarPagoBtn.addEventListener('click', function () {
+				// Mostrar el modal de registro de pago
+				modalRegistroPago.show();
+			});
+		});
+	</script>
+
+	<script th:inline="javascript">
+		document.addEventListener("DOMContentLoaded", function () {
+			// Obtener referencia al desplegable de establecimiento
+			var establecimientoSelect = document.getElementById('establecimiento');
+
+			// Ocultar el botón al cargar la página
+			establecimientoSelect.addEventListener('change', function () {
+				// Lógica para cargar los periodos disponibles en el desplegable
+				cargarPeriodosDisponibles();
+			});
+
+			// Función para cargar los periodos disponibles en el desplegable
+			function cargarPeriodosDisponibles() {
+				var periodoSelect = document.getElementById('periodo');
+				// Obtener los registros de mapa de mensualidad para el establecimiento seleccionado
+				var mapaMensualidadEstablecimiento = obtenerMapaMensualidadPorEstablecimiento();
+				// Filtrar y obtener periodos únicos
+				var periodosUnicos = [...new Set(mapaMensualidadEstablecimiento.map(registro => registro.periodo))];
+				// Limpiar las opciones anteriores
+				periodoSelect.innerHTML = '';
+				// Agregar la opción por defecto
+				var defaultOption = document.createElement('option');
+				defaultOption.value = '';
+				defaultOption.textContent = 'Seleccione un periodo:';
+				periodoSelect.appendChild(defaultOption);
+				// Agregar las opciones de periodos al desplegable
+				periodosUnicos.forEach(function (periodo) {
+					var option = document.createElement('option');
+					option.value = periodo;
+					option.textContent = periodo;
+					periodoSelect.appendChild(option);
+				});
+			}
+
+			// Función para obtener los registros de mapa de mensualidad para el establecimiento seleccionado
+			function obtenerMapaMensualidadPorEstablecimiento() {
+				var establecimientoId = establecimientoSelect.value;
+
+				return listaMapamensualidad.filter(function (registro) {
+					return registro.establecimientoId == establecimientoId;
+				});
+			}
+		});
+	</script>
+
+	<script th:inline="javascript">
+		document.addEventListener("DOMContentLoaded", function () {
+			// Obtener referencias a los campos del formulario
+			var numerodocumentoInput = document.getElementById('numerodocumento');
+			var montoInput = document.getElementById('monto');
+			var anioSelect = document.getElementById('periodo');
+			var mesInput = document.getElementById('mes');
+			var tipopagoInput = document.getElementById('tipopago');
+			var fecharegistroInput = document.getElementById('fecharegistro');
+			var entidadIdInput = document.getElementById('entidadId');
+
+			// Obtener referencias a los desplegables de tipo de pago y establecimiento
+			var tipoPagoSelect = document.getElementById('tipoPago');
+			var establecimientoSelect = document.getElementById('establecimiento');
+
+			// Manejar el cambio en el desplegable de tipo de pago
+			tipoPagoSelect.addEventListener('change', function () {
+				// Obtener el ID del tipo de pago seleccionado y asignarlo al campo oculto
+				tipopagoInput.value = tipoPagoSelect.value;
+			});
+
+			// Manejar el cambio en el desplegable de establecimiento
+			establecimientoSelect.addEventListener('change', function () {
+				// Obtener el ID del establecimiento seleccionado y asignarlo al campo oculto
+				entidadIdInput.value = establecimientoSelect.value;
+			});
+
+			// Manejar el clic en el botón "Registrar"
+			var registrarPagoBtn = document.getElementById('registrarPagoBtn2');
+			registrarPagoBtn.addEventListener('click', function () {
+
+				var fechaActual = obtenerFechaActual();
+				var entidadId = parseInt(entidadIdInput.value);
+				var monto = parseInt(montoInput.value);
+				var periodo = parseInt(anioSelect.value);
+				var tipopago = parseInt(tipopagoInput.value);
+				// Obtener los datos del formulario
+				var data = {
+					numerodocumento: numerodocumentoInput.value,
+					monto: monto,
+					periodo: periodo,
+					mes: mesInput.value,
+					tipopago: tipopago,
+					fecharegistro: fechaActual,
+					entidadId: entidadId,
+					pagado: 0,
+					saldo: 0
+				};
+
+				console.log('Enviando datos al servidor:', data);
+
+				// Enviar los datos al servidor mediante AJAX
+				$.ajax({
+					url: "http://localhost:7777/admin/gpREST/",
+					type: 'POST',
+					contentType: 'application/json',
+					data: JSON.stringify(data),
+					success: function (response) {
+						console.log('Guardado exitoso');
+						// Mostrar un mensaje de éxito
+						Swal.fire(
+							'Guardado exitoso',
+							'',
+							'success'
+						).then((ok) => {
+							if (ok.value) {
+								location.reload(); // Recargar la página si no hubo errores
+							}
+						});
+					},
+					error: function (error) {
+						console.error('Error al enviar datos al servidor:', error);
+						// Mostrar un mensaje de error
+						Swal.fire(
+							'Error',
+							'Hubo un error al guardar',
+							'error'
+						);
+					}
+				});
+			});
+
+			// Manejar el clic en el botón "Cerrar"
+			var cerrarModalBtn = document.getElementById('cerrarModalBtn');
+			cerrarModalBtn.addEventListener('click', function () {
+				// Cerrar el modal
+				var modal = bootstrap.Modal.getInstance(document.getElementById('registroPagoModal'));
+				modal.hide();
+			});
+		});
+
+		// Función para obtener la fecha actual en formato "YYYY-MM-DD HH:MM:SS"
+		function obtenerFechaActual() {
+			var now = new Date();
+			var year = now.getFullYear();
+			var month = pad(now.getMonth() + 1);
+			var day = pad(now.getDate());
+			var hour = pad(now.getHours());
+			var minute = pad(now.getMinutes());
+			var second = pad(now.getSeconds());
+			return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+		}
+
+		// Función para agregar ceros a la izquierda si es necesario
+		function pad(number) {
+			if (number < 10) {
+				return '0' + number;
+			}
+			return number;
+		}
+	</script>
+
+	<script th:inline="javascript">
+		document.addEventListener("DOMContentLoaded", function () {
+			// Obtener referencias al desplegable de tipo de pago y establecimiento
+			var tipoPagoSelect = document.getElementById('tipoPago');
+			var establecimientoSelect = document.getElementById('establecimiento');
+
+			// Obtener referencia al botón de "Registrar Pago"
+			var registrarPagoBtn = document.getElementById('registrarPagoBtn');
+
+			// Ocultar el botón al cargar la página
+			registrarPagoBtn.style.display = 'none';
+
+			// Manejar el cambio en el desplegable de tipo de pago
+			tipoPagoSelect.addEventListener('change', function () {
+				mostrarBotonRegistrar();
+			});
+
+			// Manejar el cambio en el desplegable de establecimiento
+			establecimientoSelect.addEventListener('change', function () {
+				mostrarBotonRegistrar();
+			});
+
+			// Función para mostrar el botón "Registrar Pago" si ambos desplegables tienen valores seleccionados
+			function mostrarBotonRegistrar() {
+				if (tipoPagoSelect.value && establecimientoSelect.value) {
+					registrarPagoBtn.style.display = 'block';
+				} else {
+					registrarPagoBtn.style.display = 'none';
+				}
+			}
+		});
+	</script>
+
+	<script th:inline="javascript">
+		document.addEventListener("DOMContentLoaded", function () {
+			// Obtener referencias a los desplegables de tipo de pago y establecimiento
+			var tipoPagoSelect = document.getElementById('tipoPago');
+			var establecimientoSelect = document.getElementById('establecimiento');
+
+			// Obtener referencia a la tabla de pagos
+			var tablaPagosBody = document.getElementById('tablaPagosBody');
+
+			// Manejar el cambio en los desplegables de tipo de pago y establecimiento
+			tipoPagoSelect.addEventListener('change', actualizarTablaPagos);
+			establecimientoSelect.addEventListener('change', actualizarTablaPagos);
+
+			// Función para actualizar la tabla de pagos
+			function actualizarTablaPagos() {
+				// Obtener los valores seleccionados de tipo de pago y establecimiento
+				var tipoPagoId = tipoPagoSelect.value;
+				var establecimientoId = establecimientoSelect.value;
+
+				// Filtrar la lista de pagos completa
+				var pagosFiltrados = listaPagosCompleta.filter(function (pago) {
+					return pago.tipopago === parseInt(tipoPagoId) && pago.entidadId === parseInt(establecimientoId);
+				});
+
+				// Limpiar la tabla de pagos
+				tablaPagosBody.innerHTML = '';
+
+				// Iterar sobre los pagos filtrados y agregarlos a la tabla
+				pagosFiltrados.forEach(function (pago) {
+					var row = document.createElement('tr');
+					row.innerHTML = '<td>' + pago.numerodocumento + '</td>' +
+						'<td>' + pago.monto + '</td>' +
+						'<td>' + pago.fecharegistro + '</td>' +
+						'<td>' + pago.periodo + '</td>' +
+						'<td>' + pago.mes + '</td>';
+					tablaPagosBody.appendChild(row);
+				});
+			}
+		});
+	</script>
+
+
+	<script th:inline="javascript">
+		document.addEventListener("DOMContentLoaded", function () {
+			// Obtener referencia al desplegable de año
+			var anioSelect = document.getElementById('anio');
+			// Obtener referencia al botón de confirmar año
+			var confirmarAnioBtn = document.getElementById('confirmarAnioBtn');
+			// Obtener referencia al cuerpo de la tabla de mapamensualidad
+			var mapaMensualidadBody = document.getElementById('mapaMensualidadBody');
+
+			// Array de meses ordenados
+			var mesesOrdenados = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+
+			// Manejar el clic en el botón de confirmar año
+			confirmarAnioBtn.addEventListener('click', function () {
+				// Obtener el año seleccionado
+				var anioSeleccionado = anioSelect.value;
+				// Filtrar los registros de mapamensualidad por el año seleccionado
+				var mapamensualidadFiltrados = listaMapamensualidad.filter(function (registro) {
+					return registro.periodo === parseInt(anioSeleccionado);
+				});
+				// Limpiar el cuerpo de la tabla de mapamensualidad
+				mapaMensualidadBody.innerHTML = '';
+				// Iterar sobre los meses ordenados
+				mesesOrdenados.forEach(function (mes) {
+					// Buscar el registro correspondiente al mes y año seleccionado
+					var registro = mapamensualidadFiltrados.find(function (r) {
+						return r.mes === mes;
+					});
+					// Si se encuentra el registro, calcular el saldo y agregar la fila a la tabla
+					if (registro) {
+						var saldo = calcularSaldo(registro);
+						var row = document.createElement('tr');
+						row.innerHTML = '<td>' + registro.periodo + '</td>' +
+							'<td>' + registro.mes + '</td>' +
+							'<td>' + saldo + '</td>';
+						mapaMensualidadBody.appendChild(row);
+					}
+				});
+				// Mostrar el modal de mapamensualidad
+				var mapaMensualidadModal = new bootstrap.Modal(document.getElementById('mapaMensualidadModal'));
+				mapaMensualidadModal.show();
+			});
+
+			// Función para calcular el saldo
+			function calcularSaldo(registro) {
+				// Obtener el ID de la tarifa del registro
+				var tarifaId = registro.tarifaId;
+				// Buscar la tarifa correspondiente en la lista de tarifas
+				var tarifaEncontrada = tarifa.find(function (t) {
+					return t.id === tarifaId;
+				});
+				// Verificar si se encontró la tarifa
+				if (tarifaEncontrada) {
+					// Convertir el monto de la tarifa a número
+					var tarifaMonto = parseFloat(tarifaEncontrada.monto);
+					// Obtener los pagos asociados al establecimiento, año y mes del registro
+					var pagosAsociados = listaPagosCompleta.filter(function (pago) {
+						return pago.entidadId === registro.establecimientoId &&
+							pago.periodo === registro.periodo &&
+							pago.mes === registro.mes;
+					});
+					// Calcular el total pagado
+					var totalPagado = pagosAsociados.reduce(function (total, pago) {
+						// Convertir el monto del pago a número
+						var montoPago = parseFloat(pago.monto);
+						return total + montoPago;
+					}, 0);
+					// Calcular el saldo restando el monto de la tarifa del total pagado
+					var saldo = tarifaMonto - totalPagado;
+					// Verificar si el saldo es negativo
+					if (saldo < 0) {
+						// Calcular el exceso de pago
+						var excesoPago = Math.abs(saldo);
+						// Reducir el saldo a cero
+						saldo = 0;
+						// Aplicar el exceso de pago al siguiente mes si existe
+						var indiceMesSiguiente = mesesOrdenados.indexOf(registro.mes) + 1;
+						if (indiceMesSiguiente < mesesOrdenados.length) {
+							var siguienteMes = mesesOrdenados[indiceMesSiguiente];
+							var siguienteMesRegistro = listaMapamensualidad.find(function (r) {
+								return r.periodo === registro.periodo && r.mes === siguienteMes;
+							});
+							if (siguienteMesRegistro) {
+								siguienteMesRegistro.saldo -= excesoPago;
+							}
+						}
+					}
+					return saldo;
+				} else {
+					// Si no se encuentra la tarifa, devolver NaN (o manejarlo de otra manera)
+					return NaN;
+				}
+			}
+		});
+	</script>
 
 
 

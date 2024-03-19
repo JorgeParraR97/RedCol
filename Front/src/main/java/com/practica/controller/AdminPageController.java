@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -177,13 +176,19 @@ public class AdminPageController {
 		List<EstablecimientoDTO> establecimiento = estServicio.findAllREST();
 		List<SostenedorDTO> sostenedor = sosServicio.findAllREST();
 		List<MapamensualidadDTO> mapa = tarServicio.findmmAllREST();
+		List<MapamensualidadDTO> mapamensualidad = tarServicio.findmmAllREST();
+		List<TarifaDTO> tarifa = tarServicio.findAllREST();
 		
 		
+		
+		model.addAttribute("tarifa", tarifa);
 		model.addAttribute("mapa", mapa);
 		model.addAttribute("pagos", pagos);
 		model.addAttribute("establecimiento", establecimiento);
 		model.addAttribute("sostenedor", sostenedor);
 		model.addAttribute("tipopago", tipopago);
+		model.addAttribute("mapamensualidad", mapamensualidad);
+		
 		return "/AdminPage/mantenedor_pagos";
 	}
 	
@@ -199,8 +204,12 @@ public class AdminPageController {
     }
     
     @PostMapping("/gpREST")
-	public String saveREST(@Valid @ModelAttribute PagosDTO pagosDTO, Model model) {
+	public String saveREST(@RequestBody PagosDTO pagosDTO, Model model) {
 	    try {
+	    	
+	    	// Agregar un registro de la información recibida por consola
+	        System.out.println("Datos recibidos en el controlador:");
+	        System.out.println(pagosDTO.toString());
 	        ResponseEntity<String> response = pagServicio.saveREST(pagosDTO);
 
 	        if (response != null && response.getStatusCode().is2xxSuccessful()) {

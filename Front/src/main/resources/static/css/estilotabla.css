@@ -1,0 +1,4 @@
+.table-scrollable {
+    overflow: auto;
+    height: 200px; /* ajusta la altura según sea necesario */
+}

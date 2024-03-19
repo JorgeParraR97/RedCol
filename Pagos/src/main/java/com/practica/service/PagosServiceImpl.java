@@ -23,6 +23,7 @@ public class PagosServiceImpl implements IPagosService {
 	public PagosEntity pagosDTO2Entity(PagosDTO pDTO) {
 		PagosEntity pEntity = new PagosEntity();
 		pEntity.setId(pDTO.getId());
+		pEntity.setNumerodocumento(pDTO.getNumerodocumento());
 		pEntity.setTipopago(pDTO.getTipopago());
 		pEntity.setMonto(pDTO.getMonto());
 		pEntity.setFecharegistro(pDTO.getFecharegistro());
@@ -37,6 +38,7 @@ public class PagosServiceImpl implements IPagosService {
 
 		PagosDTO pDTO = new PagosDTO();
 		pDTO.setId(pE.getId());
+		pDTO.setNumerodocumento(pE.getNumerodocumento());
 		pDTO.setTipopago(pE.getTipopago());
 		pDTO.setMonto(pE.getMonto());
 		pDTO.setFecharegistro(pE.getFecharegistro());

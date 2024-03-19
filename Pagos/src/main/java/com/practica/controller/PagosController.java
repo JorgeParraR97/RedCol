@@ -85,6 +85,7 @@ public class PagosController {
         }
         
         PagosDTO pagosExistente = optionalPagosExistente.get();
+        pagosExistente.setNumerodocumento(pagosActualizado.getNumerodocumento());
         pagosExistente.setTipopago(pagosActualizado.getTipopago());
         pagosExistente.setMonto(pagosActualizado.getMonto());
         pagosExistente.setFecharegistro(pagosActualizado.getFecharegistro());
