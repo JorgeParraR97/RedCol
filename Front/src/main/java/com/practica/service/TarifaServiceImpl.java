@@ -200,5 +200,27 @@ public class TarifaServiceImpl implements ITarifaService {
 		}
 	}
 	
+	@Override
+	public MapamensualidadDTO findmmById(int id) {
+	    try {
+	        HttpHeaders headers = new HttpHeaders();
+	        headers.setContentType(MediaType.APPLICATION_JSON);
+
+	        RestTemplate restTemplate = new RestTemplate();
+	        ResponseEntity<MapamensualidadDTO> responseEntity = restTemplate
+	                .getForEntity("http://localhost:8080/api/bff/tarifa/buscarmm" + "/" + id, MapamensualidadDTO.class);
+
+	        if (responseEntity.getStatusCode().is2xxSuccessful()) {
+	            return responseEntity.getBody();
+	        } else {
+	            System.out.println("Ha ocurrido un error al buscar el mapa");
+	            return null;
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return null;
+	    }
+	}
+	
 }
 	

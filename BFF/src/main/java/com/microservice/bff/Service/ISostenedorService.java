@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 import com.microservice.bff.DTO.EstablecimientoDTO;
+import com.microservice.bff.DTO.LoginDTO;
 import com.microservice.bff.DTO.SostenedorDTO;
 
 @Service
@@ -21,5 +22,6 @@ public interface ISostenedorService {
 	ResponseEntity<List<EstablecimientoDTO>> getColegios(@PathVariable("sostenedorid") int sostenedorid);
 	ResponseEntity<Optional<SostenedorDTO>> findById(int id);
 	ResponseEntity<String> actualizarSostenedor(@PathVariable int id, @RequestBody SostenedorDTO sostenedorActualizado);
+	ResponseEntity<LoginDTO> SostenedorLogin(LoginDTO loginDTO);
 
 }

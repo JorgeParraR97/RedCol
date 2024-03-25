@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 
 import com.practica.dto.EstablecimientoDTO;
+import com.practica.dto.LoginDTO;
 import com.practica.dto.SostenedorDTO;
 
 
@@ -22,5 +23,7 @@ public interface ISostenedorService {
 	public SostenedorDTO deleteREST(int id);
 	
 	public List<EstablecimientoDTO> getEstablecimientos(int sostenedorId);
+	
+	public LoginDTO loginsosREST(LoginDTO loginDTO);
 
 }

@@ -27,7 +27,7 @@
 			<div class="card-body register-card-body">
 				<p class="login-box-msg">Registrate como Administrador de RedCol Bio-Bio</p>
 
-    <form th:action="@{/home/rREST}" th:object="${adminDTO}" method="POST">
+    <form th:action="@{/login/rREST}" th:object="${adminDTO}" method="POST">
         <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="Nombre Completo" th:field="*{nombre}">
             <div class="input-group-append">
@@ -81,7 +81,7 @@
 
 
 
-				<a th:href="@{/home/login}" class="text-center">Ya tengo una cuenta</a>
+				<a th:href="@{/login/admin}" class="text-center">Ya tengo una cuenta</a>
 			</div>
 			<!-- /.form-box -->
 		</div><!-- /.card -->

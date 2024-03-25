@@ -1,4 +1,5 @@
-.table-scrollable {
-    overflow: auto;
-    height: 200px; /* ajusta la altura según sea necesario */
+.modal-content {
+    max-height: 400px; /* Altura máxima del modal */
+    overflow-y: auto; /* Habilitar el desplazamiento vertical cuando el contenido exceda la altura máxima */
 }
+

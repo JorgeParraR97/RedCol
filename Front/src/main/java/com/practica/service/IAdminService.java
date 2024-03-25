@@ -12,5 +12,7 @@ public interface IAdminService {
 	public LoginDTO loginREST(LoginDTO loginDTO);
 	
 	public ResponseEntity<String> saveREST(AdminDTO a);
+	
+	
 
 }

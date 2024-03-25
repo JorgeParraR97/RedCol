@@ -62,9 +62,6 @@
 				<!-- Sidebar user panel (optional) -->
 				<div class="user-panel mt-3 pb-3 mb-3 d-flex">
 
-					<div class="info">
-						<a href="#" class="d-block">Alexander Pierce</a>
-					</div>
 				</div>
 
 				<!-- SidebarSearch Form -->
@@ -271,6 +268,7 @@
 								<th>Fecha y Hora de Registro</th>
 								<th>Periodo</th>
 								<th>Mes</th>
+								<th>Eliminar</th>
 							</tr>
 						</thead>
 						<tbody id="tablaPagosBody">
@@ -769,12 +767,15 @@
 						'<td>' + pago.monto + '</td>' +
 						'<td>' + pago.fecharegistro + '</td>' +
 						'<td>' + pago.periodo + '</td>' +
-						'<td>' + pago.mes + '</td>';
+						'<td>' + pago.mes + '</td>' +
+						'<td><button class="btn btn-danger" onclick="fxJSeliminar(' + pago.id + ')">Eliminar</button></td>';
 					tablaPagosBody.appendChild(row);
 				});
 			}
+
 		});
 	</script>
+
 
 
 	<script th:inline="javascript">
@@ -807,12 +808,7 @@
 					});
 					// Si se encuentra el registro, calcular el saldo y agregar la fila a la tabla
 					if (registro) {
-						var saldo = calcularSaldo(registro);
-						var row = document.createElement('tr');
-						row.innerHTML = '<td>' + registro.periodo + '</td>' +
-							'<td>' + registro.mes + '</td>' +
-							'<td>' + saldo + '</td>';
-						mapaMensualidadBody.appendChild(row);
+						calcularSaldo(registro);
 					}
 				});
 				// Mostrar el modal de mapamensualidad
@@ -820,7 +816,7 @@
 				mapaMensualidadModal.show();
 			});
 
-			// Función para calcular el saldo
+			// Función para calcular el saldo y ajustar el color del texto
 			function calcularSaldo(registro) {
 				// Obtener el ID de la tarifa del registro
 				var tarifaId = registro.tarifaId;
@@ -846,25 +842,15 @@
 					}, 0);
 					// Calcular el saldo restando el monto de la tarifa del total pagado
 					var saldo = tarifaMonto - totalPagado;
-					// Verificar si el saldo es negativo
-					if (saldo < 0) {
-						// Calcular el exceso de pago
-						var excesoPago = Math.abs(saldo);
-						// Reducir el saldo a cero
-						saldo = 0;
-						// Aplicar el exceso de pago al siguiente mes si existe
-						var indiceMesSiguiente = mesesOrdenados.indexOf(registro.mes) + 1;
-						if (indiceMesSiguiente < mesesOrdenados.length) {
-							var siguienteMes = mesesOrdenados[indiceMesSiguiente];
-							var siguienteMesRegistro = listaMapamensualidad.find(function (r) {
-								return r.periodo === registro.periodo && r.mes === siguienteMes;
-							});
-							if (siguienteMesRegistro) {
-								siguienteMesRegistro.saldo -= excesoPago;
-							}
-						}
-					}
-					return saldo;
+
+					// Definir el color del texto en función del saldo
+					var textColor = saldo <= 0 ? 'green' : 'red';
+					// Construir la fila de la tabla con el color del texto adecuado
+					var row = document.createElement('tr');
+					row.innerHTML = '<td>' + registro.periodo + '</td>' +
+						'<td>' + registro.mes + '</td>' +
+						'<td style="color: ' + textColor + ';">' + Math.abs(saldo).toFixed(2) + '</td>';
+					mapaMensualidadBody.appendChild(row);
 				} else {
 					// Si no se encuentra la tarifa, devolver NaN (o manejarlo de otra manera)
 					return NaN;
@@ -873,8 +859,51 @@
 		});
 	</script>
 
-
-
+	<script th:inline="javascript">
+		function fxJSeliminar(id) {
+			Swal.fire({
+				title: "¿Está seguro de eliminar?",
+				text: "Una vez eliminado, no se podrá deshacer esta acción",
+				icon: "warning",
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				confirmButtonText: 'Sí, eliminarlo'
+			}).then((result) => {
+				if (result.isConfirmed) {
+					$.ajax({
+						url: "http://localhost:7777/admin/bpREST/" + id,
+						type: 'DELETE',
+						success: function (res) {
+							console.log(res);
+							Swal.fire(
+								'¡Eliminado!',
+								'Se ha eliminado exitosamente.',
+								'success'
+							).then((ok) => {
+								if (ok.value) {
+									location.href = "/admin/pagos";
+								}
+							});
+						},
+						error: function () {
+							Swal.fire(
+								'Error',
+								'Hubo un error al intentar eliminar.',
+								'error'
+							);
+						}
+					});
+				} else {
+					Swal.fire(
+						'Cancelado',
+						'Tu información no sufrió cambios',
+						'info'
+					);
+				}
+			});
+		}
+	</script>
 
 
 </body>

@@ -28,4 +28,7 @@ public interface ITarifaService {
 	
 	public MapamensualidadDTO deletemmREST(int id);
 	
+	public MapamensualidadDTO findmmById(int id);
+	
+	
 }

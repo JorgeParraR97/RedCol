@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.microservice.bff.Client.SostenedorClient;
 import com.microservice.bff.DTO.EstablecimientoDTO;
+import com.microservice.bff.DTO.LoginDTO;
 import com.microservice.bff.DTO.SostenedorDTO;
 
 @Service
@@ -56,6 +57,11 @@ public class SostenedorServiceImpl implements ISostenedorService {
 	@Override
 	public void SostenedorDelete(int id) {
 		sostenedorClient.delete(id);
+	}
+	
+	@Override
+	public ResponseEntity<LoginDTO> SostenedorLogin(LoginDTO loginDTO) {
+		return sostenedorClient.login(loginDTO);
 	}
 
 

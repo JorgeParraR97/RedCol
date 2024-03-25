@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 import com.microservice.bff.DTO.EstablecimientoDTO;
+import com.microservice.bff.DTO.LoginDTO;
 import com.microservice.bff.DTO.SostenedorDTO;
 
 @FeignClient(name = "SostenedorMicro")
@@ -38,6 +39,9 @@ public interface SostenedorClient {
     
 	@DeleteMapping("/api/sostenedor/borrar/{id}")
 	public void delete(@PathVariable int id);
+	
+	@PostMapping("/api/sostenedor/login")
+	public ResponseEntity<LoginDTO> login(@RequestBody @Valid LoginDTO loginDTO);
 }
 
 	

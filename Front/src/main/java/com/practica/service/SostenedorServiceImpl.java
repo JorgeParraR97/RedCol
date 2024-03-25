@@ -18,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.practica.dto.EstablecimientoDTO;
+import com.practica.dto.LoginDTO;
 import com.practica.dto.SostenedorDTO;
 
 
@@ -128,6 +129,31 @@ public class SostenedorServiceImpl implements ISostenedorService {
 
         return responseEntity.getBody();
     }
+	
+	@Override
+	public LoginDTO loginsosREST(LoginDTO loginDTO) {
+		try {
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+
+			HttpEntity<LoginDTO> requestEntity = new HttpEntity<>(loginDTO, headers);
+
+			RestTemplate restTemplate = new RestTemplate();
+			ResponseEntity<LoginDTO> responseEntity = restTemplate.postForEntity("http://localhost:8080/api/bff/sostenedor/login",
+					requestEntity, LoginDTO.class);
+
+			if (responseEntity.getStatusCode().is2xxSuccessful()) {
+				LoginDTO dto = responseEntity.getBody();
+				return dto;
+			} else {
+				System.out.println("A ocurrido un error");
+				return null;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	
 	
 

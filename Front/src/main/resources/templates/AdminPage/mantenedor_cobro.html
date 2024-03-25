@@ -377,11 +377,6 @@
 		}
 	</script>
 
-
-
-
-
-
 	<script th:inline="javascript">
 		function enviarSolicitud() {
 			// Obtener el año seleccionado y convertirlo a entero
@@ -403,8 +398,16 @@
 				// Obtener el ID de la tarifa seleccionada en la segunda celda de la fila y convertirlo a entero
 				var tarifaId = parseInt(fila.querySelector('select').value);
 
-				// Crear un objeto con los datos de la fila
+				// Buscar el registro correspondiente en los registros cargados en el modelo
+				var registroExistente = registros.find(function (registro) {
+					return registro.mes === mes &&
+						registro.periodo === anioSeleccionado &&
+						registro.establecimientoId === establecimientoId;
+				});
+
+				// Si el registro existe, se agrega su ID al objeto data
 				var data = {
+					id: registroExistente ? registroExistente.id : null,
 					mes: mes,
 					periodo: anioSeleccionado,
 					tarifaId: tarifaId,
@@ -449,6 +452,13 @@
 			}
 		}
 	</script>
+
+
+
+
+
+
+
 
 
 </body>

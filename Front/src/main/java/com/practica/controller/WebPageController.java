@@ -16,16 +16,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.practica.dto.AdminDTO;
 import com.practica.dto.LoginDTO;
 import com.practica.service.IAdminService;
+import com.practica.service.ISostenedorService;
 
 @Controller
-@RequestMapping("home")
+@RequestMapping("login")
 public class WebPageController {
 
 	@Autowired
 	private IAdminService servicio;
+	
+	
+	@Autowired
+	private ISostenedorService sosservicio;
 
 	// http://localhost:8081/persona/listar/REST
-	@GetMapping("/login")
+	@GetMapping("/admin")
 	public String showLoginForm(Model model) {
 		model.addAttribute("loginDTO", new LoginDTO());
 		return "/WebPage/login";
@@ -42,7 +47,7 @@ public class WebPageController {
 	    } else {
 	        // Autenticación fallida, agregar mensaje de error al modelo
 	        model.addAttribute("error", "Credenciales inválidas");
-	        return "redirect:/home/login"; // Cambiar según la ruta real de tu página de login
+	        return "redirect:/login/admin"; // Cambiar según la ruta real de tu página de login
 	    }
 	}
 
@@ -62,20 +67,37 @@ public class WebPageController {
 
 	        if (response != null && response.getStatusCode().is2xxSuccessful()) {
 	            // Si la creación en el BffAdminController es exitosa, redirige a la página de login
-	            return "redirect:/home/login";
+	            return "redirect:/login/admin";
 	        } else {
 	            // Creación fallida, agregar mensaje de error al modelo
 	            model.addAttribute("error", "Error al crear admin");
 	            // Redirige a la página de registro
-	            return "redirect:/home/registro"; // Cambiar según la ruta real de tu página de registro
+	            return "redirect:/login/registro"; // Cambiar según la ruta real de tu página de registro
 	        }
 	    } catch (Exception e) {
 	        // Error interno, agregar mensaje de error al modelo
 	        model.addAttribute("error", "Error interno del servidor");
 	        // Redirige a la página de registro
-	        return "redirect:/home/registro"; // Cambiar según la ruta real de tu página de registro
+	        return "redirect:/login/registro"; // Cambiar según la ruta real de tu página de registro
 	    }
 	}
+	
+	
+	@PostMapping("/issREST")
+	public String loginsosREST(@Valid LoginDTO loginDTO, Model model) {
+	    // Llamada al servicio para realizar la autenticación
+	    LoginDTO responseDTO = sosservicio.loginsosREST(loginDTO);
+
+	    if (responseDTO != null) {
+	        // Autenticación exitosa
+	        return "redirect:/sostenedor/home";
+	    } else {
+	        // Autenticación fallida, agregar mensaje de error al modelo
+	        model.addAttribute("error", "Credenciales inválidas");
+	        return "redirect:/login/admin"; // Cambiar según la ruta real de tu página de login
+	    }
+	}
+	
 	
 	
 	

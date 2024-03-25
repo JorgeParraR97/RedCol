@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import com.microservice.bff.DTO.EstablecimientoDTO;
+import com.microservice.bff.DTO.LoginDTO;
 import com.microservice.bff.DTO.SostenedorDTO;
 import com.microservice.bff.Service.ISostenedorService;
 
@@ -90,6 +91,21 @@ public class BffSostenedorController {
         sostenedorService.SostenedorDelete(id);
         return ResponseEntity.noContent().build();
     }
-	
-	
+    
+	@PostMapping("/login")
+	public ResponseEntity<LoginDTO> sostenedorLogin(@RequestBody LoginDTO loginDTO) {
+	    try {
+	        ResponseEntity<LoginDTO> isValidCredentials = sostenedorService.SostenedorLogin(loginDTO);
+
+	        if (isValidCredentials != null) {
+	            return ResponseEntity.ok(isValidCredentials.getBody());
+	        } else {
+	            return ResponseEntity.status(401).body(new LoginDTO()); // Puedes ajustar esto según tu necesidad
+	        }
+	    } catch (Exception e) {
+	        return ResponseEntity.status(500).body(new LoginDTO()); // Puedes ajustar esto según tu necesidad
+	    }
+	}
 }
+	
+	

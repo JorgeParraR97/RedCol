@@ -229,6 +229,17 @@ public class AdminPageController {
 	    }
 	}
     
+	@DeleteMapping("/bpREST/{id}")
+	public ResponseEntity<String> deletePagos(@PathVariable int id) {
+	    try {
+	        pagServicio.deleteREST(id);
+	        return ResponseEntity.ok("Eliminado exitosamente");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(500).body("Error al intentar eliminar");
+	    }
+	}
+    
     
     @GetMapping("tarifa")
 	public String tarifa(Model model) {
@@ -301,28 +312,38 @@ public class AdminPageController {
 	}
     
     @PostMapping("/gmmREST")
-	public String savemmREST(@RequestBody MapamensualidadDTO mapamensualidadDTO, Model model) {
-	    try {
-	    	
-	    	System.out.println("Datos recibidos en el controlador: " + mapamensualidadDTO.toString());
-	        ResponseEntity<String> response = tarServicio.savemmREST(mapamensualidadDTO);
+    public String savemmREST(@RequestBody MapamensualidadDTO mapamensualidadDTO, Model model) {
+        try {
+            System.out.println("Datos recibidos en el controlador: " + mapamensualidadDTO.toString());
+            
+            // Verificar si el registro ya existe
+            MapamensualidadDTO mapaExistente = tarServicio.findmmById(mapamensualidadDTO.getId());
+            
+            if (mapaExistente != null) {
+                // Si el registro ya existe, actualizarlo
+                tarServicio.actualizarMapa(mapamensualidadDTO);
+            } else {
+                // Si el registro no existe, guardarlo
+                ResponseEntity<String> response = tarServicio.savemmREST(mapamensualidadDTO);
+                
+                if (response == null || !response.getStatusCode().is2xxSuccessful()) {
+                    // Si hay un problema al guardar el nuevo registro, redirige con un mensaje de error
+                    model.addAttribute("error", "Error al guardar Mapa");
+                    return "redirect:/admin/cobro";
+                }
+            }
 
-	        if (response != null && response.getStatusCode().is2xxSuccessful()) {
-	            // Si la creación en el BffAdminController es exitosa, redirige a la página de login
-	            return "redirect:/admin/cobro";
-	        } else {
-	            // Creación fallida, agregar mensaje de error al modelo
-	            model.addAttribute("error", "Error al crear Mapa");
-	            // Redirige a la página de registro
-	            return "redirect:/admin/cobro"; // Cambiar según la ruta real de tu página de registro
-	        }
-	    } catch (Exception e) {
-	        // Error interno, agregar mensaje de error al modelo
-	        model.addAttribute("error", "Error interno del servidor");
-	        // Redirige a la página de registro
-	        return "redirect:/admin/cobro"; // Cambiar según la ruta real de tu página de registro
-	    }
-	}
+            // Redirige a la página adecuada después de guardar o actualizar el registro
+            return "redirect:/admin/cobro";
+            
+        } catch (Exception e) {
+            // Error interno, agregar mensaje de error al modelo y redirigir
+            model.addAttribute("error", "Error interno del servidor");
+            return "redirect:/admin/cobro";
+        }
+    }
+    
+
 	
 	@PostMapping("/ammREST")
     public String actualizarMapa(@Valid MapamensualidadDTO mapamensualidadDTO, Model model) {
