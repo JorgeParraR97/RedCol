@@ -24,9 +24,10 @@ public class SostenedorDTO {
 	
 	@JsonProperty("email")
 	private String email;
-	
 
-	private String contra;
+	
+	@JsonProperty("contrasena")
+	private String contrasena;
 	
 	@JsonProperty("representante")
 	private String representante;

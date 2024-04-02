@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>REDCOL</title>
+
+	<!-- Google Font: Source Sans Pro -->
+	<link rel="stylesheet"
+		th:href="@{https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback}" />
+	<!-- Font Awesome Icons -->
+	<link rel="stylesheet" th:href="@{/AdminLTE-3.2.0/plugins/fontawesome-free/css/all.min.css}" />
+	<!-- Theme style -->
+	<link rel="stylesheet" th:href="@{/AdminLTE-3.2.0/dist/css/adminlte.min.css}" />
+
+	<!-- DataTables -->
+	<link rel="stylesheet" th:href="@{/AdminLTE-3.2.0/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css}" />
+	<link rel="stylesheet"
+		th:href="@{/AdminLTE-3.2.0/plugins/datatables-responsive/css/responsive.bootstrap4.min.css}" />
+	<link rel="stylesheet" th:href="@{/AdminLTE-3.2.0/plugins/datatables-buttons/css/buttons.bootstrap4.min.css}" />
+</head>
+
+<body class="hold-transition sidebar-mini">
+	<div class="wrapper">
+		<!-- Navbar -->
+		<nav class="main-header navbar navbar-expand navbar-white navbar-light">
+			<!-- Left navbar links -->
+			<ul class="navbar-nav">
+				<li class="nav-item">
+					<a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+				</li>
+				<!-- Puedes dejar estos enlaces si los necesitas -->
+				<li class="nav-item d-none d-sm-inline-block">
+					<a th:href="@{/AdminPage/index3}" class="nav-link">Home</a>
+				</li>
+				<li class="nav-item d-none d-sm-inline-block">
+					<a href="#" class="nav-link">Contact</a>
+				</li>
+			</ul>
+
+			<!-- Right navbar links -->
+			<ul class="navbar-nav ml-auto">
+				<!-- Coloca aquí los elementos del menú derecho si los necesitas -->
+			</ul>
+		</nav>
+		<!-- /.navbar -->
+
+		<!-- Main Sidebar Container -->
+		<aside class="main-sidebar sidebar-dark-primary elevation-4">
+			<!-- Brand Logo -->
+			<a href="index3.html" class="brand-link">
+				<img th:src="@{/AdminLTE-3.2.0/dist/img/AdminLTELogo.png}" alt="AdminLTE Logo"
+					class="brand-image img-circle elevation-3" style="opacity: .8">
+				<span class="brand-text font-weight-light">AdminLTE 3</span>
+			</a>
+
+			<!-- Sidebar -->
+			<div class="sidebar">
+				<!-- Sidebar user panel (optional) -->
+				<div class="user-panel mt-3 pb-3 mb-3 d-flex">
+
+					<div class="info">
+						<a href="#" class="d-block" id="nombreSostenedor">
+							<!-- Aquí se cargará dinámicamente el nombre del sostenedor -->
+						</a>
+					</div>
+				</div>
+
+				<!-- SidebarSearch Form -->
+				<div class="form-inline">
+					<div class="input-group" data-widget="sidebar-search">
+						<input class="form-control form-control-sidebar" type="search" placeholder="Search"
+							aria-label="Search">
+						<div class="input-group-append">
+							<button class="btn btn-sidebar">
+								<i class="fas fa-search fa-fw"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+
+				<!-- Sidebar Menu -->
+				<nav class="mt-2">
+					<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+						data-accordion="false">
+						<!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+						<li class="nav-item menu-open">
+							<a href="#" class="nav-link active">
+								<i class="nav-icon fas fa-tachometer-alt"></i>
+								<p>
+									Administración
+									<i class="right fas fa-angle-left"></i>
+								</p>
+							</a>
+							<ul class="nav nav-treeview">
+								<li class="nav-item">
+									<a th:href="@{/sostenedor/home}" class="nav-link active">
+										<i class="far fa-circle nav-icon"></i>
+										<p>Establecimiento</p>
+									</a>
+								</li>
+							</ul>
+						</li>
+						<li class="nav-item menu-open">
+							<a href="#" class="nav-link">
+								<i class="nav-icon fas fa-tachometer-alt"></i>
+								<p>
+									Finanzas
+									<i class="right fas fa-angle-left"></i>
+								</p>
+							</a>
+							<ul class="nav nav-treeview">
+								<li class="nav-item">
+									<a th:href="@{/sostenedor/pagos}" class="nav-link">
+										<i class="far fa-circle nav-icon"></i>
+										<p>Pagos</p>
+									</a>
+								</li>
+								<li class="nav-item">
+									<a th:href="@{/sostenedor/cobro}" class="nav-link">
+										<i class="far fa-circle nav-icon"></i>
+										<p>Cobro</p>
+									</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</nav>
+				<!-- /.sidebar-menu -->
+			</div>
+			<!-- /.sidebar -->
+		</aside>
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Aquí iría el contenido central, pero está vacío en este ejemplo -->
+			<div class="content-wrapper" style="margin-left: 0; padding-left: 10px;">
+				<!-- Content Header (Page header) -->
+				<div class="content-header">
+					<div class="container-fluid">
+						<div class="row mb-2">
+							<div class="col-sm-6">
+								<h1 class="m-0">Mantenedor Establecimiento</h1>
+							</div><!-- /.col -->
+							<div class="col-sm-6">
+								<ol class="breadcrumb float-sm-right">
+
+									<li class="breadcrumb-item active">Establecimiento</li>
+								</ol>
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+					</div><!-- /.container-fluid -->
+				</div>
+				<!-- /.content-header -->
+
+				<div class="content">
+
+					<table id="example1" class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>NOMBRE</th>
+								<th>RBD</th>
+								<th>DIRECCION</th>
+								<th>NOMBRE DE CONTACTO</th>
+								<th>EMAIL DE CONTACTO</th>
+								<th>CARGO DE CONTACTO</th>
+								<th>TELEFONO DE CONTACTO</th>
+							
+								
+							</tr>
+						</thead>
+							<tr th:each="establecimiento, iterStat : ${establecimiento}"
+								th:if="${establecimiento.sostenedorId == #session.getAttribute('sostenedorId')}">
+								<td th:text="${establecimiento.id}"></td>
+								<td th:text="${establecimiento.nombre}"></td>
+								<td th:text="${establecimiento.rbd}"></td>
+								<td th:text="${establecimiento.direccion}"></td>
+								<td th:text="${establecimiento.contactonombre}"></td>
+								<td th:text="${establecimiento.contactoemail}"></td>
+								<td th:text="${establecimiento.contactocargo}"></td>
+								<td th:text="${establecimiento.contactotelefono}"></td>
+							
+							</tr>
+						</tbody>
+					</table>
+
+
+
+
+
+				</div>
+				<!-- /.col-md-6 -->
+
+				<!-- /.col-md-6 -->
+			</div>
+			<!-- /.row -->
+		</div><!-- /.container-fluid -->
+	</div>
+
+	<!-- /.content -->
+	</div>
+	</div>
+	<!-- /.content-wrapper -->
+	</div>
+	<!-- ./wrapper -->
+
+	<!-- REQUIRED SCRIPTS -->
+	<!-- jQuery -->
+	<script th:src="@{/AdminLTE-3.2.0/plugins/jquery/jquery.min.js}"></script>
+	<!-- Bootstrap 4 -->
+	<script th:src="@{/AdminLTE-3.2.0/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+	<!-- AdminLTE -->
+	<script th:src="@{/AdminLTE-3.2.0/dist/js/adminlte.js}"></script>
+	<!-- DataTables & Plugins -->
+	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables/jquery.dataTables.min.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-responsive/js/dataTables.responsive.min.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-responsive/js/responsive.bootstrap4.min.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-buttons/js/dataTables.buttons.min.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.bootstrap4.min.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/jszip/jszip.min.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/pdfmake/pdfmake.min.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/pdfmake/vfs_fonts.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.html5.min.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.print.min.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
+	<script th:src="@{https://cdn.jsdelivr.net/npm/sweetalert2@11}"></script>
+
+
+	<script th:inline="javascript">
+		// Obtener el ID del sostenedor proporcionado por tu servidor o desde otro lugar
+		var idSostenedor = /*[[${sostenedorId}]]*/ null;
+
+		// Obtener la lista de sostenedores en formato JSON del modelo
+		var sostenedores = /*[[${sostenedores}]]*/ null;
+	</script>
+
+
+	<script th:inline="javascript">
+
+		// Función para buscar el nombre del sostenedor correspondiente al ID
+		function buscarNombreSostenedor(id) {
+			for (var i = 0; i < sostenedores.length; i++) {
+				if (sostenedores[i].id === id) {
+					return sostenedores[i].nombre;
+				}
+			}
+			return null; // Retornar null si no se encuentra el nombre
+		}
+
+		// Obtener el nombre del sostenedor correspondiente al ID
+		var nombreSostenedor = buscarNombreSostenedor(idSostenedor);
+
+		// Mostrar el nombre del sostenedor en el elemento con ID 'nombreSostenedor'
+		if (nombreSostenedor) {
+			document.getElementById('nombreSostenedor').innerText = nombreSostenedor;
+		} else {
+			document.getElementById('nombreSostenedor').innerText = "Nombre de sostenedor no encontrado";
+		}
+
+	</script>
+
+
+
+</body>
+
+</html>

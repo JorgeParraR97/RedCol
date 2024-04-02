@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>REDCOL</title>
+
+	<link rel="stylesheet" th:href="@{/css/estilotabla.css}" />
+
+	<!-- Google Font: Source Sans Pro -->
+	<link rel="stylesheet"
+		th:href="@{https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback}" />
+	<!-- Font Awesome Icons -->
+	<link rel="stylesheet" th:href="@{/AdminLTE-3.2.0/plugins/fontawesome-free/css/all.min.css}" />
+	<!-- Theme style -->
+	<link rel="stylesheet" th:href="@{/AdminLTE-3.2.0/dist/css/adminlte.min.css}" />
+
+	<!-- DataTables -->
+	<link rel="stylesheet" th:href="@{/AdminLTE-3.2.0/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css}" />
+	<link rel="stylesheet"
+		th:href="@{/AdminLTE-3.2.0/plugins/datatables-responsive/css/responsive.bootstrap4.min.css}" />
+	<link rel="stylesheet" th:href="@{/AdminLTE-3.2.0/plugins/datatables-buttons/css/buttons.bootstrap4.min.css}" />
+</head>
+
+<body class="hold-transition sidebar-mini">
+	<div class="wrapper">
+		<!-- Navbar -->
+		<nav class="main-header navbar navbar-expand navbar-white navbar-light">
+			<!-- Left navbar links -->
+			<ul class="navbar-nav">
+				<li class="nav-item">
+					<a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+				</li>
+				<!-- Puedes dejar estos enlaces si los necesitas -->
+				<li class="nav-item d-none d-sm-inline-block">
+					<a th:href="@{/AdminPage/index3}" class="nav-link">Home</a>
+				</li>
+				<li class="nav-item d-none d-sm-inline-block">
+					<a href="#" class="nav-link">Contact</a>
+				</li>
+			</ul>
+
+			<!-- Right navbar links -->
+			<ul class="navbar-nav ml-auto">
+				<!-- Coloca aquí los elementos del menú derecho si los necesitas -->
+			</ul>
+		</nav>
+		<!-- /.navbar -->
+
+		<!-- Main Sidebar Container -->
+		<aside class="main-sidebar sidebar-dark-primary elevation-4">
+			<!-- Brand Logo -->
+			<a href="index3.html" class="brand-link">
+				<img th:src="@{/AdminLTE-3.2.0/dist/img/AdminLTELogo.png}" alt="AdminLTE Logo"
+					class="brand-image img-circle elevation-3" style="opacity: .8">
+				<span class="brand-text font-weight-light">AdminLTE 3</span>
+			</a>
+
+			<!-- Sidebar -->
+			<div class="sidebar">
+				<!-- Sidebar user panel (optional) -->
+				<div class="user-panel mt-3 pb-3 mb-3 d-flex">
+
+					<div class="info">
+						<a href="#" class="d-block" id="nombreSostenedor">
+							<!-- Aquí se cargará dinámicamente el nombre del sostenedor -->
+						</a>
+					</div>
+
+				</div>
+
+				<!-- SidebarSearch Form -->
+				<div class="form-inline">
+					<div class="input-group" data-widget="sidebar-search">
+						<input class="form-control form-control-sidebar" type="search" placeholder="Search"
+							aria-label="Search">
+						<div class="input-group-append">
+							<button class="btn btn-sidebar">
+								<i class="fas fa-search fa-fw"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+
+				<!-- Sidebar Menu -->
+				<nav class="mt-2">
+					<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+						data-accordion="false">
+						<!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+						<li class="nav-item menu-open">
+							<a href="#" class="nav-link">
+								<i class="nav-icon fas fa-tachometer-alt"></i>
+								<p>
+									Administración
+									<i class="right fas fa-angle-left"></i>
+								</p>
+							</a>
+							<ul class="nav nav-treeview">
+								<li class="nav-item">
+									<a th:href="@{/sostenedor/home}" class="nav-link">
+										<i class="far fa-circle nav-icon"></i>
+										<p>Establecimiento</p>
+									</a>
+								</li>
+							</ul>
+						</li>
+						<li class="nav-item menu-open">
+							<a href="#" class="nav-link active">
+								<i class="nav-icon fas fa-tachometer-alt"></i>
+								<p>
+									Finanzas
+									<i class="right fas fa-angle-left"></i>
+								</p>
+							</a>
+							<ul class="nav nav-treeview">
+								<li class="nav-item">
+									<a th:href="@{/sostenedor/pagos}" class="nav-link active">
+										<i class="far fa-circle nav-icon"></i>
+										<p>Pagos</p>
+									</a>
+								</li>
+								<li class="nav-item">
+									<a th:href="@{/sostenedor/cobro}" class="nav-link">
+										<i class="far fa-circle nav-icon"></i>
+										<p>Cobro</p>
+									</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</nav>
+				<!-- /.sidebar-menu -->
+			</div>
+			<!-- /.sidebar -->
+		</aside>
+
+		<!-- Content Wrapper. Contains page content -->
+		<div class="content-wrapper">
+			<!-- Aquí iría el contenido central, pero está vacío en este ejemplo -->
+			<div class="content-wrapper" style="margin-left: 0; padding-left: 10px;">
+				<!-- Content Header (Page header) -->
+				<div class="content-header">
+					<div class="container-fluid">
+						<div class="row mb-2">
+							<div class="col-sm-6">
+								<h1 class="m-0">Mantenedor Pagos</h1>
+							</div><!-- /.col -->
+							<div class="col-sm-6">
+								<ol class="breadcrumb float-sm-right">
+
+									<li class="breadcrumb-item active">Pagos</li>
+								</ol>
+							</div><!-- /.col -->
+						</div><!-- /.row -->
+
+						<div class="row">
+							<div class="col">
+								<div class="form-group">
+									<label for="tipoPago">Seleccione tipo de pago:</label>
+									<select class="form-control" id="tipoPago" name="tipoPago">
+										<option value="">Seleccione tipo de pago</option>
+										<!-- Iterar sobre los tipos de pago disponibles -->
+									</select>
+								</div>
+							</div>
+						</div>
+						<!-- Fin del desplegable para seleccionar tipo de pago -->
+
+						<!-- Desplegable para seleccionar establecimiento -->
+						<div class="row" id="establecimientoLabelDiv" style="display: none;">
+							<div class="col">
+								<label for="establecimiento">Seleccione un establecimiento:</label>
+							</div>
+						</div>
+
+						<select class="form-control" id="establecimiento" name="establecimiento" style="display: none;">
+							<!-- Esta opción se agregará dinámicamente con JavaScript -->
+							<option value="">Seleccione un establecimiento</option>
+						</select>
+
+
+
+
+
+					</div><!-- /.container-fluid -->
+				</div>
+				<!-- /.content-header -->
+
+				<!-- Agrega el botón para abrir el modal -->
+				<button class="btn btn-primary mb-3" id="abrirModalBtn">Revisar saldos</button>
+
+				<!-- Modal para seleccionar el año -->
+				<div class="modal fade" id="seleccionarAnioModal" tabindex="-1"
+					aria-labelledby="seleccionarAnioModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="seleccionarAnioModalLabel">Seleccionar Año</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal"
+									aria-label="Close"></button>
+							</div>
+							<div class="modal-body">
+								<label for="anio">Seleccione el Año:</label>
+								<select class="form-control" id="anio">
+									<!-- Las opciones de años se agregarán dinámicamente con JavaScript -->
+								</select>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+								<button type="button" class="btn btn-primary" id="confirmarAnioBtn">Confirmar</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Modal para mostrar el mapa de mensualidad -->
+				<div class="modal fade" id="mapaMensualidadModal" tabindex="-1"
+					aria-labelledby="mapaMensualidadModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-lg"> <!-- Agregamos la clase modal-lg para un modal grande -->
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="mapaMensualidadModalLabel">Mapa de Mensualidad</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal"
+									aria-label="Close"></button>
+							</div>
+							<div class="modal-body">
+								<!-- Contenedor scrollable -->
+								<div class="table">
+									<table class="table-scrollable">
+										<thead>
+											<tr>
+												<th>Año</th>
+												<th>Mes</th>
+												<th>Saldo</th>
+											</tr>
+										</thead>
+										<tbody id="mapaMensualidadBody">
+											<!-- Contenido de la tabla -->
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+
+				<div class="content">
+
+
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Número de Documento</th>
+								<th>Monto</th>
+								<th>Fecha y Hora de Registro</th>
+								<th>Periodo</th>
+								<th>Mes</th>
+								<th>Eliminar</th>
+							</tr>
+						</thead>
+						<tbody id="tablaPagosBody">
+							<!-- Los datos de los pagos se agregarán aquí dinámicamente -->
+						</tbody>
+					</table>
+				</div>
+
+
+				<!-- Modal para el registro de pago -->
+
+
+			</div>
+			<!-- /.card-body -->
+		</div>
+
+
+	</div>
+	<!-- /.col-md-6 -->
+
+	<!-- /.col-md-6 -->
+	</div>
+	<!-- /.row -->
+	</div><!-- /.container-fluid -->
+	</div>
+
+	<!-- /.content -->
+	</div>
+	</div>
+	<!-- /.content-wrapper -->
+	</div>
+	<!-- ./wrapper -->
+
+	<!-- REQUIRED SCRIPTS -->
+	<!-- jQuery -->
+	<script th:src="@{/AdminLTE-3.2.0/plugins/jquery/jquery.min.js}"></script>
+	<!-- Bootstrap 4 -->
+	<script th:src="@{/AdminLTE-3.2.0/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+	<!-- AdminLTE -->
+	<script th:src="@{/AdminLTE-3.2.0/dist/js/adminlte.js}"></script>
+	<!-- DataTables & Plugins -->
+	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables/jquery.dataTables.min.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-responsive/js/dataTables.responsive.min.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-responsive/js/responsive.bootstrap4.min.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-buttons/js/dataTables.buttons.min.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.bootstrap4.min.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/jszip/jszip.min.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/pdfmake/pdfmake.min.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/pdfmake/vfs_fonts.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.html5.min.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.print.min.js}"></script>
+	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
+	<script th:src="@{https://cdn.jsdelivr.net/npm/sweetalert2@11}"></script>
+	<script th:inline="javascript">
+		var establecimiento = /*[[${establecimiento}]]*/[];
+		var sostenedores = /*[[${sostenedor}]]*/[];
+		var listaPagosCompleta = /*[[${pagos}]]*/[];
+		var tipopago = /*[[${tipopago}]]*/[];
+		var listaMapamensualidad = /*[[${mapamensualidad}]]*/[];
+		var tarifa = /*[[${tarifa}]]*/[];
+		var idSostenedor = /*[[${sostenedorId}]]*/ null;
+	</script>
+
+	<script th:inline="javascript">
+
+		// Función para buscar el nombre del sostenedor correspondiente al ID
+		function buscarNombreSostenedor(id) {
+			for (var i = 0; i < sostenedores.length; i++) {
+				if (sostenedores[i].id === id) {
+					return sostenedores[i].nombre;
+				}
+			}
+			return null; // Retornar null si no se encuentra el nombre
+		}
+
+		// Obtener el nombre del sostenedor correspondiente al ID
+		var nombreSostenedor = buscarNombreSostenedor(idSostenedor);
+
+		// Mostrar el nombre del sostenedor en el elemento con ID 'nombreSostenedor'
+		if (nombreSostenedor) {
+			document.getElementById('nombreSostenedor').innerText = nombreSostenedor;
+		} else {
+			document.getElementById('nombreSostenedor').innerText = "Nombre de sostenedor no encontrado";
+		}
+
+	</script>
+
+
+	<script th:inline="javascript">
+		document.addEventListener("DOMContentLoaded", function () {
+			var tipoPagoSelect = document.getElementById('tipoPago');
+			var establecimientoLabelDiv = document.getElementById('establecimientoLabelDiv');
+			var establecimientoSelect = document.getElementById('establecimiento');
+
+			// Ocultar el desplegable y el label del establecimiento inicialmente
+			establecimientoLabelDiv.style.display = 'none';
+			establecimientoSelect.style.display = 'none';
+
+			tipoPagoSelect.addEventListener('change', function () {
+				var tipoPagoSeleccionado = tipoPagoSelect.value;
+
+				if (tipoPagoSeleccionado === '1') {
+					establecimientoLabelDiv.style.display = 'block';
+					establecimientoSelect.style.display = 'block';
+					cargarEstablecimientos();
+				} else {
+					establecimientoLabelDiv.style.display = 'none';
+					establecimientoSelect.style.display = 'none';
+				}
+			});
+
+			// Cargar opciones de tipo de pago
+			tipopago.forEach(function (tipoPago) {
+				var option = document.createElement('option');
+				option.value = tipoPago.id;
+				option.textContent = tipoPago.descripcion;
+				tipoPagoSelect.appendChild(option);
+			});
+
+			// Función para cargar las opciones del desplegable de establecimiento
+			function cargarEstablecimientos() {
+				// Limpiar las opciones anteriores
+				establecimientoSelect.innerHTML = '';
+				// Agregar la opción predeterminada
+				var defaultOption = document.createElement('option');
+				defaultOption.value = "";
+				defaultOption.textContent = "Seleccione un establecimiento";
+				establecimientoSelect.appendChild(defaultOption);
+				// Iterar sobre los establecimientos disponibles
+				establecimiento.forEach(function (establecimiento) {
+					// Filtrar establecimientos por el ID del sostenedor
+					if (establecimiento.sostenedorId === idSostenedor) {
+						// Crear una opción para cada establecimiento que coincida con el ID del sostenedor
+						var option = document.createElement('option');
+						option.value = establecimiento.id;
+						option.textContent = establecimiento.nombre;
+						establecimientoSelect.appendChild(option);
+					}
+				});
+			}
+		});
+	</script>
+
+
+
+
+
+	<script th:inline="javascript">
+		document.addEventListener("DOMContentLoaded", function () {
+			// Obtener referencia al desplegable de establecimiento, al botón y al modal
+			var establecimientoSelect = document.getElementById('establecimiento');
+			var abrirModalBtn = document.getElementById('abrirModalBtn');
+			var modal = new bootstrap.Modal(document.getElementById('seleccionarAnioModal'));
+
+			// Ocultar el botón al cargar la página
+			abrirModalBtn.style.display = 'none';
+
+			// Manejar el cambio en el desplegable de establecimiento
+			establecimientoSelect.addEventListener('change', function () {
+				// Mostrar el botón al seleccionar un establecimiento
+				abrirModalBtn.style.display = 'block';
+				// Lógica para cargar los años disponibles en el desplegable
+				cargarAniosDisponibles();
+			});
+
+			// Función para cargar los años disponibles en el desplegable
+			function cargarAniosDisponibles() {
+				var anioSelect = document.getElementById('anio');
+				// Obtener los registros de mapa de mensualidad para el establecimiento seleccionado
+				var mapaMensualidadEstablecimiento = obtenerMapaMensualidadPorEstablecimiento();
+				// Filtrar y obtener años únicos
+				var aniosUnicos = [...new Set(mapaMensualidadEstablecimiento.map(registro => registro.periodo))];
+				// Limpiar las opciones anteriores
+				anioSelect.innerHTML = '';
+				// Agregar la opción por defecto
+				var defaultOption = document.createElement('option');
+				defaultOption.value = '';
+				defaultOption.textContent = 'Seleccione el año:';
+				anioSelect.appendChild(defaultOption);
+				// Agregar las opciones de años al desplegable
+				aniosUnicos.forEach(function (anio) {
+					var option = document.createElement('option');
+					option.value = anio;
+					option.textContent = anio;
+					anioSelect.appendChild(option);
+				});
+			}
+
+			// Función para obtener los registros de mapa de mensualidad para el establecimiento seleccionado
+			function obtenerMapaMensualidadPorEstablecimiento() {
+				var establecimientoId = establecimientoSelect.value;
+
+				return listaMapamensualidad.filter(function (registro) {
+					return registro.establecimientoId == establecimientoId;
+				});
+			}
+
+			// Manejar el clic en el botón para abrir el modal
+			abrirModalBtn.addEventListener('click', function () {
+				// Mostrar el modal
+				modal.show();
+			});
+
+			// Manejar el clic en el botón de confirmar del modal
+			var confirmarAnioBtn = document.getElementById('confirmarAnioBtn');
+			confirmarAnioBtn.addEventListener('click', function () {
+				// Aquí puedes obtener el año seleccionado y realizar la lógica necesaria
+				var anioSeleccionado = document.getElementById('anio').value;
+				// Por ejemplo, puedes mostrar una alerta con el año seleccionado
+				if (anioSeleccionado) {
+				} else {
+					alert('Por favor, seleccione un año.');
+				}
+				// Cerrar el modal
+				modal.hide();
+			});
+		});
+	</script>
+
+
+	<script th:inline="javascript">
+		document.addEventListener("DOMContentLoaded", function () {
+			// Obtener referencia al botón de "Registrar Pago" y al modal
+			var registrarPagoBtn = document.getElementById('registrarPagoBtn');
+			var modalRegistroPago = new bootstrap.Modal(document.getElementById('registroPagoModal'));
+
+			// Manejar el clic en el botón de "Registrar Pago" para mostrar el modal
+			registrarPagoBtn.addEventListener('click', function () {
+				// Mostrar el modal de registro de pago
+				modalRegistroPago.show();
+			});
+		});
+	</script>
+
+	<script th:inline="javascript">
+		document.addEventListener("DOMContentLoaded", function () {
+			// Obtener referencia al desplegable de establecimiento
+			var establecimientoSelect = document.getElementById('establecimiento');
+
+			// Ocultar el botón al cargar la página
+			establecimientoSelect.addEventListener('change', function () {
+				// Lógica para cargar los periodos disponibles en el desplegable
+				cargarPeriodosDisponibles();
+			});
+
+			// Función para cargar los periodos disponibles en el desplegable
+			function cargarPeriodosDisponibles() {
+				var periodoSelect = document.getElementById('periodo');
+				// Obtener los registros de mapa de mensualidad para el establecimiento seleccionado
+				var mapaMensualidadEstablecimiento = obtenerMapaMensualidadPorEstablecimiento();
+				// Filtrar y obtener periodos únicos
+				var periodosUnicos = [...new Set(mapaMensualidadEstablecimiento.map(registro => registro.periodo))];
+				// Limpiar las opciones anteriores
+				periodoSelect.innerHTML = '';
+				// Agregar la opción por defecto
+				var defaultOption = document.createElement('option');
+				defaultOption.value = '';
+				defaultOption.textContent = 'Seleccione un periodo:';
+				periodoSelect.appendChild(defaultOption);
+				// Agregar las opciones de periodos al desplegable
+				periodosUnicos.forEach(function (periodo) {
+					var option = document.createElement('option');
+					option.value = periodo;
+					option.textContent = periodo;
+					periodoSelect.appendChild(option);
+				});
+			}
+
+			// Función para obtener los registros de mapa de mensualidad para el establecimiento seleccionado
+			function obtenerMapaMensualidadPorEstablecimiento() {
+				var establecimientoId = establecimientoSelect.value;
+
+				return listaMapamensualidad.filter(function (registro) {
+					return registro.establecimientoId == establecimientoId;
+				});
+			}
+		});
+	</script>
+
+
+
+	<script th:inline="javascript">
+		document.addEventListener("DOMContentLoaded", function () {
+			// Obtener referencias a los desplegables de tipo de pago y establecimiento
+			var tipoPagoSelect = document.getElementById('tipoPago');
+			var establecimientoSelect = document.getElementById('establecimiento');
+
+			// Obtener referencia a la tabla de pagos
+			var tablaPagosBody = document.getElementById('tablaPagosBody');
+
+			// Manejar el cambio en los desplegables de tipo de pago y establecimiento
+			tipoPagoSelect.addEventListener('change', actualizarTablaPagos);
+			establecimientoSelect.addEventListener('change', actualizarTablaPagos);
+
+			// Función para actualizar la tabla de pagos
+			function actualizarTablaPagos() {
+				// Obtener los valores seleccionados de tipo de pago y establecimiento
+				var tipoPagoId = tipoPagoSelect.value;
+				var establecimientoId = establecimientoSelect.value;
+
+				// Filtrar la lista de pagos completa
+				var pagosFiltrados = listaPagosCompleta.filter(function (pago) {
+					return pago.tipopago === parseInt(tipoPagoId) && pago.entidadId === parseInt(establecimientoId);
+				});
+
+				// Limpiar la tabla de pagos
+				tablaPagosBody.innerHTML = '';
+
+				// Iterar sobre los pagos filtrados y agregarlos a la tabla
+				pagosFiltrados.forEach(function (pago) {
+					var row = document.createElement('tr');
+					row.innerHTML = '<td>' + pago.numerodocumento + '</td>' +
+						'<td>' + pago.monto + '</td>' +
+						'<td>' + pago.fecharegistro + '</td>' +
+						'<td>' + pago.periodo + '</td>' +
+						'<td>' + pago.mes + '</td>' +
+					tablaPagosBody.appendChild(row);
+				});
+			}
+
+		});
+	</script>
+
+
+
+	<script th:inline="javascript">
+		document.addEventListener("DOMContentLoaded", function () {
+			// Obtener referencia al desplegable de año
+			var anioSelect = document.getElementById('anio');
+			// Obtener referencia al botón de confirmar año
+			var confirmarAnioBtn = document.getElementById('confirmarAnioBtn');
+			// Obtener referencia al cuerpo de la tabla de mapamensualidad
+			var mapaMensualidadBody = document.getElementById('mapaMensualidadBody');
+
+			// Array de meses ordenados
+			var mesesOrdenados = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+
+			// Manejar el clic en el botón de confirmar año
+			confirmarAnioBtn.addEventListener('click', function () {
+				// Obtener el año seleccionado
+				var anioSeleccionado = anioSelect.value;
+				// Filtrar los registros de mapamensualidad por el año seleccionado
+				var mapamensualidadFiltrados = listaMapamensualidad.filter(function (registro) {
+					return registro.periodo === parseInt(anioSeleccionado);
+				});
+				// Limpiar el cuerpo de la tabla de mapamensualidad
+				mapaMensualidadBody.innerHTML = '';
+				// Iterar sobre los meses ordenados
+				mesesOrdenados.forEach(function (mes) {
+					// Buscar el registro correspondiente al mes y año seleccionado
+					var registro = mapamensualidadFiltrados.find(function (r) {
+						return r.mes === mes;
+					});
+					// Si se encuentra el registro, calcular el saldo y agregar la fila a la tabla
+					if (registro) {
+						calcularSaldo(registro);
+					}
+				});
+				// Mostrar el modal de mapamensualidad
+				var mapaMensualidadModal = new bootstrap.Modal(document.getElementById('mapaMensualidadModal'));
+				mapaMensualidadModal.show();
+			});
+
+			// Función para calcular el saldo y ajustar el color del texto
+			function calcularSaldo(registro) {
+				// Obtener el ID de la tarifa del registro
+				var tarifaId = registro.tarifaId;
+				// Buscar la tarifa correspondiente en la lista de tarifas
+				var tarifaEncontrada = tarifa.find(function (t) {
+					return t.id === tarifaId;
+				});
+				// Verificar si se encontró la tarifa
+				if (tarifaEncontrada) {
+					// Convertir el monto de la tarifa a número
+					var tarifaMonto = parseFloat(tarifaEncontrada.monto);
+					// Obtener los pagos asociados al establecimiento, año y mes del registro
+					var pagosAsociados = listaPagosCompleta.filter(function (pago) {
+						return pago.entidadId === registro.establecimientoId &&
+							pago.periodo === registro.periodo &&
+							pago.mes === registro.mes;
+					});
+					// Calcular el total pagado
+					var totalPagado = pagosAsociados.reduce(function (total, pago) {
+						// Convertir el monto del pago a número
+						var montoPago = parseFloat(pago.monto);
+						return total + montoPago;
+					}, 0);
+					// Calcular el saldo restando el monto de la tarifa del total pagado
+					var saldo = tarifaMonto - totalPagado;
+
+					// Definir el color del texto en función del saldo
+					var textColor = saldo <= 0 ? 'green' : 'red';
+					// Construir la fila de la tabla con el color del texto adecuado
+					var row = document.createElement('tr');
+					row.innerHTML = '<td>' + registro.periodo + '</td>' +
+						'<td>' + registro.mes + '</td>' +
+						'<td style="color: ' + textColor + ';">' + Math.abs(saldo).toFixed(2) + '</td>';
+					mapaMensualidadBody.appendChild(row);
+				} else {
+					// Si no se encuentra la tarifa, devolver NaN (o manejarlo de otra manera)
+					return NaN;
+				}
+			}
+		});
+	</script>
+
+
+
+
+</body>
+
+</html>

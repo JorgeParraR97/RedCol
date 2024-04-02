@@ -1,7 +1,9 @@
 package com.practica.controller;
 
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.practica.dto.AdminDTO;
 import com.practica.dto.LoginDTO;
+import com.practica.dto.SostenedorDTO;
 import com.practica.service.IAdminService;
 import com.practica.service.ISostenedorService;
 
@@ -25,9 +28,10 @@ public class WebPageController {
 	@Autowired
 	private IAdminService servicio;
 	
-	
 	@Autowired
-	private ISostenedorService sosservicio;
+	ISostenedorService sosServicio;
+	
+	
 
 	// http://localhost:8081/persona/listar/REST
 	@GetMapping("/admin")
@@ -82,21 +86,36 @@ public class WebPageController {
 	    }
 	}
 	
-	
 	@PostMapping("/issREST")
-	public String loginsosREST(@Valid LoginDTO loginDTO, Model model) {
-	    // Llamada al servicio para realizar la autenticación
-	    LoginDTO responseDTO = sosservicio.loginsosREST(loginDTO);
+	public String loginsosREST(@Valid LoginDTO loginDTO, Model model, HttpSession session) {
+	    // Obtener la lista de SostenedorDTO
+	    List<SostenedorDTO> sostenedores = sosServicio.findAllREST();
 
-	    if (responseDTO != null) {
+	    // Buscar en la lista de sostenedores el que coincida con el email y contraseña proporcionados
+	    Long sostenedorId = null;
+	    for (SostenedorDTO sostenedor : sostenedores) {
+	        if (sostenedor.getEmail().equals(loginDTO.getEmail()) && sostenedor.getContrasena().equals(loginDTO.getContrasena())) {
+	        	sostenedorId = Long.valueOf(sostenedor.getId());
+	            break;
+	        }
+	    }
+
+	    if (sostenedorId != null) {
+	        // Si se encontró un sostenedor con las credenciales proporcionadas, almacenar su ID en la sesión
+	        session.setAttribute("sostenedorId", sostenedorId);
 	        // Autenticación exitosa
 	        return "redirect:/sostenedor/home";
 	    } else {
 	        // Autenticación fallida, agregar mensaje de error al modelo
 	        model.addAttribute("error", "Credenciales inválidas");
+	        // Cargar el modelo con la lista de sostenedores (para mostrar en caso de error)
+	        model.addAttribute("sostenedor", sostenedores);
 	        return "redirect:/login/admin"; // Cambiar según la ruta real de tu página de login
 	    }
 	}
+	
+	
+
 	
 	
 	
