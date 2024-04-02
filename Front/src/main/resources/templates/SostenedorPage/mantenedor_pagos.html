@@ -262,7 +262,6 @@
 								<th>Fecha y Hora de Registro</th>
 								<th>Periodo</th>
 								<th>Mes</th>
-								<th>Eliminar</th>
 							</tr>
 						</thead>
 						<tbody id="tablaPagosBody">
@@ -579,8 +578,8 @@
 						'<td>' + pago.monto + '</td>' +
 						'<td>' + pago.fecharegistro + '</td>' +
 						'<td>' + pago.periodo + '</td>' +
-						'<td>' + pago.mes + '</td>' +
-					tablaPagosBody.appendChild(row);
+						'<td>' + pago.mes + '</td>' 
+						tablaPagosBody.appendChild(row);
 				});
 			}
 
@@ -591,10 +590,16 @@
 
 	<script th:inline="javascript">
 		document.addEventListener("DOMContentLoaded", function () {
+			// Obtener referencias a los desplegables de tipo de pago y establecimiento
+			var tipoPagoSelect = document.getElementById('tipoPago');
+			var establecimientoSelect = document.getElementById('establecimiento');
+
 			// Obtener referencia al desplegable de año
 			var anioSelect = document.getElementById('anio');
+
 			// Obtener referencia al botón de confirmar año
 			var confirmarAnioBtn = document.getElementById('confirmarAnioBtn');
+
 			// Obtener referencia al cuerpo de la tabla de mapamensualidad
 			var mapaMensualidadBody = document.getElementById('mapaMensualidadBody');
 
@@ -605,12 +610,17 @@
 			confirmarAnioBtn.addEventListener('click', function () {
 				// Obtener el año seleccionado
 				var anioSeleccionado = anioSelect.value;
-				// Filtrar los registros de mapamensualidad por el año seleccionado
+				// Obtener el establecimiento seleccionado
+				var establecimientoSeleccionado = establecimientoSelect.value;
+
+				// Filtrar los registros de mapamensualidad por el año y el establecimiento seleccionados
 				var mapamensualidadFiltrados = listaMapamensualidad.filter(function (registro) {
-					return registro.periodo === parseInt(anioSeleccionado);
+					return registro.periodo === parseInt(anioSeleccionado) && registro.establecimientoId === parseInt(establecimientoSeleccionado);
 				});
+
 				// Limpiar el cuerpo de la tabla de mapamensualidad
 				mapaMensualidadBody.innerHTML = '';
+
 				// Iterar sobre los meses ordenados
 				mesesOrdenados.forEach(function (mes) {
 					// Buscar el registro correspondiente al mes y año seleccionado
@@ -669,6 +679,9 @@
 			}
 		});
 	</script>
+
+
+
 
 
 
