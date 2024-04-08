@@ -33,12 +33,7 @@
 					<a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
 				</li>
 				<!-- Puedes dejar estos enlaces si los necesitas -->
-				<li class="nav-item d-none d-sm-inline-block">
-					<a th:href="@{/AdminPage/index3}" class="nav-link">Home</a>
-				</li>
-				<li class="nav-item d-none d-sm-inline-block">
-					<a href="#" class="nav-link">Contact</a>
-				</li>
+
 			</ul>
 
 			<!-- Right navbar links -->
@@ -51,11 +46,8 @@
 		<!-- Main Sidebar Container -->
 		<aside class="main-sidebar sidebar-dark-primary elevation-4">
 			<!-- Brand Logo -->
-			<a href="index3.html" class="brand-link">
-				<img th:src="@{/AdminLTE-3.2.0/dist/img/AdminLTELogo.png}" alt="AdminLTE Logo"
-					class="brand-image img-circle elevation-3" style="opacity: .8">
-				<span class="brand-text font-weight-light">AdminLTE 3</span>
-			</a>
+			<img th:src="@{/img/logo2.png}">
+
 
 			<!-- Sidebar -->
 			<div class="sidebar">
@@ -130,7 +122,7 @@
 								<li class="nav-item">
 									<a th:href="@{/admin/cobro}" class="nav-link">
 										<i class="far fa-circle nav-icon"></i>
-										<p>Cobro</p>
+										<p>Mapa Mensualidad</p>
 									</a>
 								</li>
 							</ul>
@@ -228,6 +220,7 @@
 						<div class="modal-content">
 							<div class="modal-header">
 								<h5 class="modal-title" id="mapaMensualidadModalLabel">Mapa de Mensualidad</h5>
+								
 								<button type="button" class="btn-close" data-bs-dismiss="modal"
 									aria-label="Close"></button>
 							</div>
@@ -240,6 +233,7 @@
 												<th>Año</th>
 												<th>Mes</th>
 												<th>Saldo</th>
+												<th>Estado</th>
 											</tr>
 										</thead>
 										<tbody id="mapaMensualidadBody">
@@ -260,10 +254,11 @@
 				<div class="content">
 					<button class="btn btn-primary mb-3" id="registrarPagoBtn">Registrar Pago</button>
 
-					<table class="table">
+					<table id="example1" class="table">
 						<thead>
 							<tr>
 								<th>Número de Documento</th>
+								<th>Fecha de Documento</th>
 								<th>Monto</th>
 								<th>Fecha y Hora de Registro</th>
 								<th>Periodo</th>
@@ -296,6 +291,12 @@
 										<label for="numerodocumento" class="form-label">Número de Documento</label>
 										<input type="text" class="form-control" id="numerodocumento"
 											name="numerodocumento" required>
+									</div>
+									
+									<div class="mb-3">
+										<label for="fecharegistrodocumento" class="form-label">Fecha de Documento</label>
+										<input type="date" class="form-control" id="fecharegistrodocumento"
+											name="fecharegistrodocumento" required>
 									</div>
 									<!-- Campo de monto -->
 									<div class="mb-3">
@@ -592,6 +593,7 @@
 		document.addEventListener("DOMContentLoaded", function () {
 			// Obtener referencias a los campos del formulario
 			var numerodocumentoInput = document.getElementById('numerodocumento');
+			var fecharegistrodocumentoInput = document.getElementById('fecharegistrodocumento');
 			var montoInput = document.getElementById('monto');
 			var anioSelect = document.getElementById('periodo');
 			var mesInput = document.getElementById('mes');
@@ -618,7 +620,7 @@
 			// Manejar el clic en el botón "Registrar"
 			var registrarPagoBtn = document.getElementById('registrarPagoBtn2');
 			registrarPagoBtn.addEventListener('click', function () {
-
+				var fechaDocumento = fecharegistrodocumentoInput.value;
 				var fechaActual = obtenerFechaActual();
 				var entidadId = parseInt(entidadIdInput.value);
 				var monto = parseInt(montoInput.value);
@@ -632,6 +634,7 @@
 					mes: mesInput.value,
 					tipopago: tipopago,
 					fecharegistro: fechaActual,
+					fecharegistrodocumento: fechaDocumento,
 					entidadId: entidadId,
 					pagado: 0,
 					saldo: 0
@@ -764,6 +767,7 @@
 				pagosFiltrados.forEach(function (pago) {
 					var row = document.createElement('tr');
 					row.innerHTML = '<td>' + pago.numerodocumento + '</td>' +
+					    '<td>' + pago.fecharegistrodocumento + '</td>' +
 						'<td>' + pago.monto + '</td>' +
 						'<td>' + pago.fecharegistro + '</td>' +
 						'<td>' + pago.periodo + '</td>' +
@@ -776,16 +780,19 @@
 		});
 	</script>
 
-
-
 	<script th:inline="javascript">
 		document.addEventListener("DOMContentLoaded", function () {
 			// Obtener referencia al desplegable de año
 			var anioSelect = document.getElementById('anio');
+			// Obtener referencia al desplegable de establecimiento
+			var entidadSelect = document.getElementById('establecimiento');
 			// Obtener referencia al botón de confirmar año
 			var confirmarAnioBtn = document.getElementById('confirmarAnioBtn');
 			// Obtener referencia al cuerpo de la tabla de mapamensualidad
 			var mapaMensualidadBody = document.getElementById('mapaMensualidadBody');
+
+			// Variable para almacenar el saldo total a favor del año
+			var saldoAFavorTotal = 0;
 
 			// Array de meses ordenados
 			var mesesOrdenados = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
@@ -794,26 +801,45 @@
 			confirmarAnioBtn.addEventListener('click', function () {
 				// Obtener el año seleccionado
 				var anioSeleccionado = anioSelect.value;
-				// Filtrar los registros de mapamensualidad por el año seleccionado
+				// Obtener el establecimiento seleccionado
+				var entidadSeleccionada = entidadSelect.value;
+				// Filtrar los registros de mapamensualidad por el año seleccionado y el establecimiento seleccionado
 				var mapamensualidadFiltrados = listaMapamensualidad.filter(function (registro) {
-					return registro.periodo === parseInt(anioSeleccionado);
+					return registro.periodo === parseInt(anioSeleccionado) &&
+						registro.establecimientoId === parseInt(entidadSeleccionada);
 				});
 				// Limpiar el cuerpo de la tabla de mapamensualidad
 				mapaMensualidadBody.innerHTML = '';
+				// Variable para almacenar el saldo total del año
+				var saldoTotalAnio = 0;
+				// Variable para almacenar el saldo a favor
+				var saldoAFavor = 0;
 				// Iterar sobre los meses ordenados
-				mesesOrdenados.forEach(function (mes) {
+				mesesOrdenados.forEach(function (mes, index) {
 					// Buscar el registro correspondiente al mes y año seleccionado
 					var registro = mapamensualidadFiltrados.find(function (r) {
 						return r.mes === mes;
 					});
 					// Si se encuentra el registro, calcular el saldo y agregar la fila a la tabla
 					if (registro) {
-						calcularSaldo(registro);
+						var saldo = calcularSaldo(registro);
+						saldoTotalAnio += saldo;
+
 					}
 				});
+				// Agregar fila para mostrar el saldo total del año
+				var rowSaldoTotal = document.createElement('tr');
+				rowSaldoTotal.innerHTML = '<td colspan="3">Saldo Total del Año</td>' +
+					'<td>' + saldoTotalAnio.toFixed(2) + '</td>';
+				mapaMensualidadBody.appendChild(rowSaldoTotal);
+
 				// Mostrar el modal de mapamensualidad
 				var mapaMensualidadModal = new bootstrap.Modal(document.getElementById('mapaMensualidadModal'));
 				mapaMensualidadModal.show();
+
+
+				// Llamar a la función para actualizar el estado de los meses
+				actualizarEstadoMeses();
 			});
 
 			// Función para calcular el saldo y ajustar el color del texto
@@ -843,21 +869,79 @@
 					// Calcular el saldo restando el monto de la tarifa del total pagado
 					var saldo = tarifaMonto - totalPagado;
 
+					// Actualizar saldoAFavorTotal si el saldo es negativo
+					if (saldo < 0) {
+						saldoAFavorTotal += saldo;
+					}
+
 					// Definir el color del texto en función del saldo
 					var textColor = saldo <= 0 ? 'green' : 'red';
 					// Construir la fila de la tabla con el color del texto adecuado
 					var row = document.createElement('tr');
 					row.innerHTML = '<td>' + registro.periodo + '</td>' +
 						'<td>' + registro.mes + '</td>' +
-						'<td style="color: ' + textColor + ';">' + Math.abs(saldo).toFixed(2) + '</td>';
+						'<td style="color: ' + textColor + ';">' + Math.abs(saldo).toFixed(2) + '</td>' +
+						'<td data-estado="' + (saldo > 0 ? 'En deuda' : 'Pagado') + '">' + (saldo > 0 ? 'En deuda' : 'Pagado') + '</td>';
 					mapaMensualidadBody.appendChild(row);
+
+					// Retornar el saldo para sumarlo al saldo total del año
+					return saldo;
 				} else {
 					// Si no se encuentra la tarifa, devolver NaN (o manejarlo de otra manera)
 					return NaN;
 				}
 			}
-		});
+
+			// Función para actualizar el estado de los meses según el saldo a favor total
+			function actualizarEstadoMeses() {
+				var rows = mapaMensualidadBody.querySelectorAll('tr');
+				for (var i = 0; i < rows.length; i++) {
+					var row = rows[i];
+					var estado = row.querySelector('td:nth-child(4)').innerText;
+					var saldoMes = parseFloat(row.querySelector('td:nth-child(3)').innerText);
+
+					// Verificar si el estado es 'En deuda' y el saldo del mes es menor o igual al saldo a favor total
+					if (estado === 'En deuda' && saldoMes >= saldoAFavorTotal && saldoAFavorTotal !== 0) {
+						// Actualizar el estado del mes a 'Pagado'
+						row.querySelector('td:nth-child(4)').innerText = 'Pagado';
+						row.dataset.estado = 'Pagado';
+
+						// Restar el saldo del mes al saldo a favor total
+						saldoAFavorTotal += saldoMes;
+
+						// Verificar si el saldo a favor total es menor o igual a 0
+						if (saldoAFavorTotal >= 0) {
+							// Salir del bucle ya que no hay saldo a favor restante
+							break;
+						}
+					}
+				}
+			}
+
+		}
+
+			
+		
+
+		);
 	</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	<script th:inline="javascript">
 		function fxJSeliminar(id) {
@@ -903,6 +987,26 @@
 				}
 			});
 		}
+	</script>
+
+	<script th:inline="javascript">
+		$(function () {
+			$("#example1").DataTable({
+				"responsive": true,
+				"lengthChange": false,
+				"autoWidth": false,
+				"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+			}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+			// $('#example1').DataTable({
+			//     "paging": true,
+			//     "lengthChange": false,
+			//     "searching": false,
+			//     "ordering": true,
+			//     "info": true,
+			//     "autoWidth": false,
+			//     "responsive": true,
+			// });
+		});
 	</script>
 
 

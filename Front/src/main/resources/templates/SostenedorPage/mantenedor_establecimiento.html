@@ -31,12 +31,7 @@
 					<a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
 				</li>
 				<!-- Puedes dejar estos enlaces si los necesitas -->
-				<li class="nav-item d-none d-sm-inline-block">
-					<a th:href="@{/AdminPage/index3}" class="nav-link">Home</a>
-				</li>
-				<li class="nav-item d-none d-sm-inline-block">
-					<a href="#" class="nav-link">Contact</a>
-				</li>
+
 			</ul>
 
 			<!-- Right navbar links -->
@@ -49,11 +44,9 @@
 		<!-- Main Sidebar Container -->
 		<aside class="main-sidebar sidebar-dark-primary elevation-4">
 			<!-- Brand Logo -->
-			<a href="index3.html" class="brand-link">
-				<img th:src="@{/AdminLTE-3.2.0/dist/img/AdminLTELogo.png}" alt="AdminLTE Logo"
-					class="brand-image img-circle elevation-3" style="opacity: .8">
-				<span class="brand-text font-weight-light">AdminLTE 3</span>
-			</a>
+			<img th:src="@{/img/logo2.png}">
+
+
 
 			<!-- Sidebar -->
 			<div class="sidebar">
@@ -64,6 +57,9 @@
 						<a href="#" class="d-block" id="nombreSostenedor">
 							<!-- Aquí se cargará dinámicamente el nombre del sostenedor -->
 						</a>
+						<div id="opcionesSostenedor" style="display: none;">
+							<button onclick="cambiarContraseña()">Cambiar Contraseña</button>
+						</div>
 					</div>
 				</div>
 
@@ -121,7 +117,7 @@
 								<li class="nav-item">
 									<a th:href="@{/sostenedor/cobro}" class="nav-link">
 										<i class="far fa-circle nav-icon"></i>
-										<p>Cobro</p>
+										<p>Mapa Mensualidad</p>
 									</a>
 								</li>
 							</ul>
@@ -168,22 +164,22 @@
 								<th>EMAIL DE CONTACTO</th>
 								<th>CARGO DE CONTACTO</th>
 								<th>TELEFONO DE CONTACTO</th>
-							
-								
+
+
 							</tr>
 						</thead>
-							<tr th:each="establecimiento, iterStat : ${establecimiento}"
-								th:if="${establecimiento.sostenedorId == #session.getAttribute('sostenedorId')}">
-								<td th:text="${establecimiento.id}"></td>
-								<td th:text="${establecimiento.nombre}"></td>
-								<td th:text="${establecimiento.rbd}"></td>
-								<td th:text="${establecimiento.direccion}"></td>
-								<td th:text="${establecimiento.contactonombre}"></td>
-								<td th:text="${establecimiento.contactoemail}"></td>
-								<td th:text="${establecimiento.contactocargo}"></td>
-								<td th:text="${establecimiento.contactotelefono}"></td>
-							
-							</tr>
+						<tr th:each="establecimiento, iterStat : ${establecimiento}"
+							th:if="${establecimiento.sostenedorId == #session.getAttribute('sostenedorId')}">
+							<td th:text="${establecimiento.id}"></td>
+							<td th:text="${establecimiento.nombre}"></td>
+							<td th:text="${establecimiento.rbd}"></td>
+							<td th:text="${establecimiento.direccion}"></td>
+							<td th:text="${establecimiento.contactonombre}"></td>
+							<td th:text="${establecimiento.contactoemail}"></td>
+							<td th:text="${establecimiento.contactocargo}"></td>
+							<td th:text="${establecimiento.contactotelefono}"></td>
+
+						</tr>
 						</tbody>
 					</table>
 
@@ -259,6 +255,46 @@
 			document.getElementById('nombreSostenedor').innerText = nombreSostenedor;
 		} else {
 			document.getElementById('nombreSostenedor').innerText = "Nombre de sostenedor no encontrado";
+		}
+
+	</script>
+
+	<script th:inline="javascript">
+		$(document).ready(function () {
+			$("#example1").DataTable({
+				"responsive": true,
+				"lengthChange": false,
+				"autoWidth": false,
+				"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+			}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+		});
+
+	</script>
+
+	<script th:inline="javascript">
+		document.addEventListener("DOMContentLoaded", function () {
+			var nombreSostenedorLink = document.getElementById('nombreSostenedor');
+			var opcionesSostenedor = document.getElementById('opcionesSostenedor');
+
+			nombreSostenedorLink.addEventListener('click', function (event) {
+				event.preventDefault(); // Evitar que el enlace siga su comportamiento predeterminado
+				opcionesSostenedor.style.display = 'block'; // Mostrar las opciones
+				event.stopPropagation(); // Evitar que el clic se propague al documento y se active el event listener global
+			});
+
+			// Event listener global para ocultar el botón si se hace clic en cualquier otro lugar de la página
+			document.addEventListener('click', function (event) {
+				var clickedElement = event.target;
+				if (clickedElement.id !== 'nombreSostenedor' && clickedElement.id !== 'opcionesSostenedor') {
+					opcionesSostenedor.style.display = 'none'; // Ocultar las opciones
+				}
+			});
+		});
+
+		function cambiarContraseña() {
+			// Redireccionar a la ruta de cambio de contraseña
+			window.location.href = "/sostenedor/cambiocontra";
 		}
 
 	</script>

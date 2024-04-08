@@ -31,12 +31,7 @@
 					<a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
 				</li>
 				<!-- Puedes dejar estos enlaces si los necesitas -->
-				<li class="nav-item d-none d-sm-inline-block">
-					<a th:href="@{/AdminPage/index3}" class="nav-link">Home</a>
-				</li>
-				<li class="nav-item d-none d-sm-inline-block">
-					<a href="#" class="nav-link">Contact</a>
-				</li>
+
 			</ul>
 
 			<!-- Right navbar links -->
@@ -49,20 +44,15 @@
 		<!-- Main Sidebar Container -->
 		<aside class="main-sidebar sidebar-dark-primary elevation-4">
 			<!-- Brand Logo -->
-			<a href="index3.html" class="brand-link">
-				<img th:src="@{/AdminLTE-3.2.0/dist/img/AdminLTELogo.png}" alt="AdminLTE Logo"
-					class="brand-image img-circle elevation-3" style="opacity: .8">
-				<span class="brand-text font-weight-light">AdminLTE 3</span>
-			</a>
+			<img th:src="@{/img/logo2.png}">
+
 
 			<!-- Sidebar -->
 			<div class="sidebar">
 				<!-- Sidebar user panel (optional) -->
 				<div class="user-panel mt-3 pb-3 mb-3 d-flex">
 
-					<div class="info">
-						<a href="#" class="d-block">Alexander Pierce</a>
-					</div>
+
 				</div>
 
 				<!-- SidebarSearch Form -->
@@ -131,7 +121,7 @@
 								<li class="nav-item">
 									<a th:href="@{/admin/cobro}" class="nav-link">
 										<i class="far fa-circle nav-icon"></i>
-										<p>Cobro</p>
+										<p>Mapa Mensualidad</p>
 									</a>
 								</li>
 							</ul>
@@ -183,7 +173,7 @@
 									<th>DESCRIPCION</th>
 									<th>MONTO</th>
 									<th>EDITAR/ELIMINAR</th>
-								</tr>	
+								</tr>
 							</thead>
 							<tbody>
 								<!-- Aquí deberías reemplazar este bloque con los datos de tu modelo de persona -->
@@ -235,7 +225,7 @@
 										<label for="monto">Monto</label>
 										<input type="number" class="form-control" id="monto" name="monto" />
 									</div>
-								
+
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -261,11 +251,13 @@
 								<form th:action="@{/admin/gtREST}" method="POST">
 									<div class="form-group">
 										<label for="periodo">Periodo</label>
-										<input type="number" class="form-control" id="periodo" name="periodo" required />
+										<input type="number" class="form-control" id="periodo" name="periodo"
+											required />
 									</div>
 									<div class="form-group">
 										<label for="descripcion">DESCRIPCION:</label>
-										<input type="text" class="form-control" id="descripcion" name="descripcion" required>
+										<input type="text" class="form-control" id="descripcion" name="descripcion"
+											required>
 									</div>
 									<div class="form-group">
 										<label for="monto">MONTO:</label>
@@ -386,6 +378,25 @@
 				}
 			});
 		}
+	</script>
+	<script th:inline="javascript">
+		$(function () {
+			$("#example1").DataTable({
+				"responsive": true,
+				"lengthChange": false,
+				"autoWidth": false,
+				"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+			}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+			// $('#example1').DataTable({
+			//     "paging": true,
+			//     "lengthChange": false,
+			//     "searching": false,
+			//     "ordering": true,
+			//     "info": true,
+			//     "autoWidth": false,
+			//     "responsive": true,
+			// });
+		});
 	</script>
 </body>
 

@@ -31,12 +31,6 @@
 					<a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
 				</li>
 				<!-- Puedes dejar estos enlaces si los necesitas -->
-				<li class="nav-item d-none d-sm-inline-block">
-					<a th:href="@{/AdminPage/index3}" class="nav-link">Home</a>
-				</li>
-				<li class="nav-item d-none d-sm-inline-block">
-					<a href="#" class="nav-link">Contact</a>
-				</li>
 			</ul>
 
 			<!-- Right navbar links -->
@@ -49,11 +43,7 @@
 		<!-- Main Sidebar Container -->
 		<aside class="main-sidebar sidebar-dark-primary elevation-4">
 			<!-- Brand Logo -->
-			<a href="index3.html" class="brand-link">
-				<img th:src="@{/AdminLTE-3.2.0/dist/img/AdminLTELogo.png}" alt="AdminLTE Logo"
-					class="brand-image img-circle elevation-3" style="opacity: .8">
-				<span class="brand-text font-weight-light">AdminLTE 3</span>
-			</a>
+			<img th:src="@{/img/logo2.png}">
 
 			<!-- Sidebar -->
 			<div class="sidebar">
@@ -64,6 +54,9 @@
 						<a href="#" class="d-block" id="nombreSostenedor">
 							<!-- Aquí se cargará dinámicamente el nombre del sostenedor -->
 						</a>
+						<div id="opcionesSostenedor" style="display: none;">
+							<button onclick="cambiarContraseña()">Cambiar Contraseña</button>
+						</div>
 					</div>
 				</div>
 
@@ -121,7 +114,7 @@
 								<li class="nav-item">
 									<a th:href="@{/sostenedor/cobro}" class="nav-link active">
 										<i class="far fa-circle nav-icon"></i>
-										<p>Cobro</p>
+										<p>Mapa Mensualidad</p>
 									</a>
 								</li>
 							</ul>
@@ -142,12 +135,12 @@
 					<div class="container-fluid">
 						<div class="row mb-2">
 							<div class="col-sm-6">
-								<h1 class="m-0">Mantenedor Cobro</h1>
+								<h1 class="m-0">Mantenedor Mapa Mensualidad</h1>
 							</div><!-- /.col -->
 							<div class="col-sm-6">
 								<ol class="breadcrumb float-sm-right">
 
-									<li class="breadcrumb-item active">Cobro</li>
+									<li class="breadcrumb-item active">Mapa Mensualidad</li>
 								</ol>
 							</div><!-- /.col -->
 						</div><!-- /.row -->
@@ -176,11 +169,12 @@
 				</div>
 
 				<div id="tablaContenedor" style="display:none;">
-					<table id="tablaMeses" class="table">
+					<table id="tablaMeses" class="table table-bordered table-striped">
 						<thead>
 							<tr>
 								<th>Mes</th>
 								<th>Tarifa</th>
+								<th>Monto</th>
 								<!-- Aquí podrías agregar más columnas si es necesario -->
 							</tr>
 						</thead>
@@ -228,7 +222,7 @@
 	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.print.min.js}"></script>
 	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
 	<script th:src="@{https://cdn.jsdelivr.net/npm/sweetalert2@11}"></script>
-	<script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
+
 	<script th:inline="javascript">
 		var tarifas = /*[[${tarifa}]]*/[];
 		var registros = /*[[${mapamensualidad}]]*/[];
@@ -371,29 +365,75 @@
 
 				// Columna para mostrar el nombre de la tarifa correspondiente
 				var tarifaCell = document.createElement('td');
+				var montoCell = document.createElement('td');
 
 				// Obtener el registro del mes actual
 				var registroMesActual = registros.find(function (registro) {
 					return registro.mes === mes;
 				});
 
-				// Mostrar el nombre de la tarifa si existe un registro para el mes actual
+				// Mostrar el nombre y monto de la tarifa si existe un registro para el mes actual
 				if (registroMesActual) {
 					var tarifa = tarifas.find(function (tarifa) {
 						return tarifa.id === registroMesActual.tarifaId;
 					});
 					tarifaCell.textContent = tarifa ? tarifa.descripcion : 'No disponible';
+					montoCell.textContent = tarifa ? tarifa.monto : 'No disponible';
 				} else {
 					tarifaCell.textContent = 'No disponible';
+					montoCell.textContent = 'No disponible';
 				}
 
 				row.appendChild(tarifaCell);
+				row.appendChild(montoCell);
 				tbody.appendChild(row);
 			});
+
 
 			// Mostrar la tabla
 			tablaContenedor.style.display = 'block';
 		}
+	</script>
+
+
+	<script th:inline="javascript">
+		$(document).ready(function () {
+			$("#tablaMeses").DataTable({
+				"responsive": true,
+				"lengthChange": false,
+				"autoWidth": false,
+				"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+			}).buttons().container().appendTo('#tablaMeses_wrapper .col-md-6:eq(0)');
+
+		});
+
+	</script>
+
+	<script th:inline="javascript">
+		document.addEventListener("DOMContentLoaded", function () {
+			var nombreSostenedorLink = document.getElementById('nombreSostenedor');
+			var opcionesSostenedor = document.getElementById('opcionesSostenedor');
+
+			nombreSostenedorLink.addEventListener('click', function (event) {
+				event.preventDefault(); // Evitar que el enlace siga su comportamiento predeterminado
+				opcionesSostenedor.style.display = 'block'; // Mostrar las opciones
+				event.stopPropagation(); // Evitar que el clic se propague al documento y se active el event listener global
+			});
+
+			// Event listener global para ocultar el botón si se hace clic en cualquier otro lugar de la página
+			document.addEventListener('click', function (event) {
+				var clickedElement = event.target;
+				if (clickedElement.id !== 'nombreSostenedor' && clickedElement.id !== 'opcionesSostenedor') {
+					opcionesSostenedor.style.display = 'none'; // Ocultar las opciones
+				}
+			});
+		});
+
+		function cambiarContraseña() {
+			// Redireccionar a la ruta de cambio de contraseña
+			window.location.href = "/sostenedor/cambiocontra";
+		}
+
 	</script>
 
 

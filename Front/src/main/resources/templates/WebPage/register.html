@@ -27,57 +27,58 @@
 			<div class="card-body register-card-body">
 				<p class="login-box-msg">Registrate como Administrador de RedCol Bio-Bio</p>
 
-    <form th:action="@{/login/rREST}" th:object="${adminDTO}" method="POST">
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Nombre Completo" th:field="*{nombre}">
-            <div class="input-group-append">
-                <div class="input-group-text">
-                    <span class="fas fa-user"></span>
-                </div>
-            </div>
-        </div>
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="RUT(con puntos y con guion)" th:field="*{rut}">
-            <div class="input-group-append">
-                <div class="input-group-text">
-                    <span class="fas fa-id-card"></span>
-                </div>
-            </div>
-        </div>
-        <div class="input-group mb-3">
-            <input type="email" class="form-control" placeholder="Email" th:field="*{email}">
-            <div class="input-group-append">
-                <div class="input-group-text">
-                    <span class="fas fa-envelope"></span>
-                </div>
-            </div>
-        </div>
-        <div class="input-group mb-3">
-            <input type="password" class="form-control" placeholder="Contraseña" th:field="*{contrasena}">
-            <div class="input-group-append">
-                <div class="input-group-text">
-                    <span class="fas fa-lock"></span>
-                </div>
-            </div>
-        </div>
+				<form th:action="@{/login/rREST}" th:object="${adminDTO}" method="POST">
+					<div class="input-group mb-3">
+						<input type="text" class="form-control" placeholder="Nombre Completo" th:field="*{nombre}">
+						<div class="input-group-append">
+							<div class="input-group-text">
+								<span class="fas fa-user"></span>
+							</div>
+						</div>
+					</div>
+					<div class="input-group mb-3">
+						<input type="text" class="form-control" placeholder="RUT (con puntos y con guion)"
+							oninput="formatRut(this)" id="rutInput" th:field="*{rut}" maxlength="12">
+						<div class="input-group-append">
+							<div class="input-group-text">
+								<span class="fas fa-id-card"></span>
+							</div>
+						</div>
+					</div>
+					<div class="input-group mb-3">
+						<input type="email" class="form-control" placeholder="Email" th:field="*{email}">
+						<div class="input-group-append">
+							<div class="input-group-text">
+								<span class="fas fa-envelope"></span>
+							</div>
+						</div>
+					</div>
+					<div class="input-group mb-3">
+						<input type="password" class="form-control" placeholder="Contraseña" th:field="*{contrasena}">
+						<div class="input-group-append">
+							<div class="input-group-text">
+								<span class="fas fa-lock"></span>
+							</div>
+						</div>
+					</div>
 
-        <!-- Agregado campo de teléfono -->
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Telefono(+56)" th:field="*{telefono}">
-            <div class="input-group-append">
-                <div class="input-group-text">
-                    <span class="fas fa-phone"></span>
-                </div>
-            </div>
-        </div>
+					<!-- Agregado campo de teléfono -->
+					<div class="input-group mb-3">
+						<input type="text" class="form-control" placeholder="Telefono(+56)" th:field="*{telefono}">
+						<div class="input-group-append">
+							<div class="input-group-text">
+								<span class="fas fa-phone"></span>
+							</div>
+						</div>
+					</div>
 
 
-        <div class="row">
-            <div class="col-12">
-                <button type="submit" class="btn btn-primary btn-block">Registrarse</button>
-            </div>
-        </div>
-    </form>
+					<div class="row">
+						<div class="col-12">
+							<button type="submit" class="btn btn-primary btn-block">Registrarse</button>
+						</div>
+					</div>
+				</form>
 
 
 
@@ -96,6 +97,25 @@
 
 	<!-- AdminLTE App -->
 	<script th:src="@{/js/adminlte.min.js}"></script>
+
+	<script>
+		function formatRut(input) {
+			let rut = input.value.replace(/\D/g, ''); // Eliminar cualquier carácter que no sea un dígito
+
+			if (rut.length === 8) {
+				rut = rut.replace(/^(\d{1})(\d{3})(\d{3})(\d{1})$/, '$1.$2.$3-$4'); // Formato x.xxx.xxx-x
+			} else if (rut.length === 9) {
+				rut = rut.replace(/^(\d{2})(\d{3})(\d{3})(\d{1})$/, '$1.$2.$3-$4'); // Formato xx.xxx.xxx-x
+			} else {
+				// Si la longitud no es 8 ni 9, no hacemos nada
+				return;
+			}
+
+			input.value = rut; // Asignar el valor formateado de vuelta al campo de entrada
+		}
+	</script>
+
+
 </body>
 
 </html>

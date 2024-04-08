@@ -31,6 +31,7 @@ public class PagosServiceImpl implements IPagosService {
 		pEntity.setPeriodo(pDTO.getPeriodo());
 		pEntity.setMes(pDTO.getMes());
 		pEntity.setPagado(pDTO.getPagado());
+		pEntity.setFecharegistrodocumento(pDTO.getFecharegistrodocumento());		
 		return pEntity;
 	}
 
@@ -47,6 +48,7 @@ public class PagosServiceImpl implements IPagosService {
 		pDTO.setMes(pE.getMes());
 		pDTO.setPagado(pE.getPagado());
 		pDTO.setSaldo(pE.getSaldo());
+		pDTO.setFecharegistrodocumento(pE.getFecharegistrodocumento());
 		
 		return pDTO;
 	}

@@ -34,6 +34,8 @@ public class PagosEntity {
 	
 	private Date fecharegistro;
 	
+	private Date fecharegistrodocumento;
+	
 	private int entidadId;
 	
 	private int periodo;

@@ -33,12 +33,7 @@
 					<a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
 				</li>
 				<!-- Puedes dejar estos enlaces si los necesitas -->
-				<li class="nav-item d-none d-sm-inline-block">
-					<a th:href="@{/AdminPage/index3}" class="nav-link">Home</a>
-				</li>
-				<li class="nav-item d-none d-sm-inline-block">
-					<a href="#" class="nav-link">Contact</a>
-				</li>
+
 			</ul>
 
 			<!-- Right navbar links -->
@@ -51,11 +46,7 @@
 		<!-- Main Sidebar Container -->
 		<aside class="main-sidebar sidebar-dark-primary elevation-4">
 			<!-- Brand Logo -->
-			<a href="index3.html" class="brand-link">
-				<img th:src="@{/AdminLTE-3.2.0/dist/img/AdminLTELogo.png}" alt="AdminLTE Logo"
-					class="brand-image img-circle elevation-3" style="opacity: .8">
-				<span class="brand-text font-weight-light">AdminLTE 3</span>
-			</a>
+			<img th:src="@{/img/logo2.png}">
 
 			<!-- Sidebar -->
 			<div class="sidebar">
@@ -66,6 +57,9 @@
 						<a href="#" class="d-block" id="nombreSostenedor">
 							<!-- Aquí se cargará dinámicamente el nombre del sostenedor -->
 						</a>
+						<div id="opcionesSostenedor" style="display: none;">
+							<button onclick="cambiarContraseña()">Cambiar Contraseña</button>
+						</div>
 					</div>
 
 				</div>
@@ -124,7 +118,7 @@
 								<li class="nav-item">
 									<a th:href="@{/sostenedor/cobro}" class="nav-link">
 										<i class="far fa-circle nav-icon"></i>
-										<p>Cobro</p>
+										<p>Mapa Mensualidad</p>
 									</a>
 								</li>
 							</ul>
@@ -198,8 +192,6 @@
 						<div class="modal-content">
 							<div class="modal-header">
 								<h5 class="modal-title" id="seleccionarAnioModalLabel">Seleccionar Año</h5>
-								<button type="button" class="btn-close" data-bs-dismiss="modal"
-									aria-label="Close"></button>
 							</div>
 							<div class="modal-body">
 								<label for="anio">Seleccione el Año:</label>
@@ -208,7 +200,8 @@
 								</select>
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+									aria-label="Close" id="closeModalButton">Cerrar</button>
 								<button type="button" class="btn btn-primary" id="confirmarAnioBtn">Confirmar</button>
 							</div>
 						</div>
@@ -234,6 +227,7 @@
 												<th>Año</th>
 												<th>Mes</th>
 												<th>Saldo</th>
+												<th>Estado</th>
 											</tr>
 										</thead>
 										<tbody id="mapaMensualidadBody">
@@ -254,10 +248,11 @@
 				<div class="content">
 
 
-					<table class="table">
+					<table id="tablaPagos" class="table">
 						<thead>
 							<tr>
 								<th>Número de Documento</th>
+								<th>Fecha de Documento</th>
 								<th>Monto</th>
 								<th>Fecha y Hora de Registro</th>
 								<th>Periodo</th>
@@ -575,33 +570,31 @@
 				pagosFiltrados.forEach(function (pago) {
 					var row = document.createElement('tr');
 					row.innerHTML = '<td>' + pago.numerodocumento + '</td>' +
+					    '<td>' + pago.fecharegistrodocumento + '</td>' +
 						'<td>' + pago.monto + '</td>' +
 						'<td>' + pago.fecharegistro + '</td>' +
 						'<td>' + pago.periodo + '</td>' +
-						'<td>' + pago.mes + '</td>' 
-						tablaPagosBody.appendChild(row);
+						'<td>' + pago.mes + '</td>'
+					tablaPagosBody.appendChild(row);
 				});
 			}
 
 		});
 	</script>
 
-
-
 	<script th:inline="javascript">
 		document.addEventListener("DOMContentLoaded", function () {
-			// Obtener referencias a los desplegables de tipo de pago y establecimiento
-			var tipoPagoSelect = document.getElementById('tipoPago');
-			var establecimientoSelect = document.getElementById('establecimiento');
-
 			// Obtener referencia al desplegable de año
 			var anioSelect = document.getElementById('anio');
-
+			// Obtener referencia al desplegable de establecimiento
+			var entidadSelect = document.getElementById('establecimiento');
 			// Obtener referencia al botón de confirmar año
 			var confirmarAnioBtn = document.getElementById('confirmarAnioBtn');
-
 			// Obtener referencia al cuerpo de la tabla de mapamensualidad
 			var mapaMensualidadBody = document.getElementById('mapaMensualidadBody');
+
+			// Variable para almacenar el saldo total a favor del año
+			var saldoAFavorTotal = 0;
 
 			// Array de meses ordenados
 			var mesesOrdenados = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
@@ -611,30 +604,44 @@
 				// Obtener el año seleccionado
 				var anioSeleccionado = anioSelect.value;
 				// Obtener el establecimiento seleccionado
-				var establecimientoSeleccionado = establecimientoSelect.value;
-
-				// Filtrar los registros de mapamensualidad por el año y el establecimiento seleccionados
+				var entidadSeleccionada = entidadSelect.value;
+				// Filtrar los registros de mapamensualidad por el año seleccionado y el establecimiento seleccionado
 				var mapamensualidadFiltrados = listaMapamensualidad.filter(function (registro) {
-					return registro.periodo === parseInt(anioSeleccionado) && registro.establecimientoId === parseInt(establecimientoSeleccionado);
+					return registro.periodo === parseInt(anioSeleccionado) &&
+						registro.establecimientoId === parseInt(entidadSeleccionada);
 				});
-
 				// Limpiar el cuerpo de la tabla de mapamensualidad
 				mapaMensualidadBody.innerHTML = '';
-
+				// Variable para almacenar el saldo total del año
+				var saldoTotalAnio = 0;
+				// Variable para almacenar el saldo a favor
+				var saldoAFavor = 0;
 				// Iterar sobre los meses ordenados
-				mesesOrdenados.forEach(function (mes) {
+				mesesOrdenados.forEach(function (mes, index) {
 					// Buscar el registro correspondiente al mes y año seleccionado
 					var registro = mapamensualidadFiltrados.find(function (r) {
 						return r.mes === mes;
 					});
 					// Si se encuentra el registro, calcular el saldo y agregar la fila a la tabla
 					if (registro) {
-						calcularSaldo(registro);
+						var saldo = calcularSaldo(registro);
+						saldoTotalAnio += saldo;
+
 					}
 				});
+				// Agregar fila para mostrar el saldo total del año
+				var rowSaldoTotal = document.createElement('tr');
+				rowSaldoTotal.innerHTML = '<td colspan="3">Saldo Total del Año</td>' +
+					'<td>' + saldoTotalAnio.toFixed(2) + '</td>';
+				mapaMensualidadBody.appendChild(rowSaldoTotal);
+
 				// Mostrar el modal de mapamensualidad
 				var mapaMensualidadModal = new bootstrap.Modal(document.getElementById('mapaMensualidadModal'));
 				mapaMensualidadModal.show();
+
+
+				// Llamar a la función para actualizar el estado de los meses
+				actualizarEstadoMeses();
 			});
 
 			// Función para calcular el saldo y ajustar el color del texto
@@ -664,21 +671,123 @@
 					// Calcular el saldo restando el monto de la tarifa del total pagado
 					var saldo = tarifaMonto - totalPagado;
 
+					// Actualizar saldoAFavorTotal si el saldo es negativo
+					if (saldo < 0) {
+						saldoAFavorTotal += saldo;
+					}
+
 					// Definir el color del texto en función del saldo
 					var textColor = saldo <= 0 ? 'green' : 'red';
 					// Construir la fila de la tabla con el color del texto adecuado
 					var row = document.createElement('tr');
 					row.innerHTML = '<td>' + registro.periodo + '</td>' +
 						'<td>' + registro.mes + '</td>' +
-						'<td style="color: ' + textColor + ';">' + Math.abs(saldo).toFixed(2) + '</td>';
+						'<td style="color: ' + textColor + ';">' + Math.abs(saldo).toFixed(2) + '</td>' +
+						'<td data-estado="' + (saldo > 0 ? 'En deuda' : 'Pagado') + '">' + (saldo > 0 ? 'En deuda' : 'Pagado') + '</td>';
 					mapaMensualidadBody.appendChild(row);
+
+					// Retornar el saldo para sumarlo al saldo total del año
+					return saldo;
 				} else {
 					// Si no se encuentra la tarifa, devolver NaN (o manejarlo de otra manera)
 					return NaN;
 				}
 			}
+
+			// Función para actualizar el estado de los meses según el saldo a favor total
+			function actualizarEstadoMeses() {
+				var rows = mapaMensualidadBody.querySelectorAll('tr');
+				for (var i = 0; i < rows.length; i++) {
+					var row = rows[i];
+					var estado = row.querySelector('td:nth-child(4)').innerText;
+					var saldoMes = parseFloat(row.querySelector('td:nth-child(3)').innerText);
+
+					// Verificar si el estado es 'En deuda' y el saldo del mes es menor o igual al saldo a favor total
+					if (estado === 'En deuda' && saldoMes >= saldoAFavorTotal && saldoAFavorTotal !== 0) {
+						// Actualizar el estado del mes a 'Pagado'
+						row.querySelector('td:nth-child(4)').innerText = 'Pagado';
+						row.dataset.estado = 'Pagado';
+
+						// Restar el saldo del mes al saldo a favor total
+						saldoAFavorTotal += saldoMes;
+
+						// Verificar si el saldo a favor total es menor o igual a 0
+						if (saldoAFavorTotal >= 0) {
+							// Salir del bucle ya que no hay saldo a favor restante
+							break;
+						}
+					}
+				}
+			}
+
+		}
+
+
+
+
+		);
+	</script>
+
+
+
+
+
+
+	<script th:inline="javascript">
+		$(document).ready(function () {
+			$("#tablaPagos").DataTable({
+				"responsive": true,
+				"lengthChange": false,
+				"autoWidth": false,
+				"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+			}).buttons().container().appendTo('#tablaPagos_wrapper .col-md-6:eq(0)');
+
+		});
+
+	</script>
+
+	<script th:inline="javascript">
+		document.addEventListener("DOMContentLoaded", function () {
+			// Obtener referencia al botón de cerrar del modal
+			var closeModalButton = document.getElementById('closeModalButton');
+
+			// Agregar un evento de clic al botón de cerrar
+			closeModalButton.addEventListener('click', function () {
+				// Ocultar el modal manualmente
+				var modal = new bootstrap.Modal(document.getElementById('seleccionarAnioModal'));
+				modal.hide();
+			});
 		});
 	</script>
+	
+		<script th:inline="javascript">
+		document.addEventListener("DOMContentLoaded", function () {
+			var nombreSostenedorLink = document.getElementById('nombreSostenedor');
+			var opcionesSostenedor = document.getElementById('opcionesSostenedor');
+
+			nombreSostenedorLink.addEventListener('click', function (event) {
+				event.preventDefault(); // Evitar que el enlace siga su comportamiento predeterminado
+				opcionesSostenedor.style.display = 'block'; // Mostrar las opciones
+				event.stopPropagation(); // Evitar que el clic se propague al documento y se active el event listener global
+			});
+
+			// Event listener global para ocultar el botón si se hace clic en cualquier otro lugar de la página
+			document.addEventListener('click', function (event) {
+				var clickedElement = event.target;
+				if (clickedElement.id !== 'nombreSostenedor' && clickedElement.id !== 'opcionesSostenedor') {
+					opcionesSostenedor.style.display = 'none'; // Ocultar las opciones
+				}
+			});
+		});
+
+		function cambiarContraseña() {
+			// Redireccionar a la ruta de cambio de contraseña
+			window.location.href = "/sostenedor/cambiocontra";
+		}
+
+	</script>
+
+
 
 
 

@@ -31,12 +31,7 @@
 					<a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
 				</li>
 				<!-- Puedes dejar estos enlaces si los necesitas -->
-				<li class="nav-item d-none d-sm-inline-block">
-					<a th:href="@{/AdminPage/index3}" class="nav-link">Home</a>
-				</li>
-				<li class="nav-item d-none d-sm-inline-block">
-					<a href="#" class="nav-link">Contact</a>
-				</li>
+
 			</ul>
 
 			<!-- Right navbar links -->
@@ -49,20 +44,15 @@
 		<!-- Main Sidebar Container -->
 		<aside class="main-sidebar sidebar-dark-primary elevation-4">
 			<!-- Brand Logo -->
-			<a href="index3.html" class="brand-link">
-				<img th:src="@{/AdminLTE-3.2.0/dist/img/AdminLTELogo.png}" alt="AdminLTE Logo"
-					class="brand-image img-circle elevation-3" style="opacity: .8">
-				<span class="brand-text font-weight-light">AdminLTE 3</span>
-			</a>
+			<img th:src="@{/img/logo2.png}">
+
 
 			<!-- Sidebar -->
 			<div class="sidebar">
 				<!-- Sidebar user panel (optional) -->
 				<div class="user-panel mt-3 pb-3 mb-3 d-flex">
 
-					<div class="info">
-						<a href="#" class="d-block">Alexander Pierce</a>
-					</div>
+
 				</div>
 
 				<!-- SidebarSearch Form -->
@@ -131,7 +121,7 @@
 								<li class="nav-item">
 									<a th:href="@{/admin/cobro}" class="nav-link">
 										<i class="far fa-circle nav-icon"></i>
-										<p>Cobro</p>
+										<p>Mapa Mensualidad</p>
 									</a>
 								</li>
 							</ul>
@@ -182,6 +172,7 @@
 									<th>NOMBRE</th>
 									<th>RUT</th>
 									<th>EMAIL</th>
+									<th>CONTRASEÑA</th>
 									<th>REPRESENTANTE</th>
 									<th>EDITAR/ELIMINAR</th>
 								</tr>
@@ -197,6 +188,7 @@
 									</td>
 									<td th:text="${sostenedor.rut}"></td>
 									<td th:text="${sostenedor.email}"></td>
+									<td th:text="${sostenedor.contrasena}"></td>
 									<td th:text="${sostenedor.representante}"></td>
 									<td>
 										<button type="button" class="btn btn-warning btn-editar" data-toggle="modal"
@@ -276,7 +268,8 @@
 									</div>
 									<div class="form-group">
 										<label for="rut">RUT:</label>
-										<input type="text" class="form-control" id="rut" name="rut" required>
+										<input type="text" class="form-control" id="rut" name="rut" required
+											oninput="formatRut(this)">
 									</div>
 
 									<div class="form-group">
@@ -288,6 +281,12 @@
 									<div class="form-group">
 										<label for="email">Email:</label>
 										<input type="email" class="form-control" id="email" name="email" required>
+									</div>
+
+									<div class="form-group">
+										<label for="contrasena">Contraseña:</label>
+										<input type="text" class="form-control" id="contrasena" name="contrasena"
+											required readonly>
 									</div>
 									<!-- ... Otros campos del formulario ... -->
 
@@ -405,6 +404,19 @@
 			});
 		}
 	</script>
+
+	<script th:inline="javascript">
+		$(document).ready(function () {
+			$('#registrarSostenedorModal').on('shown.bs.modal', function () {
+				// Generar una cadena aleatoria de 8 caracteres alfanuméricos
+				var randomPassword = Math.random().toString(36).slice(-8);
+
+				// Asignar la cadena aleatoria al campo de contraseña
+				$('#contrasena').val(randomPassword);
+			});
+		});
+	</script>
+
 	<script th:inline="javascript">
 		$(document).ready(function () {
 			// Agrega un evento clic a los elementos con la clase "nombre-sostenedor"
@@ -455,6 +467,43 @@
 				});
 			}
 		});
+	</script>
+
+	<script th:inline="javascript">
+		$(function () {
+			$("#example1").DataTable({
+				"responsive": true,
+				"lengthChange": false,
+				"autoWidth": false,
+				"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+			}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+			// $('#example1').DataTable({
+			//     "paging": true,
+			//     "lengthChange": false,
+			//     "searching": false,
+			//     "ordering": true,
+			//     "info": true,
+			//     "autoWidth": false,
+			//     "responsive": true,
+			// });
+		});
+	</script>
+
+	<script th:inline="javascript">
+		function formatRut(input) {
+			let rut = input.value.replace(/\D/g, ''); // Eliminar cualquier carácter que no sea un dígito
+
+			if (rut.length === 8) {
+				rut = rut.replace(/^(\d{1})(\d{3})(\d{3})(\d{1})$/, '$1.$2.$3-$4'); // Formato x.xxx.xxx-x
+			} else if (rut.length === 9) {
+				rut = rut.replace(/^(\d{2})(\d{3})(\d{3})(\d{1})$/, '$1.$2.$3-$4'); // Formato xx.xxx.xxx-x
+			} else {
+				// Si la longitud no es 8 ni 9, no hacemos nada
+				return;
+			}
+
+			input.value = rut; // Asignar el valor formateado de vuelta al campo de entrada
+		}
 	</script>
 
 

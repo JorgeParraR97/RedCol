@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8">
+	<meta content="IE=edge" http-equiv="X-UA-Compatible">
+	<title>RedCol | Iniciar Sesion</title>
+	<!-- Tell the browser to be responsive to screen width -->
+	<meta content="width=device-width, initial-scale=1" name="viewport">
+
+	<!-- Google Font: Source Sans Pro -->
+	<link rel="stylesheet"
+		th:href="@{https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback}" />
+
+	<!-- Font Awesome -->
+	<link rel="stylesheet" th:href="@{/css/all.min.css}" />
+
+	<!-- icheck bootstrap -->
+	<link rel="stylesheet" th:href="@{/css/icheck-bootstrap.min.css}" />
+
+	<!-- Theme style -->
+	<link rel="stylesheet" th:href="@{/css/adminlte.min.css}" />
+
+
+</head>
+
+<body class="hold-transition login-page">
+	<div class="login-box">
+		<div class="login-logo">
+			<a href="../../index2.html">RedCol Bio-Bio</a>
+		</div>
+		<!-- /.login-logo -->
+		<div class="card">
+			<div class="card-body login-card-body">
+				<p class="login-box-msg">Cambio de Contraseña</p>
+
+				<!-- Formulario de cambio de contraseña -->
+				<form id="editarSostenedorForm" action="/sostenedor/asREST" method="POST"
+					onsubmit="return validarFormulario()">
+					<input type="hidden" id="idSostenedor" name="id">
+					<input type="hidden" id="rutSostenedor" name="rut">
+					<input type="hidden" id="emailSostenedor" name="email">
+					<input type="hidden" id="representanteSostenedor" name="representante">
+					<input type="hidden" id="nombreSostenedor" name="nombre">
+					<div class="input-group mb-3">
+						<input type="password" id="contraseñaActual" class="form-control"
+							placeholder="Contraseña Actual" required>
+						<div class="input-group-append">
+							<div class="input-group-text">
+								<span class="fas fa-lock"></span>
+							</div>
+						</div>
+					</div>
+					<div class="input-group mb-3">
+						<input type="password" id="nuevaContraseña" name="contrasena" class="form-control"
+							placeholder="Nueva Contraseña" required>
+						<div class="input-group-append">
+							<div class="input-group-text">
+								<span class="fas fa-lock"></span>
+							</div>
+						</div>
+					</div>
+					<div class="input-group mb-3">
+						<input type="password" id="confirmarContraseña" class="form-control"
+							placeholder="Confirmar Nueva Contraseña" required>
+						<div class="input-group-append">
+							<div class="input-group-text">
+								<span class="fas fa-lock"></span>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12">
+							<button type="submit" class="btn btn-primary btn-block">Cambiar Contraseña</button>
+						</div>
+						<!-- /.col -->
+					</div>
+				</form>
+				<!-- Fin del formulario de cambio de contraseña -->
+
+				<!-- Volver Atrás -->
+				<p class="mt-3 mb-0">
+					<a th:href="@{/sostenedor/home}" class="text-center">Volver Atrás</a>
+				</p>
+			</div>
+			<!-- /.login-card-body -->
+		</div>
+	</div>
+	<!-- /.login-box -->
+
+	<!-- jQuery -->
+	<script th:src="@{/js/jquery.min.js}"></script>
+
+	<!-- Bootstrap 4 -->
+	<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+
+	<!-- AdminLTE App -->
+	<script th:src="@{/js/adminlte.min.js}"></script>
+	<script th:inline="javascript">
+		var sostenedores = /*[[${sostenedores}]]*/[];
+		var idSostenedor = /*[[${sostenedorId}]]*/ null;
+	</script>
+
+	<script th:inline="javascript">
+		function validarFormulario() {
+			var contraseñaActual = document.getElementById('contraseñaActual').value;
+			var nuevaContraseña = document.getElementById('nuevaContraseña').value;
+			var confirmarContraseña = document.getElementById('confirmarContraseña').value;
+
+			// Obtener el sostenedor correspondiente al idsostenedor
+			var contraseñaSostenedor = getSostenedorCorrecto(idSostenedor);
+
+			if (contraseñaActual !== contraseñaSostenedor) {
+				alert("La contraseña actual no es correcta.");
+				return false; // Detener el envío del formulario
+			}
+
+			// Verificar que la nueva contraseña y la confirmación coincidan
+			if (nuevaContraseña !== confirmarContraseña) {
+				alert("La nueva contraseña y la confirmación no coinciden.");
+				return false; // Detener el envío del formulario
+			}
+
+			var id = idSostenedor; // Obtener el ID del sostenedor
+
+			// Asignar el valor del ID del sostenedor al input hidden
+			document.getElementById("idSostenedor").value = id;
+
+			// Obtener el sostenedor correspondiente al ID
+			var sostenedor = getSostenedorPorId(id);
+
+			// Llenar los campos del formulario con los datos del sostenedor
+			if (sostenedor) {
+				document.getElementById("rutSostenedor").value = sostenedor.rut;
+				document.getElementById("emailSostenedor").value = sostenedor.email;
+				document.getElementById("representanteSostenedor").value = sostenedor.representante;
+				document.getElementById("nombreSostenedor").value = sostenedor.nombre;
+			}
+
+			// Si todas las validaciones pasaron, el formulario se enviará
+			return true;
+		}
+
+		function getSostenedorCorrecto(idSostenedor) {
+			// Supongamos que tienes una variable sostenedores que contiene todos los sostenedores
+			// Aquí buscas el sostenedor con el ID proporcionado
+			for (var i = 0; i < sostenedores.length; i++) {
+				if (sostenedores[i].id === idSostenedor) {
+					// Devolver la contraseña del sostenedor
+					return sostenedores[i].contrasena;
+				}
+			}
+			return null; // Si no se encuentra el sostenedor, devuelves null
+		}
+
+		function getSostenedorPorId(idSostenedor) {
+			// Supongamos que tienes una variable sostenedores que contiene todos los sostenedores
+			// Aquí buscas el sostenedor con el ID proporcionado
+			for (var i = 0; i < sostenedores.length; i++) {
+				if (sostenedores[i].id === idSostenedor) {
+					// Devolver el sostenedor
+					return sostenedores[i];
+				}
+			}
+			return null; // Si no se encuentra el sostenedor, devuelves null
+		}
+	</script>
+
+
+
+
+</body>
+
+</html>

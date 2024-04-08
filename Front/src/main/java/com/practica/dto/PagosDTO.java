@@ -25,6 +25,9 @@ public class PagosDTO {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date fecharegistro;
 	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	private Date fecharegistrodocumento;
+	
 	private int entidadId;
 	
 	private int periodo;
