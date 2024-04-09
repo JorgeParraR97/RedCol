@@ -20,7 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.practica.sostenedor.dto.ColegioDTO;
+
+import com.practica.sostenedor.dto.EstablecimientoDTO;
 import com.practica.sostenedor.dto.LoginDTO;
 import com.practica.sostenedor.dto.SostenedorDTO;
 
@@ -71,13 +72,13 @@ public class SostenedorController {
         return ResponseEntity.ok(s);
     }
     
-    @ResponseBody @GetMapping("colegio/{sostenedorid}")
-    public ResponseEntity<List<ColegioDTO>> getColegios(@PathVariable("sostenedorid") int sostenedorid){
+    @ResponseBody @GetMapping("establecimientos/{sostenedorid}")
+    public ResponseEntity<List<EstablecimientoDTO>> getEstablecimientos(@PathVariable("sostenedorid") int sostenedorid){
     	Optional<SostenedorDTO> sostenedor = servicio.findById(sostenedorid);
     	if(sostenedor == null)
     		return ResponseEntity.notFound().build();
-    	List<ColegioDTO> colegios = servicio.getColegios(sostenedorid);
-    	return ResponseEntity.ok(colegios);
+    	List<EstablecimientoDTO> establecimientos = servicio.getEstablecimientos(sostenedorid);
+    	return ResponseEntity.ok(establecimientos);
     }
     
 	@PutMapping("/actualizar/{id}")

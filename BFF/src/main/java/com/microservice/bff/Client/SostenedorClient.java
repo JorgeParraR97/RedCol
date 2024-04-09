@@ -28,8 +28,8 @@ public interface SostenedorClient {
 	@PostMapping("/api/sostenedor/crear")
 	public SostenedorDTO save(@RequestBody @Valid SostenedorDTO sostenedor);
 	
-    @GetMapping("api/sostenedor/establecimiento/{sostenedorid}")
-    public ResponseEntity<List<EstablecimientoDTO>> getColegios(@PathVariable("sostenedorid") int sostenedorid);
+    @GetMapping("api/sostenedor/establecimientos/{sostenedorid}")
+    public ResponseEntity<List<EstablecimientoDTO>> getEstablecimientos(@PathVariable("sostenedorid") int sostenedorid);
     
     @GetMapping("api/sostenedor/buscar/{id}")
     public ResponseEntity<Optional<SostenedorDTO>> findById(@PathVariable("id") int id);

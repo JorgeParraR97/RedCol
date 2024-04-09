@@ -12,8 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.practica.sostenedor.dto.ColegioDTO;
-
+import com.practica.sostenedor.dto.EstablecimientoDTO;
 import com.practica.sostenedor.dto.SostenedorDTO;
 import com.practica.sostenedor.entity.SostenedorEntity;
 import com.practica.sostenedor.repository.SostenedorRepository;
@@ -99,19 +98,19 @@ public class SostenedorServiceImpl implements ISostenedorService {
 
 	}
 
-	public List<ColegioDTO> getColegios(int sostenedorId) {
-        ResponseEntity<List<ColegioDTO>> responseEntity = restTemplate.exchange(
-            "http://localhost:8080/api/bff/colegio/ls/" + sostenedorId,
+	public List<EstablecimientoDTO> getEstablecimientos(int sostenedorId) {
+        ResponseEntity<List<EstablecimientoDTO>> responseEntity = restTemplate.exchange(
+            "http://localhost:8080/api/bff/establecimiento/ls/" + sostenedorId,
             HttpMethod.GET,
             null,
-            new ParameterizedTypeReference<List<ColegioDTO>>() {}
+            new ParameterizedTypeReference<List<EstablecimientoDTO>>() {}
         );
 
         if (responseEntity.getStatusCode().is2xxSuccessful()) {
             return responseEntity.getBody();
         } else {
             // Manejar el error de acuerdo a tus necesidades
-            throw new RuntimeException("Error al obtener la lista de colegios. Código de estado: " + responseEntity.getStatusCodeValue());
+            throw new RuntimeException("Error al obtener la lista de establecimientos. Código de estado: " + responseEntity.getStatusCodeValue());
         }
     }
 	

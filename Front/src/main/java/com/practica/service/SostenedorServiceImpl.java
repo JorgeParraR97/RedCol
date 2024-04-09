@@ -118,7 +118,7 @@ public class SostenedorServiceImpl implements ISostenedorService {
 	
 	@Override
     public List<EstablecimientoDTO> getEstablecimientos(int sostenedorId) {
-        String url = "http://localhost:8080/api/bff/sostenedor/colegio/{sostenedorId}";
+        String url = "http://localhost:8080/api/bff/sostenedor/establecimientos/{sostenedorId}";
         ResponseEntity<List<EstablecimientoDTO>> responseEntity = restTemplate.exchange(
                 url,
                 HttpMethod.GET,

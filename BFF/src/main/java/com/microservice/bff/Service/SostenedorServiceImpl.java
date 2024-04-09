@@ -31,8 +31,8 @@ public class SostenedorServiceImpl implements ISostenedorService {
 	}
 
 	@Override
-	public ResponseEntity<List<EstablecimientoDTO>> getColegios(int sostenedorid) {
-		ResponseEntity<List<EstablecimientoDTO>> responseEntity = sostenedorClient.getColegios(sostenedorid);
+	public ResponseEntity<List<EstablecimientoDTO>> getEstablecimientos(int sostenedorid) {
+		ResponseEntity<List<EstablecimientoDTO>> responseEntity = sostenedorClient.getEstablecimientos(sostenedorid);
         return responseEntity;
 	}
 

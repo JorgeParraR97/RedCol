@@ -62,10 +62,10 @@ public class BffSostenedorController {
 	    }
 	}
 	
-	@GetMapping("/colegio/{sostenedorid}")
-    public ResponseEntity<List<EstablecimientoDTO>> getColegios(@PathVariable("sostenedorid") int sostenedorid) {
+	@GetMapping("/establecimientos/{sostenedorid}")
+    public ResponseEntity<List<EstablecimientoDTO>> getEstablecimientos(@PathVariable("sostenedorid") int sostenedorid) {
 		
-		ResponseEntity<List<EstablecimientoDTO>> responseEntity = sostenedorService.getColegios(sostenedorid);
+		ResponseEntity<List<EstablecimientoDTO>> responseEntity = sostenedorService.getEstablecimientos(sostenedorid);
         return responseEntity;
     }
 	

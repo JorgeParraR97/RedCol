@@ -425,7 +425,7 @@
 
 				// Realiza una solicitud AJAX para obtener la información de los colegios
 				$.ajax({
-					url: "http://localhost:7777/admin/csREST/" + idSostenedor,
+					url: "http://localhost:7777/admin/esREST/" + idSostenedor,
 					type: "GET",
 					success: function (data) {
 						console.log(data);
@@ -433,7 +433,7 @@
 						mostrarInformacionEnModal(data);
 					},
 					error: function () {
-						alert("Error al obtener la información de los colegios.");
+						alert("Error al obtener la información de los establecimientos.");
 					}
 				});
 			});
@@ -442,7 +442,7 @@
 			function mostrarInformacionEnModal(data) {
 				// Crea el contenido HTML de la tabla con la información de los colegios
 				var tablaHtml = "<table class='table'>";
-				tablaHtml += "<thead><tr><th>RBD</th><th>Nombre</th><th>Dirección</th><th>Email</th><th>Teléfono</th></tr></thead>";
+				tablaHtml += "<thead><tr><th>RBD</th><th>Nombre</th><th>Dirección</th><th>Email de Contacto</th><th>Teléfono de Contacto</th></tr></thead>";
 				tablaHtml += "<tbody>";
 
 				// Itera sobre los datos para construir las filas de la tabla
@@ -451,9 +451,9 @@
 					tablaHtml += "<td>" + data[i].rbd + "</td>";
 					tablaHtml += "<td>" + data[i].nombre + "</td>";
 					tablaHtml += "<td>" + data[i].direccion + "</td>";
-					tablaHtml += "<td>" + data[i].email + "</td>";
+					tablaHtml += "<td>" + data[i].contactoemail + "</td>";
 					// Asegúrate de que tengas un campo 'telefono' en tu objeto ColegioDTO
-					tablaHtml += "<td>" + (data[i].telefono || '') + "</td>";
+					tablaHtml += "<td>" + (data[i].contactotelefono || '') + "</td>";
 					tablaHtml += "</tr>";
 				}
 
@@ -461,7 +461,7 @@
 
 				// Muestra el modal con la tabla
 				Swal.fire({
-					title: "Información de colegios asociados",
+					title: "Información de establecimientos asociados",
 					html: tablaHtml,
 					confirmButtonColor: "#007BFF"
 				});

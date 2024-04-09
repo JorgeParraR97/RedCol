@@ -1,7 +1,6 @@
 package com.practica.sostenedor.dto;
 
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,24 +8,25 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ColegioDTO {
+public class EstablecimientoDTO {
 	
 	private int id;
 	
-	
 	private String nombre;
 	
+	private String rbd;
 	
-	private String RBD;
+	private String contactonombre;
 	
+	private String contactocargo;
 	
-	private String email;
-	
+	private String contactoemail;
 	
 	private String direccion;
 	
+	private String contactotelefono;
 	
-	private String telefono;
+	private int sostenedorId;
 	
 	
 
