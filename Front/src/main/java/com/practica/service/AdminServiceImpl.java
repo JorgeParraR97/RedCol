@@ -25,7 +25,7 @@ public class AdminServiceImpl implements IAdminService {
 			HttpEntity<LoginDTO> requestEntity = new HttpEntity<>(loginDTO, headers);
 
 			RestTemplate restTemplate = new RestTemplate();
-			ResponseEntity<LoginDTO> responseEntity = restTemplate.postForEntity("http://localhost:8080/api/bff/admin/login",
+			ResponseEntity<LoginDTO> responseEntity = restTemplate.postForEntity("http://localhost:7778/api/bff/admin/login",
 					requestEntity, LoginDTO.class);
 
 			if (responseEntity.getStatusCode().is2xxSuccessful()) {
@@ -51,7 +51,7 @@ public class AdminServiceImpl implements IAdminService {
 
 	        RestTemplate restTemplate = new RestTemplate();
 	        ResponseEntity<String> responseEntity = restTemplate.postForEntity(
-	                "http://localhost:8080/api/bff/admin/create", requestEntity, String.class);
+	                "http://localhost:7778/api/bff/admin/create", requestEntity, String.class);
 
 	        if (responseEntity.getStatusCode().is2xxSuccessful()) {
 	            String responseBody = responseEntity.getBody();

@@ -274,6 +274,7 @@ public class AdminPageController {
 	@PostMapping("/atREST")
     public String actualizarTarifa(@Valid TarifaDTO tarifaDTO, Model model) {
         try {
+        	System.out.println("Contenido de tarifaDTO: " + tarifaDTO);
         	tarServicio.actualizarTarifa(tarifaDTO);
             // Si la actualización en el servicio es exitosa, redirige a la página adecuada
             return "redirect:/admin/tarifa";

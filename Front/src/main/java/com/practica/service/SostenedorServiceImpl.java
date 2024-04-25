@@ -35,7 +35,7 @@ public class SostenedorServiceImpl implements ISostenedorService {
 			ObjectMapper unMapper = new ObjectMapper();
 
 			List<SostenedorDTO> sostenedor = Arrays
-					.asList(unMapper.readValue(new URL("http://localhost:8080/api/bff/sostenedor/findAll"), SostenedorDTO[].class));
+					.asList(unMapper.readValue(new URL("http://localhost:7778/api/bff/sostenedor/findAll"), SostenedorDTO[].class));
 			return sostenedor;
 
 		} catch (IOException e) {
@@ -54,7 +54,7 @@ public class SostenedorServiceImpl implements ISostenedorService {
 
 	        RestTemplate restTemplate = new RestTemplate();
 	        ResponseEntity<String> responseEntity = restTemplate.postForEntity(
-	                "http://localhost:8080/api/bff/sostenedor/create", requestEntity, String.class);
+	                "http://localhost:7778/api/bff/sostenedor/create", requestEntity, String.class);
 
 	        if (responseEntity.getStatusCode().is2xxSuccessful()) {
 	            String responseBody = responseEntity.getBody();
@@ -76,7 +76,7 @@ public class SostenedorServiceImpl implements ISostenedorService {
         HttpEntity<SostenedorDTO> requestEntity = new HttpEntity<>(sostenedorDTO, headers);
 
         ResponseEntity<String> response = restTemplate.exchange(
-        		"http://localhost:8080/api/bff/sostenedor/actualizar/{id}",
+        		"http://localhost:7778/api/bff/sostenedor/actualizar/{id}",
                 HttpMethod.PUT,
                 requestEntity,
                 String.class,
@@ -97,12 +97,12 @@ public class SostenedorServiceImpl implements ISostenedorService {
 
 			RestTemplate restTemplate = new RestTemplate();
 			ResponseEntity<SostenedorDTO> responseEntity = restTemplate
-					.getForEntity("http://localhost:8080/api/bff/sostenedor/buscar" + "/" + id, SostenedorDTO.class);
+					.getForEntity("http://localhost:7778/api/bff/sostenedor/buscar" + "/" + id, SostenedorDTO.class);
 
 			if (responseEntity.getStatusCode().is2xxSuccessful()) {
 				SostenedorDTO dto = responseEntity.getBody();
 
-				restTemplate.delete("http://localhost:8080/api/bff/sostenedor/delete" + "/" + id);
+				restTemplate.delete("http://localhost:7778/api/bff/sostenedor/delete" + "/" + id);
 
 				return dto;
 			} else {
@@ -118,7 +118,7 @@ public class SostenedorServiceImpl implements ISostenedorService {
 	
 	@Override
     public List<EstablecimientoDTO> getEstablecimientos(int sostenedorId) {
-        String url = "http://localhost:8080/api/bff/sostenedor/establecimientos/{sostenedorId}";
+        String url = "http://localhost:7778/api/bff/sostenedor/establecimientos/{sostenedorId}";
         ResponseEntity<List<EstablecimientoDTO>> responseEntity = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
@@ -139,7 +139,7 @@ public class SostenedorServiceImpl implements ISostenedorService {
 			HttpEntity<LoginDTO> requestEntity = new HttpEntity<>(loginDTO, headers);
 
 			RestTemplate restTemplate = new RestTemplate();
-			ResponseEntity<LoginDTO> responseEntity = restTemplate.postForEntity("http://localhost:8080/api/bff/sostenedor/login",
+			ResponseEntity<LoginDTO> responseEntity = restTemplate.postForEntity("http://localhost:7778/api/bff/sostenedor/login",
 					requestEntity, LoginDTO.class);
 
 			if (responseEntity.getStatusCode().is2xxSuccessful()) {

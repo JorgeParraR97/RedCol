@@ -220,7 +220,7 @@
 						<div class="modal-content">
 							<div class="modal-header">
 								<h5 class="modal-title" id="mapaMensualidadModalLabel">Mapa de Mensualidad</h5>
-								
+
 								<button type="button" class="btn-close" data-bs-dismiss="modal"
 									aria-label="Close"></button>
 							</div>
@@ -292,9 +292,10 @@
 										<input type="text" class="form-control" id="numerodocumento"
 											name="numerodocumento" required>
 									</div>
-									
+
 									<div class="mb-3">
-										<label for="fecharegistrodocumento" class="form-label">Fecha de Documento</label>
+										<label for="fecharegistrodocumento" class="form-label">Fecha de
+											Documento</label>
 										<input type="date" class="form-control" id="fecharegistrodocumento"
 											name="fecharegistrodocumento" required>
 									</div>
@@ -438,18 +439,14 @@
 				establecimientoSelect.appendChild(defaultOption);
 				// Iterar sobre los establecimientos disponibles
 				establecimiento.forEach(function (establecimiento) {
-					// Encontrar el sostenedor correspondiente al ID de sostenedor del establecimiento actual
-					var sostenedor = sostenedores.find(function (sostenedor) {
-						return sostenedor.id === establecimiento.sostenedorId;
-					});
-
-					// Crear una opción para cada establecimiento con el nombre del establecimiento y el nombre del sostenedor entre paréntesis
+					// Crear una opción para cada establecimiento con solo el nombre del establecimiento
 					var option = document.createElement('option');
 					option.value = establecimiento.id;
-					option.textContent = establecimiento.nombre + ' (' + sostenedor.nombre + ')';
+					option.textContent = establecimiento.nombre;
 					establecimientoSelect.appendChild(option);
 				});
 			}
+
 		});
 	</script>
 
@@ -767,7 +764,7 @@
 				pagosFiltrados.forEach(function (pago) {
 					var row = document.createElement('tr');
 					row.innerHTML = '<td>' + pago.numerodocumento + '</td>' +
-					    '<td>' + pago.fecharegistrodocumento + '</td>' +
+						'<td>' + pago.fecharegistrodocumento + '</td>' +
 						'<td>' + pago.monto + '</td>' +
 						'<td>' + pago.fecharegistro + '</td>' +
 						'<td>' + pago.periodo + '</td>' +
@@ -920,8 +917,8 @@
 
 		}
 
-			
-		
+
+
 
 		);
 	</script>

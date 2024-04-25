@@ -32,7 +32,7 @@ public class PagosServiceImpl implements IPagosService {
 			ObjectMapper unMapper = new ObjectMapper();
 
 			List<PagosDTO> proyectos = Arrays
-					.asList(unMapper.readValue(new URL("http://localhost:8080/api/bff/pagos/findAll"), PagosDTO[].class));
+					.asList(unMapper.readValue(new URL("http://localhost:7778/api/bff/pagos/findAll"), PagosDTO[].class));
 			return proyectos;
 
 		} catch (IOException e) {
@@ -48,7 +48,7 @@ public class PagosServiceImpl implements IPagosService {
 			ObjectMapper unMapper = new ObjectMapper();
 
 			List<TipopagoDTO> tipopago = Arrays
-					.asList(unMapper.readValue(new URL("http://localhost:8080/api/bff/pagos/findAlltp"), TipopagoDTO[].class));
+					.asList(unMapper.readValue(new URL("http://localhost:7778/api/bff/pagos/findAlltp"), TipopagoDTO[].class));
 			return tipopago;
 
 		} catch (IOException e) {
@@ -67,7 +67,7 @@ public class PagosServiceImpl implements IPagosService {
 
 	        RestTemplate restTemplate = new RestTemplate();
 	        ResponseEntity<String> responseEntity = restTemplate.postForEntity(
-	                "http://localhost:8080/api/bff/pagos/create", requestEntity, String.class);
+	                "http://localhost:7778/api/bff/pagos/create", requestEntity, String.class);
 
 	        if (responseEntity.getStatusCode().is2xxSuccessful()) {
 	            String responseBody = responseEntity.getBody();
@@ -90,7 +90,7 @@ public class PagosServiceImpl implements IPagosService {
         HttpEntity<PagosDTO> requestEntity = new HttpEntity<>(pagosDTO, headers);
 
         ResponseEntity<String> response = restTemplate.exchange(
-        		"http://localhost:8080/api/bff/pagos/actualizar/{id}",
+        		"http://localhost:7778/api/bff/pagos/actualizar/{id}",
                 HttpMethod.PUT,
                 requestEntity,
                 String.class,
@@ -111,12 +111,12 @@ public class PagosServiceImpl implements IPagosService {
 
 			RestTemplate restTemplate = new RestTemplate();
 			ResponseEntity<PagosDTO> responseEntity = restTemplate
-					.getForEntity("http://localhost:8080/api/bff/pagos/buscar" + "/" + id, PagosDTO.class);
+					.getForEntity("http://localhost:7778/api/bff/pagos/buscar" + "/" + id, PagosDTO.class);
 
 			if (responseEntity.getStatusCode().is2xxSuccessful()) {
 				PagosDTO dto = responseEntity.getBody();
 
-				restTemplate.delete("http://localhost:8080/api/bff/pagos/delete" + "/" + id);
+				restTemplate.delete("http://localhost:7778/api/bff/pagos/delete" + "/" + id);
 
 				return dto;
 			} else {

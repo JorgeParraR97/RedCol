@@ -32,7 +32,7 @@ public class TarifaServiceImpl implements ITarifaService {
 			ObjectMapper unMapper = new ObjectMapper();
 
 			List<TarifaDTO> tarifas = Arrays
-					.asList(unMapper.readValue(new URL("http://localhost:8080/api/bff/tarifa/findAll"), TarifaDTO[].class));
+					.asList(unMapper.readValue(new URL("http://localhost:7778/api/bff/tarifa/findAll"), TarifaDTO[].class));
 			return tarifas;
 
 		} catch (IOException e) {
@@ -51,7 +51,7 @@ public class TarifaServiceImpl implements ITarifaService {
 
 	        RestTemplate restTemplate = new RestTemplate();
 	        ResponseEntity<String> responseEntity = restTemplate.postForEntity(
-	                "http://localhost:8080/api/bff/tarifa/create", requestEntity, String.class);
+	                "http://localhost:7778/api/bff/tarifa/create", requestEntity, String.class);
 
 	        if (responseEntity.getStatusCode().is2xxSuccessful()) {
 	            String responseBody = responseEntity.getBody();
@@ -73,7 +73,7 @@ public class TarifaServiceImpl implements ITarifaService {
         HttpEntity<TarifaDTO> requestEntity = new HttpEntity<>(tarifaDTO, headers);
 
         ResponseEntity<String> response = restTemplate.exchange(
-        		"http://localhost:8080/api/bff/tarifa/actualizar/{id}",
+        		"http://localhost:7778/api/bff/tarifa/actualizar/{id}",
                 HttpMethod.PUT,
                 requestEntity,
                 String.class,
@@ -94,12 +94,12 @@ public class TarifaServiceImpl implements ITarifaService {
 
 			RestTemplate restTemplate = new RestTemplate();
 			ResponseEntity<TarifaDTO> responseEntity = restTemplate
-					.getForEntity("http://localhost:8080/api/bff/tarifa/buscar" + "/" + id, TarifaDTO.class);
+					.getForEntity("http://localhost:7778/api/bff/tarifa/buscar" + "/" + id, TarifaDTO.class);
 
 			if (responseEntity.getStatusCode().is2xxSuccessful()) {
 				TarifaDTO dto = responseEntity.getBody();
 
-				restTemplate.delete("http://localhost:8080/api/bff/tarifa/delete" + "/" + id);
+				restTemplate.delete("http://localhost:7778/api/bff/tarifa/delete" + "/" + id);
 
 				return dto;
 			} else {
@@ -120,7 +120,7 @@ public class TarifaServiceImpl implements ITarifaService {
 			ObjectMapper unMapper = new ObjectMapper();
 
 			List<MapamensualidadDTO> mapas = Arrays
-					.asList(unMapper.readValue(new URL("http://localhost:8080/api/bff/tarifa/findmmAll"), MapamensualidadDTO[].class));
+					.asList(unMapper.readValue(new URL("http://localhost:7778/api/bff/tarifa/findmmAll"), MapamensualidadDTO[].class));
 			return mapas;
 
 		} catch (IOException e) {
@@ -139,7 +139,7 @@ public class TarifaServiceImpl implements ITarifaService {
 
 	        RestTemplate restTemplate = new RestTemplate();
 	        ResponseEntity<String> responseEntity = restTemplate.postForEntity(
-	                "http://localhost:8080/api/bff/tarifa/createmm", requestEntity, String.class);
+	                "http://localhost:7778/api/bff/tarifa/createmm", requestEntity, String.class);
 
 	        if (responseEntity.getStatusCode().is2xxSuccessful()) {
 	            String responseBody = responseEntity.getBody();
@@ -161,7 +161,7 @@ public class TarifaServiceImpl implements ITarifaService {
         HttpEntity<MapamensualidadDTO> requestEntity = new HttpEntity<>(mapamensualidadDTO, headers);
 
         ResponseEntity<String> response = restTemplate.exchange(
-        		"http://localhost:8080/api/bff/tarifa/actualizarmm/{id}",
+        		"http://localhost:7778/api/bff/tarifa/actualizarmm/{id}",
                 HttpMethod.PUT,
                 requestEntity,
                 String.class,
@@ -182,12 +182,12 @@ public class TarifaServiceImpl implements ITarifaService {
 
 			RestTemplate restTemplate = new RestTemplate();
 			ResponseEntity<MapamensualidadDTO> responseEntity = restTemplate
-					.getForEntity("http://localhost:8080/api/bff/tarifa/buscarmm" + "/" + id, MapamensualidadDTO.class);
+					.getForEntity("http://localhost:7778/api/bff/tarifa/buscarmm" + "/" + id, MapamensualidadDTO.class);
 
 			if (responseEntity.getStatusCode().is2xxSuccessful()) {
 				MapamensualidadDTO dto = responseEntity.getBody();
 
-				restTemplate.delete("http://localhost:8080/api/bff/tarifa/deletemm" + "/" + id);
+				restTemplate.delete("http://localhost:7778/api/bff/tarifa/deletemm" + "/" + id);
 
 				return dto;
 			} else {
@@ -208,7 +208,7 @@ public class TarifaServiceImpl implements ITarifaService {
 
 	        RestTemplate restTemplate = new RestTemplate();
 	        ResponseEntity<MapamensualidadDTO> responseEntity = restTemplate
-	                .getForEntity("http://localhost:8080/api/bff/tarifa/buscarmm" + "/" + id, MapamensualidadDTO.class);
+	                .getForEntity("http://localhost:7778/api/bff/tarifa/buscarmm" + "/" + id, MapamensualidadDTO.class);
 
 	        if (responseEntity.getStatusCode().is2xxSuccessful()) {
 	            return responseEntity.getBody();
@@ -223,4 +223,3 @@ public class TarifaServiceImpl implements ITarifaService {
 	}
 	
 }
-	

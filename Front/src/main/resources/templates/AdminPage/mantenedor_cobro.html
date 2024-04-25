@@ -234,11 +234,10 @@
 	</script>
 
 	<script th:inline="javascript">
-		// Obtener la lista de establecimientos y sostenedores
+		// Obtener la lista de establecimientos
 		var establecimientos = /*[[${establecimiento}]]*/[];
-		var sostenedores = /*[[${sostenedor}]]*/[];
 
-		// Función para actualizar el desplegable de establecimiento con el nombre del establecimiento y el nombre del sostenedor
+		// Función para actualizar el desplegable de establecimiento con el nombre del establecimiento
 		function actualizarDesplegable() {
 			var selectEstablecimiento = document.getElementById('establecimiento');
 
@@ -247,15 +246,10 @@
 
 			// Iterar sobre los establecimientos y agregar cada opción al desplegable
 			establecimientos.forEach(function (establecimiento) {
-				// Encontrar el sostenedor correspondiente al ID de sostenedor del establecimiento actual
-				var sostenedor = sostenedores.find(function (sostenedor) {
-					return sostenedor.id === establecimiento.sostenedorId;
-				});
-
-				// Crear la opción con el nombre del establecimiento y el nombre del sostenedor entre paréntesis
+				// Crear la opción con el nombre del establecimiento
 				var option = document.createElement('option');
 				option.value = establecimiento.id;
-				option.textContent = establecimiento.nombre + ' (' + sostenedor.nombre + ')';
+				option.textContent = establecimiento.nombre;
 				selectEstablecimiento.appendChild(option);
 			});
 		}
