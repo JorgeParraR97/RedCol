@@ -10,9 +10,9 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.practica</groupId>
-	<artifactId>apigateway-1</artifactId>
+	<artifactId>apigateway-REDCOL</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>apigateway-1</name>
+	<name>apigateway-REDCOL</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>

@@ -10,9 +10,9 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.microservice.bff</groupId>
-	<artifactId>BFF</artifactId>
+	<artifactId>BFF-REDCOL</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>BFF</name>
+	<name>BFF-REDCOL</name>
 	<description>Spring Boot </description>
 	<properties>
 		<java.version>11</java.version>

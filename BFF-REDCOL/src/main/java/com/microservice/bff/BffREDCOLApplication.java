@@ -8,10 +8,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableFeignClients
 @EnableDiscoveryClient
 @SpringBootApplication
-public class BffApplication {
+public class BffREDCOLApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BffApplication.class, args);
+		SpringApplication.run(BffREDCOLApplication.class, args);
 	}
 
 }
