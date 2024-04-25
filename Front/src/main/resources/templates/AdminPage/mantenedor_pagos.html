@@ -641,7 +641,7 @@
 
 				// Enviar los datos al servidor mediante AJAX
 				$.ajax({
-					url: "http://localhost:7777/admin/gpREST/",
+					url: "http://localhost:7775/admin/gpREST/",
 					type: 'POST',
 					contentType: 'application/json',
 					data: JSON.stringify(data),
@@ -953,7 +953,7 @@
 			}).then((result) => {
 				if (result.isConfirmed) {
 					$.ajax({
-						url: "http://localhost:7777/admin/bpREST/" + id,
+						url: "http://localhost:7775/admin/bpREST/" + id,
 						type: 'DELETE',
 						success: function (res) {
 							console.log(res);

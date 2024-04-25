@@ -185,8 +185,12 @@
 									<td th:text="${tarifa.descripcion}"></td>
 									<td th:text="${tarifa.monto}"></td>
 									<td>
-										<button type="button" class="btn btn-warning btn-editar" data-toggle="modal"
-											data-target="#editarTarifaModal">Editar</button>
+										<button type="button" class="btn btn-warning btn-editar"
+											th:data-id="${tarifa.id}" th:data-periodo="${tarifa.periodo}"
+											th:data-descripcion="${tarifa.descripcion}" th:data-monto="${tarifa.monto}"
+											onclick="abrirModalEditarTarifa(this)">
+											Editar
+										</button>
 										<a class="btn btn-danger" th:attr="data-id=${tarifa.id}"
 											onclick="fxJSeliminar(this.getAttribute('data-id'))">Borrar</a>
 									</td>
@@ -255,12 +259,12 @@
 											required />
 									</div>
 									<div class="form-group">
-										<label for="descripcion">DESCRIPCION:</label>
+										<label for="descripcion">Descripcion:</label>
 										<input type="text" class="form-control" id="descripcion" name="descripcion"
 											required>
 									</div>
 									<div class="form-group">
-										<label for="monto">MONTO:</label>
+										<label for="monto">Monto:</label>
 										<input type="number" class="form-control" id="monto" name="monto" required>
 									</div>
 
@@ -319,21 +323,38 @@
 	<script th:src="@{/AdminLTE-3.2.0/plugins/datatables-buttons/js/buttons.colVis.min.js}"></script>
 	<script th:src="@{https://cdn.jsdelivr.net/npm/sweetalert2@11}"></script>
 
+
 	<script th:inline="javascript">
-		$(document).on("click", ".btn-editar", function () {
-			var id = this.dataset.id;
-			var periodo = this.dataset.periodo;
-			var descripcion = this.dataset.descripcion;
-			var monto = this.dataset.monto;
 
-			// Puedes utilizar estos valores para actualizar el modal de edición, por ejemplo
-			$("#id").val(id);
-			$("#periodo").val(periodo);
-			$("#descripcion").val(descripcion);
-			$("#monto").val(monto);
+		function cargarInformacionTarifa(id, periodo, descripcion, monto) {
+			document.getElementById('id').value = parseInt(id); // Convertir a entero
+			document.getElementById('periodo').value = periodo;
+			document.getElementById('descripcion').value = descripcion;
+			document.getElementById('monto').value = monto;
+		}
+		// Función para cargar la información de la tarifa a editar en el modal
+		function abrirModalEditarTarifa(button) {
+			var id = button.getAttribute('data-id');
+			var periodo = button.getAttribute('data-periodo');
+			var descripcion = button.getAttribute('data-descripcion');
+			var monto = button.getAttribute('data-monto');
 
-		});
+
+
+
+
+			// Llamar a la función para cargar la información en el modal
+			cargarInformacionTarifa(id, periodo, descripcion, monto);
+
+			// Mostrar el modal
+			$('#editarTarifaModal').modal('show');
+		}
+
+		// Ejemplo de cómo podrías llamar a abrirModalEditarTarifa desde un botón de editar
+		// <button type="button" class="btn btn-warning btn-editar" onclick="abrirModalEditarTarifa(tarifa.id, tarifa.periodo, tarifa.descripcion, tarifa.monto)">Editar</button>
 	</script>
+
+
 	<script th:inline="javascript">
 		function fxJSeliminar(id) {
 			Swal.fire({
@@ -347,7 +368,7 @@
 			}).then((result) => {
 				if (result.isConfirmed) {
 					$.ajax({
-						url: "http://localhost:7777/admin/btREST/" + id,
+						url: "http://localhost:7775/admin/btREST/" + id,
 						type: 'DELETE',
 						success: function (res) {
 							console.log(res);
@@ -357,7 +378,7 @@
 								'success'
 							).then((ok) => {
 								if (ok.value) {
-									location.href = "/admin/sostenedor";
+									location.href = "/admin/tarifa";
 								}
 							});
 						},
