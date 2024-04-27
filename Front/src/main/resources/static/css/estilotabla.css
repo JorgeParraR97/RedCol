@@ -1,5 +1,17 @@
-.modal-content {
-    max-height: 400px; /* Altura máxima del modal */
-    overflow-y: auto; /* Habilitar el desplazamiento vertical cuando el contenido exceda la altura máxima */
+.modal {
+    display: flex;
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center; /* Centrar verticalmente */
 }
 
+.modal-content {
+    max-width: 450px; /* Ancho máximo del modal */
+    max-height: 600px; /* Altura máxima del modal */
+    overflow-y: auto; /* Habilitar el desplazamiento vertical cuando el contenido exceda la altura máxima */
+    margin-left: 50px; /* Espacio de desplazamiento hacia la derecha */
+}
+
+#registroPagoModal .modal-content {
+    max-height: 600px; /* Altura máxima del contenido del modal */
+    overflow-y: auto; /* Habilitar el desplazamiento vertical cuando el contenido exceda la altura máxima */
+}

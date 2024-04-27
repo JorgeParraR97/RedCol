@@ -195,7 +195,8 @@
 											data-target="#editarSostenedorModal" th:data-id="${sostenedor.id}"
 											th:data-nombre="${sostenedor.nombre}" th:data-rut="${sostenedor.rut}"
 											th:data-email="${sostenedor.email}"
-											th:data-representante="${sostenedor.representante}">Editar</button>
+											th:data-representante="${sostenedor.representante}"
+											th:data-contrasena="${sostenedor.contrasena}">Editar</button>
 										<a class="btn btn-danger" th:attr="data-id=${sostenedor.id}"
 											onclick="fxJSeliminar(this.getAttribute('data-id'))">Borrar</a>
 									</td>
@@ -222,6 +223,7 @@
 							<div class="modal-body">
 								<form id="editarSostenedorForm" action="/admin/asREST" method="POST">
 									<input type="hidden" name="id" id="id" />
+
 									<div class="form-group">
 										<label for="nombre">Nombre</label>
 										<input type="text" class="form-control" id="nombre" name="nombre" />
@@ -238,6 +240,11 @@
 										<label for="representante">Representante</label>
 										<input type="text" class="form-control" id="representante"
 											name="representante" />
+									</div>
+									<div class="form-group">
+										<label for="contrasena">Contraseña</label>
+										<input type="text" class="form-control" id="contrasena" name="contrasena"
+											readonly />
 									</div>
 							</div>
 							<div class="modal-footer">
@@ -285,7 +292,7 @@
 
 									<div class="form-group">
 										<label for="contrasena">Contraseña:</label>
-										<input type="text" class="form-control" id="contrasena" name="contrasena"
+										<input type="text" class="form-control" id="nuevaContrasena" name="contrasena"
 											required readonly>
 									</div>
 									<!-- ... Otros campos del formulario ... -->
@@ -350,6 +357,8 @@
 			var rut = this.dataset.rut;
 			var email = this.dataset.email;
 			var representante = this.dataset.representante;
+			var contrasena = this.dataset.contrasena;
+
 
 			// Puedes utilizar estos valores para actualizar el modal de edición, por ejemplo
 			$("#id").val(id);
@@ -357,6 +366,8 @@
 			$("#rut").val(rut);
 			$("#email").val(email);
 			$("#representante").val(representante);
+			$("#contrasena").val(contrasena);
+
 		});
 	</script>
 	<script th:inline="javascript">
@@ -406,13 +417,19 @@
 	</script>
 
 	<script th:inline="javascript">
+		// Definir la función generarContrasenaAleatoria fuera de $(document).ready()
+		function generarContrasenaAleatoria() {
+			// Generar una cadena aleatoria de 8 caracteres alfanuméricos
+			var randomPassword = Math.random().toString(36).slice(-8);
+
+			// Asignar la contraseña aleatoria al campo de contraseña del modal
+			$('#nuevaContrasena').val(randomPassword);
+		}
+
 		$(document).ready(function () {
 			$('#registrarSostenedorModal').on('shown.bs.modal', function () {
-				// Generar una cadena aleatoria de 8 caracteres alfanuméricos
-				var randomPassword = Math.random().toString(36).slice(-8);
-
-				// Asignar la cadena aleatoria al campo de contraseña
-				$('#contrasena').val(randomPassword);
+				// Llamar a la función generarContrasenaAleatoria() dentro de $(document).ready()
+				generarContrasenaAleatoria();
 			});
 		});
 	</script>

@@ -231,13 +231,12 @@
 	<script th:inline="javascript">
 		var tarifas = /*[[${tarifa}]]*/[];
 		var registros = /*[[${mapamensualidad}]]*/[];
+		var establecimientos = /*[[${establecimiento}]]*/[];
+		var sostenedores = /*[[${sostenedor}]]*/[];
 	</script>
 
 	<script th:inline="javascript">
-		// Obtener la lista de establecimientos
-		var establecimientos = /*[[${establecimiento}]]*/[];
-
-		// Función para actualizar el desplegable de establecimiento con el nombre del establecimiento
+		// Función para actualizar el desplegable de establecimiento con el nombre del establecimiento y del sostenedor
 		function actualizarDesplegable() {
 			var selectEstablecimiento = document.getElementById('establecimiento');
 
@@ -246,10 +245,15 @@
 
 			// Iterar sobre los establecimientos y agregar cada opción al desplegable
 			establecimientos.forEach(function (establecimiento) {
-				// Crear la opción con el nombre del establecimiento
+				// Encontrar el sostenedor correspondiente al ID de sostenedor del establecimiento actual
+				var sostenedor = sostenedores.find(function (sostenedor) {
+					return sostenedor.id === establecimiento.sostenedorId;
+				});
+
+				// Crear la opción con el nombre del sostenedor y del establecimiento
 				var option = document.createElement('option');
 				option.value = establecimiento.id;
-				option.textContent = establecimiento.nombre;
+				option.textContent = sostenedor.nombre + ' - ' + establecimiento.nombre;
 				selectEstablecimiento.appendChild(option);
 			});
 		}
@@ -263,12 +267,18 @@
 
 
 	<script>
+		// Event listener para el cambio en el desplegable de establecimiento
 		document.getElementById('establecimiento').addEventListener('change', function () {
-			var selectAnioDiv = document.getElementById('selectAnioDiv');
-			var selectAnio = document.getElementById('anio');
+			// Obtener el valor del establecimiento seleccionado
+			var establecimientoSeleccionado = this.value;
 
-			if (this.value !== '') {
-				selectAnio.innerHTML = ''; // Limpiar las opciones anteriores
+			// Verificar si se ha seleccionado un establecimiento
+			if (establecimientoSeleccionado !== '') {
+				// Obtener el desplegable de años
+				var selectAnio = document.getElementById('anio');
+
+				// Limpiar las opciones anteriores del desplegable de años
+				selectAnio.innerHTML = '<option value="">Seleccione un año</option>';
 
 				// Agregar opciones de años desde 2020 hasta 2025
 				for (var i = 2020; i <= 2025; i++) {
@@ -278,33 +288,45 @@
 					selectAnio.appendChild(option);
 				}
 
-				selectAnioDiv.style.display = 'block'; // Mostrar el desplegable de años si se selecciona un establecimiento
+				// Mostrar el desplegable de años
+				document.getElementById('selectAnioDiv').style.display = 'block';
 			} else {
-				selectAnioDiv.style.display = 'none'; // Ocultar el desplegable de años si no se selecciona un establecimiento
+				// Ocultar el desplegable de años si no se selecciona un establecimiento
+				document.getElementById('selectAnioDiv').style.display = 'none';
 			}
 		});
-	</script>
 
-	<script>
+		// Event listener para el cambio en el desplegable de año
 		document.getElementById('anio').addEventListener('change', function () {
-			var anioSeleccionado = this.value;
+			// Obtener el valor del establecimiento seleccionado
 			var establecimientoSeleccionado = document.getElementById('establecimiento').value;
 
-			if (anioSeleccionado !== '' && establecimientoSeleccionado !== '') {
-				// Obtener la lista de mapamensualidad de la variable registros
-				var mapamensualidad = registros;
+			// Obtener el valor del año seleccionado
+			var anioSeleccionado = this.value;
 
-				// Filtrar la lista de mapamensualidad por establecimiento y año seleccionados
-				var mapamensualidadFiltrada = mapamensualidad.filter(function (registro) {
-					return registro.periodo == anioSeleccionado && registro.establecimientoId == establecimientoSeleccionado;
-				});
-
-				// Actualizar la tabla con los registros filtrados
-				updateTable(mapamensualidadFiltrada);
+			// Verificar si se ha seleccionado un establecimiento y un año
+			if (establecimientoSeleccionado !== '' && anioSeleccionado !== '') {
+				// Llamar a la función para cargar el contenido correspondiente al establecimiento y al año seleccionados
+				updateTable(establecimientoSeleccionado, anioSeleccionado);
 			}
 		});
 
-		function updateTable(registros) {
+		// Función para cargar el contenido correspondiente al establecimiento y al año seleccionados
+		function updateTable(establecimientoId, anio) {
+			// Obtener la lista de mapamensualidad de la variable registros
+			var mapamensualidad = registros;
+
+			// Filtrar la lista de mapamensualidad por establecimiento y año seleccionados
+			var mapamensualidadFiltrada = mapamensualidad.filter(function (registro) {
+				return registro.periodo == anio && registro.establecimientoId == establecimientoId;
+			});
+
+			// Llamar a la función para actualizar la tabla con los registros filtrados
+			updateTableContent(mapamensualidadFiltrada);
+		}
+
+		// Función para actualizar el contenido de la tabla
+		function updateTableContent(registros) {
 			var tablaContenedor = document.getElementById('tablaContenedor');
 			var tbody = document.getElementById('tablaMeses').querySelector('tbody');
 
@@ -435,14 +457,6 @@
 			}
 		}
 	</script>
-
-
-
-
-
-
-
-
 
 </body>
 

@@ -186,8 +186,7 @@
 				</div>
 				<!-- /.content-header -->
 
-				<!-- Agrega el botón para abrir el modal -->
-				<button class="btn btn-primary mb-3" id="abrirModalBtn">Revisar saldos</button>
+
 
 				<!-- Modal para seleccionar el año -->
 				<div class="modal fade" id="seleccionarAnioModal" tabindex="-1"
@@ -196,8 +195,8 @@
 						<div class="modal-content">
 							<div class="modal-header">
 								<h5 class="modal-title" id="seleccionarAnioModalLabel">Seleccionar Año</h5>
-								<button type="button" class="btn-close" data-bs-dismiss="modal"
-									aria-label="Close"></button>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
 							</div>
 							<div class="modal-body">
 								<label for="anio">Seleccione el Año:</label>
@@ -206,7 +205,7 @@
 								</select>
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
 								<button type="button" class="btn btn-primary" id="confirmarAnioBtn">Confirmar</button>
 							</div>
 						</div>
@@ -216,13 +215,12 @@
 				<!-- Modal para mostrar el mapa de mensualidad -->
 				<div class="modal fade" id="mapaMensualidadModal" tabindex="-1"
 					aria-labelledby="mapaMensualidadModalLabel" aria-hidden="true">
-					<div class="modal-dialog modal-lg"> <!-- Agregamos la clase modal-lg para un modal grande -->
+					<div class="modal-dialog"> <!-- Agregamos la clase modal-lg para un modal grande -->
 						<div class="modal-content">
 							<div class="modal-header">
 								<h5 class="modal-title" id="mapaMensualidadModalLabel">Mapa de Mensualidad</h5>
-
-								<button type="button" class="btn-close" data-bs-dismiss="modal"
-									aria-label="Close"></button>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
 							</div>
 							<div class="modal-body">
 								<!-- Contenedor scrollable -->
@@ -243,7 +241,7 @@
 								</div>
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
 							</div>
 						</div>
 					</div>
@@ -253,6 +251,9 @@
 
 				<div class="content">
 					<button class="btn btn-primary mb-3" id="registrarPagoBtn">Registrar Pago</button>
+
+					<!-- Agrega el botón para abrir el modal -->
+					<button class="btn btn-primary mb-3" id="abrirModalBtn">Revisar saldos</button>
 
 					<table id="example1" class="table">
 						<thead>
@@ -276,12 +277,13 @@
 				<!-- Modal para el registro de pago -->
 				<div class="modal fade" id="registroPagoModal" tabindex="-1" aria-labelledby="registroPagoModalLabel"
 					aria-hidden="true">
-					<div class="modal-dialog">
+					<div class="modal-dialog" role="document">
 						<div class="modal-content">
 							<div class="modal-header">
 								<h5 class="modal-title" id="registroPagoModalLabel">Registro de Pago</h5>
-								<button type="button" class="btn-close" data-bs-dismiss="modal"
-									aria-label="Close"></button>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
 							</div>
 							<div class="modal-body">
 								<!-- Formulario para el registro de pago -->
@@ -313,7 +315,7 @@
 									</div>
 									<!-- Campo de mes -->
 									<div class="mb-3">
-										<label for="mes" class="form-label">Mes</label>
+										<label for="mes" class="form-label">Mes a pagar</label>
 										<select class="form-control" id="mes" name="mes" required>
 											<option value="" selected>Seleccione un mes</option>
 											<option value="Enero">Enero</option>
@@ -337,8 +339,7 @@
 								</form>
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" id="cerrarModalBtn"
-									data-bs-dismiss="modal">Cerrar</button>
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
 								<button type="button" class="btn btn-primary" id="registrarPagoBtn2">Registrar</button>
 							</div>
 						</div>
@@ -439,14 +440,18 @@
 				establecimientoSelect.appendChild(defaultOption);
 				// Iterar sobre los establecimientos disponibles
 				establecimiento.forEach(function (establecimiento) {
-					// Crear una opción para cada establecimiento con solo el nombre del establecimiento
+					// Encontrar el sostenedor correspondiente al ID de sostenedor del establecimiento actual
+					var sostenedor = sostenedores.find(function (sostenedor) {
+						return sostenedor.id === establecimiento.sostenedorId;
+					});
+
+					// Crear una opción para cada establecimiento con el nombre del sostenedor y del establecimiento
 					var option = document.createElement('option');
 					option.value = establecimiento.id;
-					option.textContent = establecimiento.nombre;
+					option.textContent = sostenedor.nombre + ' - ' + establecimiento.nombre;
 					establecimientoSelect.appendChild(option);
 				});
 			}
-
 		});
 	</script>
 
@@ -671,12 +676,6 @@
 			});
 
 			// Manejar el clic en el botón "Cerrar"
-			var cerrarModalBtn = document.getElementById('cerrarModalBtn');
-			cerrarModalBtn.addEventListener('click', function () {
-				// Cerrar el modal
-				var modal = bootstrap.Modal.getInstance(document.getElementById('registroPagoModal'));
-				modal.hide();
-			});
 		});
 
 		// Función para obtener la fecha actual en formato "YYYY-MM-DD HH:MM:SS"
@@ -827,7 +826,7 @@
 				// Agregar fila para mostrar el saldo total del año
 				var rowSaldoTotal = document.createElement('tr');
 				rowSaldoTotal.innerHTML = '<td colspan="3">Saldo Total del Año</td>' +
-					'<td>' + saldoTotalAnio.toFixed(2) + '</td>';
+					'<td>' + parseInt(saldoTotalAnio.toFixed(2)) + '</td>';
 				mapaMensualidadBody.appendChild(rowSaldoTotal);
 
 				// Mostrar el modal de mapamensualidad
@@ -849,8 +848,8 @@
 				});
 				// Verificar si se encontró la tarifa
 				if (tarifaEncontrada) {
-					// Convertir el monto de la tarifa a número
-					var tarifaMonto = parseFloat(tarifaEncontrada.monto);
+					// Convertir el monto de la tarifa a un entero
+					var tarifaMonto = parseInt(tarifaEncontrada.monto);
 					// Obtener los pagos asociados al establecimiento, año y mes del registro
 					var pagosAsociados = listaPagosCompleta.filter(function (pago) {
 						return pago.entidadId === registro.establecimientoId &&
@@ -859,8 +858,8 @@
 					});
 					// Calcular el total pagado
 					var totalPagado = pagosAsociados.reduce(function (total, pago) {
-						// Convertir el monto del pago a número
-						var montoPago = parseFloat(pago.monto);
+						// Convertir el monto del pago a un entero
+						var montoPago = parseInt(pago.monto);
 						return total + montoPago;
 					}, 0);
 					// Calcular el saldo restando el monto de la tarifa del total pagado
@@ -877,7 +876,7 @@
 					var row = document.createElement('tr');
 					row.innerHTML = '<td>' + registro.periodo + '</td>' +
 						'<td>' + registro.mes + '</td>' +
-						'<td style="color: ' + textColor + ';">' + Math.abs(saldo).toFixed(2) + '</td>' +
+						'<td style="color: ' + textColor + ';">' + Math.abs(tarifaMonto).toFixed(0) + '</td>' + // Mostrar como un entero (Int)
 						'<td data-estado="' + (saldo > 0 ? 'En deuda' : 'Pagado') + '">' + (saldo > 0 ? 'En deuda' : 'Pagado') + '</td>';
 					mapaMensualidadBody.appendChild(row);
 
@@ -903,6 +902,9 @@
 						row.querySelector('td:nth-child(4)').innerText = 'Pagado';
 						row.dataset.estado = 'Pagado';
 
+						// Cambiar el color del texto a verde
+						row.querySelector('td:nth-child(3)').style.color = 'green';
+
 						// Restar el saldo del mes al saldo a favor total
 						saldoAFavorTotal += saldoMes;
 
@@ -917,23 +919,8 @@
 
 		}
 
-
-
-
 		);
 	</script>
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
