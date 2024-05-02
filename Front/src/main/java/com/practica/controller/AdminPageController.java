@@ -48,7 +48,7 @@ public class AdminPageController {
 	public String sostenedor(Model model) {
 		List<SostenedorDTO> sostenedor = sosServicio.findAllREST(); 
 		model.addAttribute("sostenedor", sostenedor);
-		return "/AdminPage/mantenedor_sostenedor";
+		return "AdminPage/mantenedor_sostenedor";
 	}
 	
 	
@@ -118,7 +118,7 @@ public class AdminPageController {
 		
 		model.addAttribute("sostenedor", sostenedor);
 		model.addAttribute("establecimiento", establecimiento);
-		return "/AdminPage/mantenedor_establecimiento";
+		return "AdminPage/mantenedor_establecimiento";
 	}
 	
 	
@@ -189,7 +189,7 @@ public class AdminPageController {
 		model.addAttribute("tipopago", tipopago);
 		model.addAttribute("mapamensualidad", mapamensualidad);
 		
-		return "/AdminPage/mantenedor_pagos";
+		return "AdminPage/mantenedor_pagos";
 	}
 	
 	
@@ -245,7 +245,7 @@ public class AdminPageController {
 	public String tarifa(Model model) {
 		List<TarifaDTO> tarifa = tarServicio.findAllREST();
 		model.addAttribute("tarifa", tarifa);
-		return "/AdminPage/mantenedor_tarifa";
+		return "AdminPage/mantenedor_tarifa";
 	}
 	
 	
@@ -309,7 +309,7 @@ public class AdminPageController {
 		model.addAttribute("tarifa", tarifa);
 		model.addAttribute("establecimiento", establecimiento);
 		model.addAttribute("mapamensualidad", mapamensualidad);
-		return "/AdminPage/mantenedor_cobro";
+		return "AdminPage/mantenedor_cobro";
 	}
     
     @PostMapping("/gmmREST")

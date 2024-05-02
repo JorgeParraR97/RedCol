@@ -37,7 +37,7 @@ public class WebPageController {
 	@GetMapping("/admin")
 	public String showLoginForm(Model model) {
 		model.addAttribute("loginDTO", new LoginDTO());
-		return "/WebPage/login";
+		return "WebPage/login";
 	}
 
 	@PostMapping("/isREST")
@@ -59,7 +59,7 @@ public class WebPageController {
 	@GetMapping("/registro")
 	public String mostrarPaginaRegistro(Model model) {
 	    model.addAttribute("adminDTO", new AdminDTO());
-	    return "/WebPage/register";
+	    return "WebPage/register";
 	}
 	
 	

@@ -54,7 +54,7 @@ public class SostenedorPageController {
 
 		model.addAttribute("sostenedores", sostenedores);
 
-		return "/SostenedorPage/cambiocontrasena";
+		return "SostenedorPage/cambiocontrasena";
 
 	}
 	
@@ -87,7 +87,7 @@ public class SostenedorPageController {
 		model.addAttribute("sostenedores", sostenedores);
 		model.addAttribute("establecimiento", establecimiento);
 		System.out.println("El ID del sostenedor almacenado en la sesión es: " + sostenedorId);
-		return "/SostenedorPage/mantenedor_establecimiento";
+		return "SostenedorPage/mantenedor_establecimiento";
 	}
 
 	@GetMapping("cobro")
@@ -111,7 +111,7 @@ public class SostenedorPageController {
 		model.addAttribute("establecimiento", establecimiento);
 		model.addAttribute("mapamensualidad", mapamensualidad);
 		System.out.println("El ID del sostenedor almacenado en la sesión es: " + sostenedorId);
-		return "/SostenedorPage/mantenedor_cobro";
+		return "SostenedorPage/mantenedor_cobro";
 	}
 
 	@GetMapping("pagos")
@@ -142,7 +142,7 @@ public class SostenedorPageController {
 		model.addAttribute("tipopago", tipopago);
 		model.addAttribute("mapamensualidad", mapamensualidad);
 
-		return "/SostenedorPage/mantenedor_pagos";
+		return "SostenedorPage/mantenedor_pagos";
 	}
 
 }
