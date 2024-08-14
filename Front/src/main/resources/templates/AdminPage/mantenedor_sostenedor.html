@@ -383,7 +383,7 @@
 			}).then((result) => {
 				if (result.isConfirmed) {
 					$.ajax({
-						url: "http://localhost:7775/admin/bsREST/" + id,
+						url: "http://181.212.143.228:7775/admin/bsREST/" + id,
 						type: 'DELETE',
 						success: function (res) {
 							console.log(res);
@@ -442,7 +442,7 @@
 
 				// Realiza una solicitud AJAX para obtener la información de los colegios
 				$.ajax({
-					url: "http://localhost:7777/admin/esREST/" + idSostenedor,
+					url: "http://181.212.143.228:7775/admin/esREST/" + idSostenedor,
 					type: "GET",
 					success: function (data) {
 						console.log(data);

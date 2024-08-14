@@ -368,7 +368,7 @@
 			}).then((result) => {
 				if (result.isConfirmed) {
 					$.ajax({
-						url: "http://localhost:7775/admin/btREST/" + id,
+						url: "http://181.212.143.228:7775/admin/btREST/" + id,
 						type: 'DELETE',
 						success: function (res) {
 							console.log(res);

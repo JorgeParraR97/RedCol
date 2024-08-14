@@ -243,8 +243,23 @@
 			// Limpiar el desplegable de establecimiento
 			selectEstablecimiento.innerHTML = '<option value="">Seleccione un establecimiento</option>';
 
-			// Iterar sobre los establecimientos y agregar cada opción al desplegable
-			establecimientos.forEach(function (establecimiento) {
+			// Ordenar los establecimientos por el nombre del sostenedor
+			var establecimientosOrdenados = establecimientos.sort(function (a, b) {
+				var sostenedorA = sostenedores.find(function (sostenedor) {
+					return sostenedor.id === a.sostenedorId;
+				}).nombre.toLowerCase();
+
+				var sostenedorB = sostenedores.find(function (sostenedor) {
+					return sostenedor.id === b.sostenedorId;
+				}).nombre.toLowerCase();
+
+				if (sostenedorA < sostenedorB) return -1;
+				if (sostenedorA > sostenedorB) return 1;
+				return 0;
+			});
+
+			// Iterar sobre los establecimientos ordenados y agregar cada opción al desplegable
+			establecimientosOrdenados.forEach(function (establecimiento) {
 				// Encontrar el sostenedor correspondiente al ID de sostenedor del establecimiento actual
 				var sostenedor = sostenedores.find(function (sostenedor) {
 					return sostenedor.id === establecimiento.sostenedorId;
@@ -423,7 +438,7 @@
 				console.log('Enviando datos al servidor:', data);
 
 				$.ajax({
-					url: "http://localhost:7775/admin/gmmREST/",
+					url: "http://181.212.143.228:7775/admin/gmmREST/",
 					type: 'POST',
 					contentType: 'application/json',
 					data: JSON.stringify(data),

@@ -1,17 +1,60 @@
-.modal {
-    display: flex;
-    justify-content: center; /* Centrar horizontalmente */
-    align-items: center; /* Centrar verticalmente */
+/* Permite que el modal se ajuste al tamaño del contenido */
+.modal-dialog {
+	max-width: 100%;
+	width: auto;
+	/* Deja que el ancho se ajuste al contenido */
+	margin: 1.75rem auto;
+	/* Centrado automático */
 }
 
-.modal-content {
-    max-width: 450px; /* Ancho máximo del modal */
-    max-height: 600px; /* Altura máxima del modal */
-    overflow-y: auto; /* Habilitar el desplazamiento vertical cuando el contenido exceda la altura máxima */
-    margin-left: 50px; /* Espacio de desplazamiento hacia la derecha */
+/* Hace que la tabla ocupe el espacio disponible y permita scroll si es necesario */
+.table-responsive {
+	overflow-x: auto;
+	/* Scroll horizontal si es necesario */
+}
+
+.table-scrollable {
+	width: 100%;
+	white-space: nowrap;
+	/* Mantén el contenido en una sola línea */
+}
+
+/* Estilos para las celdas */
+.table-scrollable th,
+.table-scrollable td {
+	text-align: left;
+	vertical-align: middle;
+	padding: 8px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/* Asegura que el encabezado de la tabla permanezca fijo cuando se hace scroll */
+.table-scrollable th {
+	position: sticky;
+	top: 0;
+	background-color: #f8f9fa;
+	z-index: 1;
+}
+
+/* Ajuste adicional para pantallas pequeñas */
+@media (max-width: 768px) {
+	.modal-dialog {
+		width: 95%;
+		margin: 1.75rem auto;
+	}
+
+	.table-scrollable th,
+	.table-scrollable td {
+		min-width: 80px;
+		/* Ajuste de ancho mínimo para pantallas pequeñas */
+	}
 }
 
 #registroPagoModal .modal-content {
-    max-height: 600px; /* Altura máxima del contenido del modal */
-    overflow-y: auto; /* Habilitar el desplazamiento vertical cuando el contenido exceda la altura máxima */
+	max-height: 600px;
+	/* Altura máxima del contenido del modal */
+	overflow-y: auto;
+	/* Habilitar el desplazamiento vertical cuando el contenido exceda la altura máxima */
 }

@@ -205,7 +205,7 @@
 								</select>
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 								<button type="button" class="btn btn-primary" id="confirmarAnioBtn">Confirmar</button>
 							</div>
 						</div>
@@ -215,23 +215,25 @@
 				<!-- Modal para mostrar el mapa de mensualidad -->
 				<div class="modal fade" id="mapaMensualidadModal" tabindex="-1"
 					aria-labelledby="mapaMensualidadModalLabel" aria-hidden="true">
-					<div class="modal-dialog"> <!-- Agregamos la clase modal-lg para un modal grande -->
+					<div class="modal-dialog modal-dialog-centered modal-lg"> <!-- modal-lg para un modal grande -->
 						<div class="modal-content">
 							<div class="modal-header">
 								<h5 class="modal-title" id="mapaMensualidadModalLabel">Mapa de Mensualidad</h5>
 								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 									<span aria-hidden="true">&times;</span>
+								</button>
 							</div>
 							<div class="modal-body">
 								<!-- Contenedor scrollable -->
-								<div class="table">
-									<table class="table-scrollable">
+								<div class="table-responsive">
+									<table class="table table-scrollable">
 										<thead>
 											<tr>
 												<th>Año</th>
 												<th>Mes</th>
 												<th>Saldo</th>
 												<th>Estado</th>
+												<th>Excedente</th>
 											</tr>
 										</thead>
 										<tbody id="mapaMensualidadBody">
@@ -241,7 +243,7 @@
 								</div>
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 							</div>
 						</div>
 					</div>
@@ -339,7 +341,7 @@
 								</form>
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 								<button type="button" class="btn btn-primary" id="registrarPagoBtn2">Registrar</button>
 							</div>
 						</div>
@@ -433,13 +435,30 @@
 			function cargarEstablecimientos() {
 				// Limpiar las opciones anteriores
 				establecimientoSelect.innerHTML = '';
+
 				// Agregar la opción predeterminada
 				var defaultOption = document.createElement('option');
 				defaultOption.value = "";
 				defaultOption.textContent = "Seleccione un establecimiento";
 				establecimientoSelect.appendChild(defaultOption);
-				// Iterar sobre los establecimientos disponibles
-				establecimiento.forEach(function (establecimiento) {
+
+				// Ordenar los establecimientos por el nombre del sostenedor
+				var establecimientosOrdenados = establecimiento.sort(function (a, b) {
+					var sostenedorA = sostenedores.find(function (sostenedor) {
+						return sostenedor.id === a.sostenedorId;
+					}).nombre.toLowerCase();
+
+					var sostenedorB = sostenedores.find(function (sostenedor) {
+						return sostenedor.id === b.sostenedorId;
+					}).nombre.toLowerCase();
+
+					if (sostenedorA < sostenedorB) return -1;
+					if (sostenedorA > sostenedorB) return 1;
+					return 0;
+				});
+
+				// Iterar sobre los establecimientos ordenados
+				establecimientosOrdenados.forEach(function (establecimiento) {
 					// Encontrar el sostenedor correspondiente al ID de sostenedor del establecimiento actual
 					var sostenedor = sostenedores.find(function (sostenedor) {
 						return sostenedor.id === establecimiento.sostenedorId;
@@ -646,7 +665,7 @@
 
 				// Enviar los datos al servidor mediante AJAX
 				$.ajax({
-					url: "http://localhost:7775/admin/gpREST/",
+					url: "http://181.212.143.228:7775/admin/gpREST/",
 					type: 'POST',
 					contentType: 'application/json',
 					data: JSON.stringify(data),
@@ -778,148 +797,143 @@
 
 	<script th:inline="javascript">
 		document.addEventListener("DOMContentLoaded", function () {
-			// Obtener referencia al desplegable de año
 			var anioSelect = document.getElementById('anio');
-			// Obtener referencia al desplegable de establecimiento
 			var entidadSelect = document.getElementById('establecimiento');
-			// Obtener referencia al botón de confirmar año
 			var confirmarAnioBtn = document.getElementById('confirmarAnioBtn');
-			// Obtener referencia al cuerpo de la tabla de mapamensualidad
 			var mapaMensualidadBody = document.getElementById('mapaMensualidadBody');
 
-			// Variable para almacenar el saldo total a favor del año
-			var saldoAFavorTotal = 0;
-
-			// Array de meses ordenados
 			var mesesOrdenados = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
-			// Manejar el clic en el botón de confirmar año
 			confirmarAnioBtn.addEventListener('click', function () {
-				// Obtener el año seleccionado
 				var anioSeleccionado = anioSelect.value;
-				// Obtener el establecimiento seleccionado
 				var entidadSeleccionada = entidadSelect.value;
-				// Filtrar los registros de mapamensualidad por el año seleccionado y el establecimiento seleccionado
 				var mapamensualidadFiltrados = listaMapamensualidad.filter(function (registro) {
 					return registro.periodo === parseInt(anioSeleccionado) &&
 						registro.establecimientoId === parseInt(entidadSeleccionada);
 				});
-				// Limpiar el cuerpo de la tabla de mapamensualidad
+
 				mapaMensualidadBody.innerHTML = '';
-				// Variable para almacenar el saldo total del año
-				var saldoTotalAnio = 0;
-				// Variable para almacenar el saldo a favor
-				var saldoAFavor = 0;
-				// Iterar sobre los meses ordenados
-				mesesOrdenados.forEach(function (mes, index) {
-					// Buscar el registro correspondiente al mes y año seleccionado
+
+				var resultados = mesesOrdenados.map(function (mes) {
 					var registro = mapamensualidadFiltrados.find(function (r) {
 						return r.mes === mes;
 					});
-					// Si se encuentra el registro, calcular el saldo y agregar la fila a la tabla
-					if (registro) {
-						var saldo = calcularSaldo(registro);
-						saldoTotalAnio += saldo;
 
+					if (registro) {
+						return calcularSaldoInicial(registro);
+					} else {
+						return {saldo: 0, excedente: 0};
 					}
 				});
+
+				aplicarExcedentes(resultados);
+
+				// Calcular el saldo total del año después de aplicar los excedentes
+				var saldoTotalAnio = resultados.reduce(function (total, resultado) {
+					return total + resultado.saldo;
+				}, 0);
+
 				// Agregar fila para mostrar el saldo total del año
 				var rowSaldoTotal = document.createElement('tr');
-				rowSaldoTotal.innerHTML = '<td colspan="3">Saldo Total del Año</td>' +
-					'<td>' + parseInt(saldoTotalAnio.toFixed(2)) + '</td>';
+				rowSaldoTotal.innerHTML = '<td colspan="3" style="text-align:right;"><strong>Saldo Total del Año:</strong></td>' +
+					'<td colspan="2" style="text-align:left;">' + saldoTotalAnio.toFixed(0) + '</td>';
 				mapaMensualidadBody.appendChild(rowSaldoTotal);
 
-				// Mostrar el modal de mapamensualidad
 				var mapaMensualidadModal = new bootstrap.Modal(document.getElementById('mapaMensualidadModal'));
 				mapaMensualidadModal.show();
-
-
-				// Llamar a la función para actualizar el estado de los meses
-				actualizarEstadoMeses();
 			});
 
-			// Función para calcular el saldo y ajustar el color del texto
-			function calcularSaldo(registro) {
-				// Obtener el ID de la tarifa del registro
+			function calcularSaldoInicial(registro) {
 				var tarifaId = registro.tarifaId;
-				// Buscar la tarifa correspondiente en la lista de tarifas
 				var tarifaEncontrada = tarifa.find(function (t) {
 					return t.id === tarifaId;
 				});
-				// Verificar si se encontró la tarifa
+
 				if (tarifaEncontrada) {
-					// Convertir el monto de la tarifa a un entero
 					var tarifaMonto = parseInt(tarifaEncontrada.monto);
-					// Obtener los pagos asociados al establecimiento, año y mes del registro
 					var pagosAsociados = listaPagosCompleta.filter(function (pago) {
 						return pago.entidadId === registro.establecimientoId &&
 							pago.periodo === registro.periodo &&
 							pago.mes === registro.mes;
 					});
-					// Calcular el total pagado
+
 					var totalPagado = pagosAsociados.reduce(function (total, pago) {
-						// Convertir el monto del pago a un entero
-						var montoPago = parseInt(pago.monto);
-						return total + montoPago;
+						return total + parseInt(pago.monto);
 					}, 0);
-					// Calcular el saldo restando el monto de la tarifa del total pagado
+
 					var saldo = tarifaMonto - totalPagado;
+					var excedente = 0;
 
-					// Actualizar saldoAFavorTotal si el saldo es negativo
 					if (saldo < 0) {
-						saldoAFavorTotal += saldo;
+						excedente = Math.abs(saldo);
+						saldo = 0;
 					}
 
-					// Definir el color del texto en función del saldo
-					var textColor = saldo <= 0 ? 'green' : 'red';
-					// Construir la fila de la tabla con el color del texto adecuado
-					var row = document.createElement('tr');
-					row.innerHTML = '<td>' + registro.periodo + '</td>' +
-						'<td>' + registro.mes + '</td>' +
-						'<td style="color: ' + textColor + ';">' + Math.abs(tarifaMonto).toFixed(0) + '</td>' + // Mostrar como un entero (Int)
-						'<td data-estado="' + (saldo > 0 ? 'En deuda' : 'Pagado') + '">' + (saldo > 0 ? 'En deuda' : 'Pagado') + '</td>';
-					mapaMensualidadBody.appendChild(row);
-
-					// Retornar el saldo para sumarlo al saldo total del año
-					return saldo;
+					return {
+						saldo: saldo,
+						excedente: excedente
+					};
 				} else {
-					// Si no se encuentra la tarifa, devolver NaN (o manejarlo de otra manera)
-					return NaN;
+					return {saldo: 0, excedente: 0};
 				}
 			}
 
-			// Función para actualizar el estado de los meses según el saldo a favor total
-			function actualizarEstadoMeses() {
-				var rows = mapaMensualidadBody.querySelectorAll('tr');
-				for (var i = 0; i < rows.length; i++) {
-					var row = rows[i];
-					var estado = row.querySelector('td:nth-child(4)').innerText;
-					var saldoMes = parseFloat(row.querySelector('td:nth-child(3)').innerText);
+			function aplicarExcedentes(resultados) {
+				var saldoAFavorTotal = 0;
 
-					// Verificar si el estado es 'En deuda' y el saldo del mes es menor o igual al saldo a favor total
-					if (estado === 'En deuda' && saldoMes >= saldoAFavorTotal && saldoAFavorTotal !== 0) {
-						// Actualizar el estado del mes a 'Pagado'
-						row.querySelector('td:nth-child(4)').innerText = 'Pagado';
-						row.dataset.estado = 'Pagado';
-
-						// Cambiar el color del texto a verde
-						row.querySelector('td:nth-child(3)').style.color = 'green';
-
-						// Restar el saldo del mes al saldo a favor total
-						saldoAFavorTotal += saldoMes;
-
-						// Verificar si el saldo a favor total es menor o igual a 0
-						if (saldoAFavorTotal >= 0) {
-							// Salir del bucle ya que no hay saldo a favor restante
-							break;
-						}
+				resultados.forEach(function (resultado, index) {
+					if (resultado.excedente > 0) {
+						saldoAFavorTotal += resultado.excedente;
 					}
+
+					if (resultado.saldo > 0 && saldoAFavorTotal >= resultado.saldo) {
+						saldoAFavorTotal -= resultado.saldo;
+						resultado.saldo = 0;
+					} else if (resultado.saldo > 0 && saldoAFavorTotal < resultado.saldo) {
+						resultado.saldo -= saldoAFavorTotal;
+						saldoAFavorTotal = 0;
+					}
+
+					var textColor = resultado.saldo === 0 ? 'green' : 'red';
+					var row = document.createElement('tr');
+					row.innerHTML = '<td>' + anioSelect.value + '</td>' +
+						'<td>' + mesesOrdenados[index] + '</td>' +
+						'<td style="color: ' + textColor + ';">' + resultado.saldo.toFixed(0) + '</td>' +
+						'<td data-estado="' + (resultado.saldo > 0 ? 'En deuda' : 'Pagado') + '">' + (resultado.saldo > 0 ? 'En deuda' : 'Pagado') + '</td>' +
+						'<td>' + (resultado.excedente > 0 ? resultado.excedente.toFixed(0) : '-') + '</td>';
+					mapaMensualidadBody.appendChild(row);
+				});
+
+				// Aplicar el excedente de diciembre a los meses de enero en adelante
+				if (saldoAFavorTotal > 0) {
+					resultados.forEach(function (resultado, index) {
+						if (index < 11 && resultado.saldo > 0) {
+							if (saldoAFavorTotal >= resultado.saldo) {
+								saldoAFavorTotal -= resultado.saldo;
+								resultado.saldo = 0;
+							} else {
+								resultado.saldo -= saldoAFavorTotal;
+								saldoAFavorTotal = 0;
+							}
+
+							// Actualizar el color y estado de las filas afectadas
+							var fila = mapaMensualidadBody.getElementsByTagName('tr')[index];
+							var estado = resultado.saldo > 0 ? 'En deuda' : 'Pagado';
+							var color = resultado.saldo === 0 ? 'green' : 'red';
+
+							fila.cells[2].innerHTML = resultado.saldo.toFixed(0);
+							fila.cells[2].style.color = color;
+							fila.cells[3].innerHTML = estado;
+							fila.cells[3].setAttribute('data-estado', estado);
+
+							if (saldoAFavorTotal === 0) {
+								return;
+							}
+						}
+					});
 				}
 			}
-
-		}
-
-		);
+		});
 	</script>
 
 
@@ -940,7 +954,7 @@
 			}).then((result) => {
 				if (result.isConfirmed) {
 					$.ajax({
-						url: "http://localhost:7775/admin/bpREST/" + id,
+						url: "http://181.212.143.228:7775/admin/bpREST/" + id,
 						type: 'DELETE',
 						success: function (res) {
 							console.log(res);
